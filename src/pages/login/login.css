@@ -1,3 +1,12 @@
 .main-container {
-    background-color: #e9e9e930;
+    /* background-color: #e9e9e930; */
+    /* background-color: red; */
+}
+
+.header-h1 {
+    color: var(--font-primary-color);
+}
+
+.input-labels-color {
+    color: var(--font-secondary-color);
 }

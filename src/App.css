@@ -40,3 +40,14 @@
     transform: rotate(360deg);
   }
 }
+
+:root {
+  --bg-primary-color: #ffffff;
+
+  /* Fonts style */
+  --font-primary-color: #27292dcf;
+  --font-secondary-color: #27292dcf;
+
+
+  --background-color: #f3f4f6;
+}
