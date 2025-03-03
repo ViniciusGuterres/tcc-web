@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-// import './ResourcesCRUD.css';
+import "./resources.css";
 
 // Components
 import Input from "../../components/Input";
@@ -82,7 +82,7 @@ function CreateResource() {
 
                                 <CustomSelect
                                     options={CATEGORY_OPTIONS}
-                                    value={selectedCategory} 
+                                    value={selectedCategory}
                                     onChange={handleChangeSelectedCategory}
                                     isMulti={false}
                                     placeholder="Escolha uma categoria..."
@@ -106,14 +106,20 @@ function CreateResource() {
                                 />
                             </div>
 
-                            {/* Create button */}
-                            <button
+                            {/* <button
                                 onClick={handleCreateResource}
                                 type="submit"
                                 className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:hover:bg-primary-700 dark:focus:ring-primary-800 input-labels-color"
                             >
                                 Cadastrar
-                            </button>
+                            </button> */}
+
+                            {/* Create button */}
+                            <div className="action-button-container">
+                                <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+                                    Cadastrar
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>
