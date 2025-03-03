@@ -3,19 +3,36 @@ import React, { useState } from "react"
 
 // Components
 import Input from "../../components/Input";
+import CustomSelect from "../../components/CustomSelect";
+
+// Globals
+const CATEGORY_OPTIONS = [
+    { value: "COMPONENT", label: "Componente" },
+    { value: "ELECTRICITY", label: "Eletricidade" },
+    { value: "GAS", label: "Gás" },
+    { value: "RAW_MATERIAL", label: "Matéria-prima" },
+    { value: "RETAIL", label: "Varejo" },
+    { value: "SILICATE", label: "Silicato" },
+    { value: "WATER", label: "Água" },
+];
+
+interface Option {
+    value: string | number;
+    label: string;
+}
 
 function CreateResource() {
     const [name, setName] = useState('');
-    const [category, setCategory] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState<Option | Option[] | null>(null);
     const [unityValue, setUnityValue] = useState('');
 
     function handleChangeName(evt: any) {
-        
+
         setName(evt.target.value);
     }
 
-    function handleChangeCategory(evt: any) {
-        setCategory(evt.target.value);
+    function handleChangeSelectedCategory(category: Option | Option[] | null) {
+        setSelectedCategory(category);
     }
 
     function handleChangeUnityValue(evt: any) {
@@ -63,11 +80,12 @@ function CreateResource() {
                                     Categoria:
                                 </label>
 
-                                <Input
-                                    onInputChanges={handleChangeCategory}
-                                    placeholder='Ex: categoria'
-                                    type="text"
-                                    value={category}
+                                <CustomSelect
+                                    options={CATEGORY_OPTIONS}
+                                    value={selectedCategory} 
+                                    onChange={handleChangeSelectedCategory}
+                                    isMulti={false}
+                                    placeholder="Escolha uma categoria..."
                                 />
                             </div>
 
@@ -82,7 +100,7 @@ function CreateResource() {
 
                                 <Input
                                     onInputChanges={handleChangeUnityValue}
-                                    placeholder='Ex: R$3.50'
+                                    placeholder='Ex: R$ 3.50'
                                     type="text"
                                     value={unityValue}
                                 />
