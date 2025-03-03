@@ -43,11 +43,25 @@
 
 :root {
   --bg-primary-color: #ffffff;
+  --bg-secondary-color: #FAFAFA;
 
   /* Fonts style */
   --font-primary-color: #27292dcf;
   --font-secondary-color: #27292dcf;
+}
 
+.bg-primary-color {
+  background-color: var(--bg-primary-color);
+}
 
-  --background-color: #f3f4f6;
+.bg-secondary-color {
+  background-color: var(--bg-secondary-color);
+}
+
+.font-color-primary {
+  color: var(--font-primary-color);
+}
+
+.font-color-secondary {
+  color: var(--font-secondary-color);
 }
