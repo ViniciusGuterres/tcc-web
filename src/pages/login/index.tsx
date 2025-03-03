@@ -25,8 +25,10 @@ function Login() {
                                 </label>
 
                                 <Input
+                                    onInputChanges={() => {}}
                                     placeholder='email@gmail.com'
                                     type="email"
+                                    value=""
                                 />
                             </div>
 
@@ -40,8 +42,10 @@ function Login() {
                                 </label>
 
                                 <Input
+                                    onInputChanges={() => {}}
                                     placeholder='******'
                                     type="password"
+                                    value=""
                                 />
                             </div>
 
