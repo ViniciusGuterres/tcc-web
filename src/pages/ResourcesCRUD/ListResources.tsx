@@ -36,7 +36,7 @@ const MOCK: Resource[] = [
     },
 ]
 
-const TanStackTable = () => {
+const ListResources = () => {
     const columnHelper = createColumnHelper();
 
     const columns: any = [
@@ -191,4 +191,4 @@ const TanStackTable = () => {
     );
 };
 
-export default TanStackTable;
+export default ListResources;

@@ -4,11 +4,13 @@ import React from "react"
 // Components
 import Input from "../../components/Input";
 import CreateResource from "./CreateResource";
+import ListResources from "./ListResources";
 
 function ResourcesCRUD() {
     return (
         <div>
-            <CreateResource />
+            {/* <CreateResource /> */}
+            <ListResources />
         </div>
     );
 }
