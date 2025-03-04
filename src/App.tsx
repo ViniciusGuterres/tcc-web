@@ -1,11 +1,8 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import './index.css';
-import Login from './pages/login';
+import AppRoutes from './routes/routes';
 
 export default function App() {
-    return (
-        <Login />
-    );
+    return <AppRoutes />;
 }
