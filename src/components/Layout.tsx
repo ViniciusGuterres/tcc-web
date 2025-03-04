@@ -8,17 +8,17 @@ const menuLinks = [
     {
         label: 'Home',
         link: 'resources',
-        icon: 'home',
+        icon: 'fa-house',
     },
     {
         label: 'Kanban',
         link: 'Kanban',
-        icon: 'kanban',
+        icon: 'fa-home',
     },
     {
         label: 'Inbox',
         link: 'Inbox',
-        icon: 'inbox',
+        icon: 'fa-home',
     },
 ];
 
