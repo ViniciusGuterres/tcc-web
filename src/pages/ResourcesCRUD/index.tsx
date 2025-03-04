@@ -1,18 +1,35 @@
-import React from "react"
+import React, { useState } from "react"
 // import './ResourcesCRUD.css';
 
 // Components
-import Input from "../../components/Input";
 import CreateResource from "./CreateResource";
 import ListResources from "./ListResources";
 
+type CrudModeTypesAllowed = "list" | "create" | "edit";
+
 function ResourcesCRUD() {
+    const [crudMode, setCrudMode] = useState<CrudModeTypesAllowed>('list');
+
+    const handleChangeCrudMode = (newCrudMode: CrudModeTypesAllowed) => {
+        setCrudMode(newCrudMode);
+    }
+
+    const buildCrud = () => {
+        switch(crudMode) {
+            case 'list':
+                return <ListResources onChangeCrudMode={handleChangeCrudMode} />;
+            
+            case 'create':
+                return <CreateResource />;
+                
+            default:
+                    return <ListResources onChangeCrudMode={handleChangeCrudMode} />;
+        }
+    }
+
     return (
-        <div>
-            {/* <CreateResource /> */}
-            <ListResources />
-        </div>
+        buildCrud()
     );
 }
 
-export default ResourcesCRUD
+export default ResourcesCRUD;
