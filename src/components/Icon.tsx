@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBox, faArrowRightFromBracket, faHouse, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faBox, faArrowRightFromBracket, faHouse, faUser, faChartPie, faCubesStacked } from '@fortawesome/free-solid-svg-icons'
 
 interface Props {
     iconClass: string,
@@ -24,6 +24,14 @@ function Icon({
 
             case 'fa-logout':
                 icon = faArrowRightFromBracket;
+                break;
+
+            case 'fa-chart-pie':
+                icon = faChartPie;
+                break;
+                
+            case 'fa-cubes-stacked':
+                icon = faCubesStacked;
                 break;
 
             default:

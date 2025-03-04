@@ -7,13 +7,13 @@ import SidebarMenu from "./SidebarMenu";
 const menuLinks = [
     {
         label: 'Home',
-        link: 'resources',
-        icon: 'fa-house',
+        link: 'home',
+        icon: 'fa-chart-pie',
     },
     {
-        label: 'Kanban',
-        link: 'Kanban',
-        icon: 'fa-home',
+        label: 'Recursos',
+        link: 'resources',
+        icon: 'fa-cubes-stacked',
     },
     {
         label: 'Inbox',
