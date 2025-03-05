@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "../components/Layout";
-// import PrivateRoute from "./PrivateRoute";
+import PrivateRoute from "./PrivateRoute";
 
 // Lazy-loaded pages for better performance
 // const Home = lazy(() => import("../pages/Home"));
@@ -19,13 +19,18 @@ const AppRoutes = () => {
                     <Routes>
                         {/* <Route path="/" element={<Home />} /> */}
 
-                        <Route path="/resources" element={<ResourcesCRUD />} />
+                        {/* Resources */}
+                        <Route path="/resources" element={
+                            <PrivateRoute>
+                                <ResourcesCRUD />
+                            </PrivateRoute>}
+                        />
 
                         {/* Protected Routes */}
                         {/* <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} /> */}
 
                         {/* Authentication Route */}
-                        {/* <Route path="/login" element={<Login />} /> */}
+                        <Route path="/login" element={<Login />} />
 
                         {/* 404 Page */}
                         {/* <Route path="*" element={<NotFound />} /> */}
