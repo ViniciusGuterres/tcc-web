@@ -12,7 +12,7 @@ const CATEGORY_OPTIONS = [
     { value: "ELECTRICITY", label: "Eletricidade" },
     { value: "GAS", label: "Gás" },
     { value: "RAW_MATERIAL", label: "Matéria-prima" },
-    { value: "RETAIL", label: "Varejo" },
+    { value: "RETAIL", label: "Retalho" },
     { value: "SILICATE", label: "Silicato" },
     { value: "WATER", label: "Água" },
 ];
