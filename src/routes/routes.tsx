@@ -14,29 +14,27 @@ const Login = lazy(() => import("../pages/Login"));
 const AppRoutes = () => {
     return (
         <Router>
-            <Layout>
-                <Suspense fallback={<div>Loading...</div>}>
-                    <Routes>
-                        {/* <Route path="/" element={<Home />} /> */}
+            <Routes>
+                {/* Login route*/}
+                <Route path="/login" element={<Login />} />
 
-                        {/* Resources */}
-                        <Route path="/resources" element={
-                            <PrivateRoute>
-                                <ResourcesCRUD />
-                            </PrivateRoute>}
-                        />
+                {/* 404 Page */}
+                {/* <Route path="*" element={<NotFound />} /> */}
 
-                        {/* Protected Routes */}
-                        {/* <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} /> */}
+                {/* Protected routes */}
+                <Route
+                    path="/"
+                    element={
+                        <PrivateRoute>
+                            <Layout />
+                        </PrivateRoute>
+                    }
+                >
+                    {/* <Route index element={<Home />} /> */}
 
-                        {/* Authentication Route */}
-                        <Route path="/login" element={<Login />} />
-
-                        {/* 404 Page */}
-                        {/* <Route path="*" element={<NotFound />} /> */}
-                    </Routes>
-                </Suspense>
-            </Layout>
+                    <Route path="profile" element={<ResourcesCRUD />} />
+                </Route>
+            </Routes>
         </Router>
     );
 };

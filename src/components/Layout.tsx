@@ -1,3 +1,5 @@
+import { Outlet } from "react-router-dom";
+
 import React from "react";
 
 // Components
@@ -22,7 +24,7 @@ const menuLinks = [
     },
 ];
 
-const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+function Layout() {
     return (
         <div>
             <Header />
@@ -32,7 +34,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             />
 
             <main className="p-4 sm:ml-64">
-                {children}
+                <Outlet />
             </main>
         </div>
     );
