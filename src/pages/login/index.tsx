@@ -1,8 +1,10 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import './login.css';
 
 // Libs
 import fetchRequest from "../../utils/fetchRequest";
+import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 // Components
 import Input from "../../components/Input";
@@ -14,6 +16,8 @@ const LOGIN_END_POINT = 'auth/login';
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const navigate = useNavigate();
 
     const handleEmailChanged = (evt: ChangeEvent) => {
         setEmail(evt.target.value);
@@ -29,18 +33,19 @@ function Login() {
             "password": password
         };
 
-        const fetchOptions = {
-            method: "POST",
-            body: JSON.stringify(bodyData),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        };
+        const { data, err } = await fetchRequest(LOGIN_END_POINT, 'POST', bodyData);
 
-        const req = await fetchRequest(LOGIN_END_POINT, fetchOptions);
-        console.log("🚀 ~ handleLoginButtonClicked ~ req:", req)
+        if (err || !data) {
+            console.log(err || 'Missing req.data');
 
-        return;
+            alert(`Erro ao acessar`);
+            return;
+        }
+
+        // record the jwt key in the cookies and redirect user
+        Cookies.set('user_token', data, {expires: 7, secure: true});
+
+        navigate('/');
     }
 
     const isLoginButtonDisabled = !email || !password;
