@@ -1,26 +1,53 @@
+type MethodsAllowed = 'POST' | 'GET' | 'PUT' | 'DELETE';
+
+type ResObj = {
+    timestamp: string,
+    stats: number,
+    error: string,
+    message: string,
+    path: string,
+};
+
+type ResData = null | string | ResObj;
+
+interface ReturnObj {
+    err: ResData,
+    data: ResData,
+}
+
 const host = 'localhost';
 const port = '8080';
 
-export async function fetchData(endpoint: string, options = {}) {
-    const ret = {
+export async function fetchRequest(endpoint: string, method: MethodsAllowed, body: {}) {
+    const ret: ReturnObj = {
         err: null,
         data: null,
     };
 
+    // Building the request options
+    const options = {
+        method,
+        body: JSON.stringify(body),
+        headers: {
+            "Content-Type": "application/json",
+        },
+    };
+
     try {
-        const url = `http://${host}:${port}/${endpoint}`;        
+        const url = `http://${host}:${port}/${endpoint}`;
         const response = await fetch(url, options);
 
-        const responseJson = await response.json();
-
+        
         if (!response?.ok) {
-            console.log("req response: ", responseJson);
+            const responseJson = await response.json();
 
             ret.err = responseJson;
             return ret;
         }
 
-        ret.data = responseJson;
+        const resData = await response.text()
+
+        ret.data = resData;
 
         return ret;
     } catch (error) {
@@ -29,4 +56,4 @@ export async function fetchData(endpoint: string, options = {}) {
     }
 }
 
-export default fetchData;
+export default fetchRequest;
