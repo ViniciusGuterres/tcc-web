@@ -32,16 +32,18 @@ function Button({
         buttonClassName = 'bg-white opacity-50 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow justify-center items-center flex gap-4 cursor-not-allowed';
     }
 
+    const handleButtonClicked = (event: ButtonEvent): void => {
+        event.preventDefault();
+
+        if (!isDisabled) onClickFunc();
+    }
+
     return (
         <>
             <button
                 className={`${buttonClassName} ${className || ''}`}
                 type={type}
-                onClick={() => {
-                    if (!isDisabled) {
-                        onClickFunc();
-                    }
-                }}
+                onClick={e => handleButtonClicked(e)}
             >
                 {
                     icon?.position === 'left'
