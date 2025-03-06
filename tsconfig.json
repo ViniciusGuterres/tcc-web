@@ -21,6 +21,8 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src"
+    "src",
+    "src/types/global.d.ts",
+    "../config/*"
   ]
 }

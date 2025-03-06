@@ -1,10 +1,50 @@
-import React from "react"
+import React, { useState } from "react"
 import './login.css';
+
+// Libs
+import fetchRequest from "../../utils/fetchRequest";
 
 // Components
 import Input from "../../components/Input";
+import Button from "../../components/Button";
+
+// Globals
+const LOGIN_END_POINT = 'auth/login';
 
 function Login() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleEmailChanged = (evt: ChangeEvent) => {
+        setEmail(evt.target.value);
+    }
+
+    const handlePasswordChanged = (evt: ChangeEvent) => {
+        setPassword(evt.target.value);
+    }
+
+    const handleLoginButtonClicked = async () => {
+        const bodyData = {
+            "email": email,
+            "password": password
+        };
+
+        const fetchOptions = {
+            method: "POST",
+            body: JSON.stringify(bodyData),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+
+        const req = await fetchRequest(LOGIN_END_POINT, fetchOptions);
+        console.log("🚀 ~ handleLoginButtonClicked ~ req:", req)
+
+        return;
+    }
+
+    const isLoginButtonDisabled = !email || !password;
+
     return (
         <section className="main-container">
             <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -25,10 +65,10 @@ function Login() {
                                 </label>
 
                                 <Input
-                                    onInputChanges={() => {}}
+                                    onInputChanges={handleEmailChanged}
                                     placeholder='email@gmail.com'
                                     type="email"
-                                    value=""
+                                    value={email}
                                 />
                             </div>
 
@@ -42,21 +82,22 @@ function Login() {
                                 </label>
 
                                 <Input
-                                    onInputChanges={() => {}}
+                                    onInputChanges={handlePasswordChanged}
                                     placeholder='******'
                                     type="password"
-                                    value=""
+                                    value={password}
                                 />
                             </div>
 
                             {/* Sign in button */}
-                            <button
-                                type="submit"
-                                className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:hover:bg-primary-700 dark:focus:ring-primary-800 input-labels-color"
-                            >
-                                Entrar
-                            </button>
-
+                            <div className="action-button-container">
+                                <Button
+                                    name="Entrar"
+                                    // type="submit"
+                                    isDisabled={isLoginButtonDisabled}
+                                    onClickFunc={handleLoginButtonClicked}
+                                />
+                            </div>
                         </form>
                     </div>
                 </div>
