@@ -18,21 +18,24 @@ const AppRoutes = () => {
                 {/* Login route*/}
                 <Route path="/login" element={<Login />} />
 
-                {/* 404 Page */}
-                {/* <Route path="*" element={<NotFound />} /> */}
+                {/* Protected Routes */}
+                <Route element={<PrivateRoute />}>
+                    <Route element={<Layout />}>
 
-                {/* Protected routes */}
-                <Route
-                    path="/"
-                    element={
-                        <PrivateRoute>
-                            <Layout />
-                        </PrivateRoute>
-                    }
-                >
-                    {/* <Route index element={<Home />} /> */}
+                        {/* Resources */}
+                        <Route 
+                            path="resources"
+                            element={
+                                <Suspense fallback={<div>Loading...</div>}>
+                                    <ResourcesCRUD />
+                                </Suspense>
+                            } 
+                        />
 
-                    <Route path="profile" element={<ResourcesCRUD />} />
+
+                        <Route path="inbox" element={<h1>Inbox Page</h1>} />
+                        <Route path="*" element={<h1>404 Not Found</h1>} />
+                    </Route>
                 </Route>
             </Routes>
         </Router>

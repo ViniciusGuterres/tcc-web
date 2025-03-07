@@ -1,22 +1,41 @@
+import Cookies from "js-cookie";
+import jwtDecode from "jwt-decode";
 import React, { ReactNode } from "react";
-import { Navigate } from "react-router";
+import { Navigate, Outlet } from "react-router";
 
-interface Props {
-    children: ReactNode,
+const PrivateRoute = () => {
+    const userToken = Cookies.get("user_token");
+
+    if (!userToken) {
+        return <Navigate to='/login' replace />
+    }
+
+    try {
+        const decodedToken = jwtDecode<{ exp: number }>(userToken);
+
+        // Check if the token expired
+        if (decodedToken.exp * 1000 < Date.now()) {
+            Cookies.remove("user_token");
+            return <Navigate to='/login' replace />
+        }
+
+        return <Outlet />;
+        // return <>{children}</>
+    } catch (error) {
+        Cookies.remove("user_token");
+        return <Navigate to='/login' replace />
+    }
+
 }
 
-const isAuthenticated = () => {
-    return false;
-}
-
-const PrivateRoute: React.FC<Props> = ({ children }) => {
-    return (
-        isAuthenticated()
-            ?
-            <>{children}</>
-            :
-            <Navigate to="/login" replace />
-    );
-};
+// const PrivateRoute: React.FC<Props> = ({ children }) => {
+//     return (
+//         isAuthenticated()
+//             ?
+//             <>{children}</>
+//             :
+//             <Navigate to="/login" replace />
+//     );
+// };
 
 export default PrivateRoute;
