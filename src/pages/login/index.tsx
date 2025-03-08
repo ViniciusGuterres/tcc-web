@@ -43,7 +43,9 @@ function Login() {
         }
 
         // record the jwt key in the cookies and redirect user
-        Cookies.set('user_token', data, {expires: 7, secure: true});
+        if (data && typeof data === 'string') {
+            Cookies.set('user_token', data, {expires: 7, secure: true});
+        }
 
         navigate('/');
     }
