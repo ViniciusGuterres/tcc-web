@@ -1,4 +1,12 @@
+import Cookies from "js-cookie";
+
 type MethodsAllowed = 'POST' | 'GET' | 'PUT' | 'DELETE';
+
+interface Options {
+    method: MethodsAllowed,
+    headers: object,
+    body?: string,
+}
 
 type ResObj = {
     timestamp: string,
@@ -18,7 +26,9 @@ interface ReturnObj {
 const host = 'localhost';
 const port = '8080';
 
-export async function fetchRequest(endpoint: string, method: MethodsAllowed, body: {}) {
+export async function fetchRequest(endpoint: string, method: MethodsAllowed, body: {} | null) {
+    const userToken = Cookies.get("user_token");
+
     const ret: ReturnObj = {
         err: null,
         data: null,
@@ -27,21 +37,32 @@ export async function fetchRequest(endpoint: string, method: MethodsAllowed, bod
     // Building the request options
     const options = {
         method,
-        body: JSON.stringify(body),
         headers: {
             "Content-Type": "application/json",
         },
-    };
+    } as any;
+
+    if (body) {
+        options.body = JSON.stringify(body);
+    }
+
+    if (userToken) {
+        options.headers.Authorization =  `Bearer ${userToken}`;
+    }
 
     try {
         const url = `http://${host}:${port}/${endpoint}`;
         const response = await fetch(url, options);
 
-        
-        if (!response?.ok) {
-            const responseJson = await response.json();
+        // User not authenticated, remove jwt on cookies and send to login page
+        if (response?.status === 403) {
+            Cookies.remove("user_token");
+            window.location.href = 'login';
+            return ret;
+        }
 
-            ret.err = responseJson;
+        if (!response?.ok) {
+            ret.err = 'Erro no servidor';
             return ret;
         }
 
