@@ -1,6 +1,5 @@
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
-import React, { ReactNode } from "react";
 import { Navigate, Outlet } from "react-router";
 
 const PrivateRoute = () => {
@@ -27,15 +26,5 @@ const PrivateRoute = () => {
     }
 
 }
-
-// const PrivateRoute: React.FC<Props> = ({ children }) => {
-//     return (
-//         isAuthenticated()
-//             ?
-//             <>{children}</>
-//             :
-//             <Navigate to="/login" replace />
-//     );
-// };
 
 export default PrivateRoute;
