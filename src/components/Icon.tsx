@@ -6,7 +6,8 @@ import {
     faUser,
     faChartPie,
     faCubesStacked,
-    faPlus
+    faPlus,
+    faArrowLeft
 } from '@fortawesome/free-solid-svg-icons'
 
 interface Props {
@@ -44,6 +45,10 @@ function Icon({
 
             case 'fa-plus':
                 icon = faPlus;
+                break;
+
+            case 'fa-arrow-left':
+                icon = faArrowLeft;
                 break;
 
             default:
