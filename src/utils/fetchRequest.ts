@@ -20,7 +20,7 @@ type ResData = null | string | ResObj;
 
 interface ReturnObj {
     err: ResData,
-    data: string | null,
+    data: string | null | Array<any>,
 }
 
 const host = 'localhost';
@@ -66,7 +66,7 @@ export async function fetchRequest(endpoint: string, method: MethodsAllowed, bod
             return ret;
         }
 
-        const resData = await response.text()
+        const resData = await response.json()
 
         ret.data = resData;
 
