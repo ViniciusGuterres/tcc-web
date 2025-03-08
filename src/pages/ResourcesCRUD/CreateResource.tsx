@@ -22,7 +22,11 @@ interface Option {
     label: string;
 }
 
-function CreateResource() {
+interface Props {
+    onChangeCrudMode: (newCrudMode: ResourceCrudModeTypesAllowed) => void
+};
+
+function CreateResource({ onChangeCrudMode }: Props) {
     const [name, setName] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<Option | Option[] | null>(null);
     const [unityValue, setUnityValue] = useState('');
@@ -47,6 +51,17 @@ function CreateResource() {
 
     return (
         <section className="main-container">
+            {/* Go back button */}
+            <Button
+                name="Voltar"
+                onClickFunc={() => onChangeCrudMode('list')}
+                isDisabled={false}
+                icon={{
+                    position: 'left',
+                    icon: 'fa-arrow-left'
+                }}
+            />
+
             <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
                 <div className="w-full rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0">
                     <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -107,19 +122,11 @@ function CreateResource() {
                                 />
                             </div>
 
-                            {/* <button
-                                onClick={handleCreateResource}
-                                type="submit"
-                                className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:hover:bg-primary-700 dark:focus:ring-primary-800 input-labels-color"
-                            >
-                                Cadastrar
-                            </button> */}
-
                             {/* Create button */}
                             <div className="action-button-container">
-                                <Button 
+                                <Button
                                     name='Cadastrar'
-                                    onClickFunc={() => {}}
+                                    onClickFunc={() => { }}
                                 />
                             </div>
                         </form>
