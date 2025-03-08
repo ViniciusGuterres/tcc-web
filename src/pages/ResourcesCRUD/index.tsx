@@ -20,7 +20,7 @@ function ResourcesCRUD() {
                 return <ListResources onChangeCrudMode={handleChangeCrudMode} />;
             
             case 'create':
-                return <CreateResource />;
+                return <CreateResource onChangeCrudMode={handleChangeCrudMode} />;
                 
             default:
                     return <ListResources onChangeCrudMode={handleChangeCrudMode} />;
