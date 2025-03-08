@@ -17,6 +17,8 @@ declare global {
         id: number,
         name: string,
     };
+
+    type ResourceCrudModeTypesAllowed = "list" | "create" | "edit";
 };
 
 export {};

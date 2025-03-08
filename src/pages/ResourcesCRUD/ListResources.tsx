@@ -2,11 +2,8 @@ import { useEffect, useState } from "react";
 import Button from "../../components/Button";
 import fetchRequest from "../../utils/fetchRequest";
 import Table from "../../components/Table";
-
-type CrudModeTypesAllowed = "list" | "create" | "edit";
-
 interface Props {
-    onChangeCrudMode: (newCrudMode: CrudModeTypesAllowed) => void
+    onChangeCrudMode: (newCrudMode: ResourceCrudModeTypesAllowed) => void
 };
 
 // Globals
