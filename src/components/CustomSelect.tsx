@@ -8,8 +8,8 @@ interface Option {
 
 interface CustomSelectProps {
     options: Option[];
-    value?: Option | Option[] | null;
-    onChange: (selectedOption: Option | Option[] | null) => void;
+    value?: Option | null;
+    onChange: (selectedOption: Option | null) => void;
     placeholder?: string;
     isMulti?: boolean;
     isDisabled?: boolean;
