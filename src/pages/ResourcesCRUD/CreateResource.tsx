@@ -5,6 +5,7 @@ import "./resources.css";
 import Input from "../../components/Input";
 import CustomSelect from "../../components/CustomSelect";
 import Button from "../../components/Button";
+import fetchRequest from "../../utils/fetchRequest";
 
 // Globals
 const CATEGORY_OPTIONS = [
@@ -26,9 +27,12 @@ interface Props {
     onChangeCrudMode: (newCrudMode: ResourceCrudModeTypesAllowed) => void
 };
 
+// Globals
+const RESOURCE_END_POINT = 'resources';
+
 function CreateResource({ onChangeCrudMode }: Props) {
     const [name, setName] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState<Option | Option[] | null>(null);
+    const [selectedCategory, setSelectedCategory] = useState<Option | null>(null);
     const [unityValue, setUnityValue] = useState('');
 
     function handleChangeName(evt: any) {
@@ -36,7 +40,7 @@ function CreateResource({ onChangeCrudMode }: Props) {
         setName(evt.target.value);
     }
 
-    function handleChangeSelectedCategory(category: Option | Option[] | null) {
+    function handleChangeSelectedCategory(category: Option | null) {
         setSelectedCategory(category);
     }
 
@@ -44,9 +48,27 @@ function CreateResource({ onChangeCrudMode }: Props) {
         setUnityValue(evt.target.value);
     }
 
-    function handleCreateResource() {
-        alert('Recurso criada');
-        console.log('Resource created!!!')
+    async function handleCreateResource() {
+        
+
+        const bodyData = {
+            name,
+            category: selectedCategory?.value,
+            unitValue: unityValue,
+        };
+
+        const { data, err } = await fetchRequest(RESOURCE_END_POINT, 'POST', bodyData);
+
+        if (err || !data) {
+            console.log(err || 'Missing req.data');
+
+            alert(`Erro ao cadastrar recurso`);
+            return;
+        }
+    }
+
+    function validateFields() {
+        return Boolean(name) && Boolean(selectedCategory) && Boolean(unityValue);
     }
 
     return (
@@ -126,7 +148,8 @@ function CreateResource({ onChangeCrudMode }: Props) {
                             <div className="action-button-container">
                                 <Button
                                     name='Cadastrar'
-                                    onClickFunc={() => { }}
+                                    onClickFunc={handleCreateResource}
+                                    isDisabled={!validateFields()}
                                 />
                             </div>
                         </form>
