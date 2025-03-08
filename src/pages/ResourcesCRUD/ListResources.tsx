@@ -61,6 +61,7 @@ const ListResources = ({ onChangeCrudMode }: Props) => {
             <Button
                 name="Novo recurso"
                 onClickFunc={() => onChangeCrudMode('create')}
+                isDisabled={false}
                 icon={{
                     position: 'left',
                     icon: 'fa-plus'
