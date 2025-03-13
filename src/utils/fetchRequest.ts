@@ -14,13 +14,14 @@ type ResObj = {
     error: string,
     message: string,
     path: string,
+    token: string,
 };
 
 type ResData = null | string | ResObj;
 
 interface ReturnObj {
     err: ResData,
-    data: string | null | Array<any>,
+    data: ResObj | null | Array<any>,
 }
 
 const host = 'localhost';
@@ -63,6 +64,14 @@ export async function fetchRequest(endpoint: string, method: MethodsAllowed, bod
 
         if (!response?.ok) {
             ret.err = 'Erro no servidor';
+
+            try {
+                const errorRes = await response.json();
+                ret.err = errorRes.message;
+            } catch (error) {
+                console.log('error to parse json');
+            }
+            
             return ret;
         }
 
