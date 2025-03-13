@@ -49,8 +49,6 @@ function CreateResource({ onChangeCrudMode }: Props) {
     }
 
     async function handleCreateResource() {
-        
-
         const bodyData = {
             name,
             category: selectedCategory?.value,
