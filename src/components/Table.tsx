@@ -27,13 +27,36 @@ function Table({
     const columnHelper = createColumnHelper();
 
     const columnsBuilder = (): ColumnDef<any, any>[] => {
-        return columns?.map(column =>
+        const actionColumn: ColumnDef<any, any> = {
+            id: "actions",
+            header: () => "Actions",
+            cell: ({ row }) => (
+                <div className="flex gap-2">
+                    <button
+                        onClick={() => {}}
+                        className="px-2 py-1 text-blue-600 border border-blue-600 rounded-md"
+                    >
+                        Edit
+                    </button>
+                    <button
+                        onClick={() => {}}
+                        className="px-2 py-1 text-red-600 border border-red-600 rounded-md"
+                    >
+                        Delete
+                    </button>
+                </div>
+            )
+        }
+
+        const dynamicColumns = columns?.map(column =>
             columnHelper.accessor(column.name, {
                 header: () => column.header,
                 cell: info => info.getValue(),
                 footer: info => info.column.id,
             })
         ) as ColumnDef<any, any>[];
+
+        return [...dynamicColumns, actionColumn];
     }
 
     const [globalFilter, setGlobalFilter] = useState("");
