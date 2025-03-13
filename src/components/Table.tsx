@@ -9,10 +9,12 @@ import {
     getPaginationRowModel,
     useReactTable,
 } from "@tanstack/react-table";
+import formatToBRL from "../utils/formatToBRL";
 
 interface Column {
     name: string,
     header: string,
+    format?: string,
 };
 
 interface Props {
@@ -25,6 +27,15 @@ function Table({
     columns,
 }: Props) {
     const columnHelper = createColumnHelper();
+
+    const formatCellValue = (format, value) => {
+        switch(format) {
+            case 'currency-BRL':
+                return formatToBRL(value);
+            default:
+                return value;
+        }
+    }
 
     const columnsBuilder = (): ColumnDef<any, any>[] => {
         const actionColumn: ColumnDef<any, any> = {
@@ -51,7 +62,9 @@ function Table({
         const dynamicColumns = columns?.map(column =>
             columnHelper.accessor(column.name, {
                 header: () => column.header,
-                cell: info => info.getValue(),
+                cell: info => {
+                    return formatCellValue(column.format, info.getValue());
+                },
                 footer: info => info.column.id,
             })
         ) as ColumnDef<any, any>[];

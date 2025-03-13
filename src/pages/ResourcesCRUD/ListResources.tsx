@@ -29,7 +29,7 @@ const TABLE_COLUMNS = [
     {
         name: "unitValue",
         header: "Valor unitário",
-        type: "currency-BRL"
+        format: "currency-BRL"
     },
 ];
 
