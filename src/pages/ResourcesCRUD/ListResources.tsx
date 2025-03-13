@@ -26,6 +26,11 @@ const TABLE_COLUMNS = [
         name: "currentQuantityPrice",
         header: "Preço",
     },
+    {
+        name: "unitValue",
+        header: "Valor unitário",
+        type: "currency-BRL"
+    },
 ];
 
 const ListResources = ({ onChangeCrudMode }: Props) => {
@@ -45,8 +50,6 @@ const ListResources = ({ onChangeCrudMode }: Props) => {
             alert(`Erro ao pegar dados`);
             return;
         }
-
-        console.log("🚀 ~ getInitialData ~ data:", data)
 
         if (data && Array.isArray(data) && data.length > 0) {
             setResourcesList(data);
