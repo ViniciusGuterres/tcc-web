@@ -21,7 +21,7 @@ type ResData = null | string | ResObj;
 
 interface ReturnObj {
     err: ResData,
-    data: ResObj | null | Array<any>,
+    data: ResObj | null | Array<any> | string,
 }
 
 const host = 'localhost';
@@ -48,7 +48,7 @@ export async function fetchRequest(endpoint: string, method: MethodsAllowed, bod
     }
 
     if (userToken) {
-        options.headers.Authorization =  `Bearer ${userToken}`;
+        options.headers.Authorization = `Bearer ${userToken}`;
     }
 
     try {
@@ -71,13 +71,23 @@ export async function fetchRequest(endpoint: string, method: MethodsAllowed, bod
             } catch (error) {
                 console.log('error to parse json');
             }
-            
+
             return ret;
         }
 
-        const resData = await response.json()
+        // Dynamically handle response based on Content-Type
+        const contentType = response.headers.get("Content-Type");
+        
+        if (contentType?.includes("application/json")) {
+            ret.data = await response.json();
+        } else {
+            if (response.status === 204) {
+                ret.data = 'success';
+                return ret;
+            } 
 
-        ret.data = resData;
+            ret.data = await response.text();
+        }
 
         return ret;
     } catch (error) {
