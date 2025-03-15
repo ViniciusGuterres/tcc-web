@@ -34,7 +34,6 @@ function Login() {
         };
 
         const { data, err } = await fetchRequest(LOGIN_END_POINT, 'POST', bodyData);
-        console.log("🚀 ~ handleLoginButtonClicked ~ data:", data)
 
         if (err || !data ) {
             console.log(err || 'Missing req.data');
