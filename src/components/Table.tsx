@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 import {
     ColumnDef,
@@ -10,17 +10,24 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import formatToBRL from "../utils/formatToBRL";
+interface ActionButtonType {
+    type: string,
+    onClickHandler: () => void,
+    enabled: boolean,
+}
 
 interface Column {
     name: string,
     header: string,
     format?: string,
+    type: string,
+    actionButton?: ActionButtonType,
 };
 
 interface Props {
     data: Array<any>,
     columns: Array<Column>,
-}
+};
 
 function Table({
     data,
@@ -29,7 +36,7 @@ function Table({
     const columnHelper = createColumnHelper();
 
     const formatCellValue = (format, value) => {
-        switch(format) {
+        switch (format) {
             case 'currency-BRL':
                 return formatToBRL(value);
             default:
@@ -37,39 +44,42 @@ function Table({
         }
     }
 
-    const columnsBuilder = (): ColumnDef<any, any>[] => {
-        const actionColumn: ColumnDef<any, any> = {
-            id: "actions",
-            header: () => "Actions",
-            cell: ({ row }) => (
-                <div className="flex gap-2">
-                    <button
-                        onClick={() => {}}
-                        className="px-2 py-1 text-blue-600 border border-blue-600 rounded-md"
-                    >
-                        Edit
-                    </button>
-                    <button
-                        onClick={() => {}}
-                        className="px-2 py-1 text-red-600 border border-red-600 rounded-md"
-                    >
-                        Delete
-                    </button>
-                </div>
-            )
+    const actionButtonBuilder = ({ type, onClickHandler, enabled }: ActionButtonType, header: string) => {
+        let buttonClass = 'px-2 py-1 border rounded-md ';
+
+        if (type === 'delete') {
+            buttonClass += 'text-red-600 border-red-600';
+        } else {
+            buttonClass += 'text-blue-600 border-blue-600';
         }
 
-        const dynamicColumns = columns?.map(column =>
+        return (
+            <button
+                onClick={onClickHandler}
+                className={buttonClass}
+            >
+                {header}
+            </button>
+        );
+    }
+
+    const columnsBuilder = (): ColumnDef<any, any>[] => {
+        return columns?.map(column =>
             columnHelper.accessor(column.name, {
                 header: () => column.header,
                 cell: info => {
+                    if (
+                        column.type === 'action' 
+                        && column.actionButton
+                    ) {
+                        return actionButtonBuilder(column.actionButton, column.header);
+                    }
+
                     return formatCellValue(column.format, info.getValue());
                 },
                 footer: info => info.column.id,
             })
         ) as ColumnDef<any, any>[];
-
-        return [...dynamicColumns, actionColumn];
     }
 
     const [globalFilter, setGlobalFilter] = useState("");
@@ -121,9 +131,7 @@ function Table({
                         table.getRowModel().rows.map((row, i) => (
                             <tr
                                 key={row.id}
-                                className={`font-color-primary
-          ${i % 2 === 0 ? "bg-primary-color" : "bg-secondary-color"}
-          `}
+                                className={`font-color-primary${i % 2 === 0 ? "bg-primary-color" : "bg-secondary-color"}`}
                             >
                                 {row.getVisibleCells().map((cell) => (
                                     <td key={cell.id} className="px-3.5 py-2">

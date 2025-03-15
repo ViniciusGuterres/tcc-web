@@ -13,23 +13,48 @@ const TABLE_COLUMNS = [
     {
         name: "name",
         header: "Nome",
+        type: 'default',
     },
     {
         name: "category",
         header: "Categoria",
+        type: 'default',
     },
     {
         name: "currentQuantity",
         header: "Quantidade",
+        type: 'default',
     },
     {
         name: "currentQuantityPrice",
         header: "Preço",
+        type: 'default',
     },
     {
         name: "unitValue",
         header: "Valor unitário",
-        format: "currency-BRL"
+        format: "currency-BRL",
+        type: 'default',
+    },
+    {
+        name: "edit",
+        header: "Editar",
+        type: 'action',
+        actionButton: {
+            type: "edit",
+            onClickHandler: () => {},
+            enabled: true,
+        },
+    },
+    {
+        name: "delete",
+        header: "Deletar",
+        type: 'action',
+        actionButton: {
+            type: "delete",
+            onClickHandler: () => {},
+            enabled: true,
+        },
     },
 ];
 
@@ -53,7 +78,7 @@ const ListResources = ({ onChangeCrudMode }: Props) => {
 
         if (data && Array.isArray(data) && data.length > 0) {
             setResourcesList(data);
-        }   
+        }
     }
 
     return (
@@ -69,7 +94,7 @@ const ListResources = ({ onChangeCrudMode }: Props) => {
                 }}
             />
 
-            <Table 
+            <Table
                 data={resourcesList}
                 columns={TABLE_COLUMNS}
             />
