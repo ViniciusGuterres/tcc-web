@@ -12,7 +12,7 @@ import {
 import formatToBRL from "../utils/formatToBRL";
 interface ActionButtonType {
     type: string,
-    onClickHandler: () => void,
+    onClickHandler: (id: string | number) => void,
     enabled: boolean,
 }
 
@@ -44,7 +44,7 @@ function Table({
         }
     }
 
-    const actionButtonBuilder = ({ type, onClickHandler, enabled }: ActionButtonType, header: string) => {
+    const actionButtonBuilder = ({ type, onClickHandler, enabled }: ActionButtonType, header: string, rowData: any) => {
         let buttonClass = 'px-2 py-1 border rounded-md ';
 
         if (type === 'delete') {
@@ -55,7 +55,7 @@ function Table({
 
         return (
             <button
-                onClick={onClickHandler}
+                onClick={() => { onClickHandler(rowData.id) }}
                 className={buttonClass}
             >
                 {header}
@@ -68,11 +68,13 @@ function Table({
             columnHelper.accessor(column.name, {
                 header: () => column.header,
                 cell: info => {
+                    const rowData = info.row.original; // Get the full object
+
                     if (
                         column.type === 'action' 
                         && column.actionButton
                     ) {
-                        return actionButtonBuilder(column.actionButton, column.header);
+                        return actionButtonBuilder(column.actionButton, column.header, rowData);
                     }
 
                     return formatCellValue(column.format, info.getValue());
@@ -141,7 +143,7 @@ function Table({
                             </tr>
                         ))
                     ) : (
-                        <tr className="text-center h-32">
+                        <tr className="text-center h-32 font-color-primary">
                             <td colSpan={12}>Sem dados encontrados!</td>
                         </tr>
                     )}
