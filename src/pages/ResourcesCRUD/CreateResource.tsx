@@ -36,7 +36,6 @@ function CreateResource({ onChangeCrudMode }: Props) {
     const [unityValue, setUnityValue] = useState('');
 
     function handleChangeName(evt: any) {
-
         setName(evt.target.value);
     }
 
@@ -46,6 +45,12 @@ function CreateResource({ onChangeCrudMode }: Props) {
 
     function handleChangeUnityValue(evt: any) {
         setUnityValue(evt.target.value);
+    }
+
+    function cleanFields() {
+        setName('');
+        setSelectedCategory(null);
+        setUnityValue('');
     }
 
     async function handleCreateResource() {
@@ -63,6 +68,9 @@ function CreateResource({ onChangeCrudMode }: Props) {
             alert(`Erro ao cadastrar recurso`);
             return;
         }
+
+        alert(`Recurso criado com sucesso`);
+        cleanFields();
     }
 
     function validateFields() {
