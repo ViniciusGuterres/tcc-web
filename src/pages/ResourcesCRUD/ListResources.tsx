@@ -6,6 +6,28 @@ interface Props {
     onChangeCrudMode: (newCrudMode: ResourceCrudModeTypesAllowed) => void
 };
 
+const handleClickDeleteResource = async (resourceID: string | number) => {
+    if (!resourceID) return null;
+
+    const deleteResourceEndPoint = `${RESOURCES_END_POINT}/${resourceID}`;
+
+    const { data, err } = await fetchRequest(deleteResourceEndPoint, 'DELETE', null);
+
+    if (err || !data ) {
+        console.log(err || 'Missing req.data');
+
+        alert(`Erro ao deletar. Por favor, tente novamente`);
+        return;
+    }
+
+    if (data === 'success') {
+        alert(`Recurso deletado com sucesso!`);
+        window.location.reload();
+    }
+
+    return null;
+}
+
 // Globals
 const RESOURCE_END_POINT = 'resources';
 
@@ -21,6 +43,12 @@ const TABLE_COLUMNS = [
         type: 'default',
     },
     {
+        name: "unitValue",
+        header: "Valor unitário",
+        format: "currency-BRL",
+        type: 'default',
+    },
+    {
         name: "currentQuantity",
         header: "Quantidade",
         type: 'default',
@@ -28,12 +56,6 @@ const TABLE_COLUMNS = [
     {
         name: "currentQuantityPrice",
         header: "Preço",
-        type: 'default',
-    },
-    {
-        name: "unitValue",
-        header: "Valor unitário",
-        format: "currency-BRL",
         type: 'default',
     },
     {
@@ -52,11 +74,13 @@ const TABLE_COLUMNS = [
         type: 'action',
         actionButton: {
             type: "delete",
-            onClickHandler: () => {},
+            onClickHandler: (id) => { handleClickDeleteResource(id) },
             enabled: true,
         },
     },
 ];
+
+const RESOURCES_END_POINT = 'resources';
 
 const ListResources = ({ onChangeCrudMode }: Props) => {
     const [resourcesList, setResourcesList] = useState<Resource[]>([]);
