@@ -131,7 +131,7 @@ function Table({
                         table.getRowModel().rows.map((row, i) => (
                             <tr
                                 key={row.id}
-                                className={`font-color-primary${i % 2 === 0 ? "bg-primary-color" : "bg-secondary-color"}`}
+                                className={`${i % 2 === 0 ? "font-color-primary" : "font-color-secondary"}`}
                             >
                                 {row.getVisibleCells().map((cell) => (
                                     <td key={cell.id} className="px-3.5 py-2">
