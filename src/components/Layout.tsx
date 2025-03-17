@@ -18,9 +18,9 @@ const menuLinks = [
         icon: 'fa-cubes-stacked',
     },
     {
-        label: 'Inbox',
-        link: 'Inbox',
-        icon: 'fa-home',
+        label: 'Máquinas',
+        link: 'machines',
+        icon: 'fa-industry',
     },
 ];
 
