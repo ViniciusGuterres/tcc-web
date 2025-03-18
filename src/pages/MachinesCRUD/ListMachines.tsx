@@ -31,12 +31,12 @@ const handleClickDelete = async (machineID: string | number) => {
 const TABLE_COLUMNS = [
     {
         name: "name",
-        header: "Nome",
+        header: "Nome da máquina",
         type: 'default',
     },
     {
         name: "power",
-        header: "Potência",
+        header: "Potência (CV)",
         type: 'default',
     },
     {
@@ -77,7 +77,7 @@ const ListMachines = ({ onChangeCrudMode }: Props) => {
         const { err, data } = await fetchRequest(ENTITY_END_POINT, 'GET', null);
 
         if (err) {
-            console.log(err || 'Erro ao pagar lista de máquinas');
+            console.log(err || 'Erro ao pegar lista de máquinas');
 
             alert(`Erro ao pegar dados`);
             return;
