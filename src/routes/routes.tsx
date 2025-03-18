@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "../components/Layout";
 import PrivateRoute from "./PrivateRoute";
+import MachinesCRUD from "../pages/MachinesCRUD";
 
 // Lazy-loaded pages for better performance
 // const Home = lazy(() => import("../pages/Home"));
@@ -23,17 +24,25 @@ const AppRoutes = () => {
                     <Route element={<Layout />}>
 
                         {/* Resources */}
-                        <Route 
+                        <Route
                             path="resources"
                             element={
                                 <Suspense fallback={<div>Loading...</div>}>
                                     <ResourcesCRUD />
                                 </Suspense>
-                            } 
+                            }
                         />
 
+                        {/* Machines */}
+                        <Route
+                            path="machines"
+                            element={
+                                <Suspense fallback={<div>Loading...</div>}>
+                                    <MachinesCRUD />
+                                </Suspense>
+                            }
+                        />
 
-                        <Route path="inbox" element={<h1>Inbox Page</h1>} />
                         <Route path="*" element={<h1>404 Not Found</h1>} />
                     </Route>
                 </Route>
