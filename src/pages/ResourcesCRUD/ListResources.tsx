@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Button from "../../components/Button";
 import fetchRequest from "../../utils/fetchRequest";
 import Table from "../../components/Table";
+import resourceCategoryTranslate from "../../utils/resourceCategoryTranslate";
 interface Props {
     onChangeCrudMode: (newCrudMode: ResourceCrudModeTypesAllowed) => void
 };
@@ -40,6 +41,8 @@ const TABLE_COLUMNS = [
     {
         name: "category",
         header: "Categoria",
+        format: 'custom',
+        customFormatFunction: resourceCategoryTranslate,
         type: 'default',
     },
     {
