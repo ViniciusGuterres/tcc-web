@@ -10,16 +10,20 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import formatToBRL from "../utils/formatToBRL";
+
 interface ActionButtonType {
     type: string,
     onClickHandler: (id: string | number) => void,
     enabled: boolean,
 }
 
+type customFormatFunctionType = (value: string | number) => void;
+
 interface Column {
     name: string,
     header: string,
     format?: string,
+    customFormatFunction?: customFormatFunctionType, 
     type: string,
     actionButton?: ActionButtonType,
 };
@@ -35,10 +39,21 @@ function Table({
 }: Props) {
     const columnHelper = createColumnHelper();
 
-    const formatCellValue = (format, value) => {
+    const formatCellValue = (format: string | undefined, value: string | number, customFormatFunction: customFormatFunctionType | undefined) => {
         switch (format) {
             case 'currency-BRL':
-                return formatToBRL(value);
+                if (typeof value === 'number') {
+                    return formatToBRL(value);
+                }
+
+                return value;
+
+            case 'custom':
+                if (customFormatFunction && typeof customFormatFunction === 'function') {
+                    return customFormatFunction(value);
+                }
+                
+                return value;
             default:
                 return value;
         }
@@ -77,7 +92,7 @@ function Table({
                         return actionButtonBuilder(column.actionButton, column.header, rowData);
                     }
 
-                    return formatCellValue(column.format, info.getValue());
+                    return formatCellValue(column.format, info.getValue(), column.customFormatFunction);
                 },
                 footer: info => info.column.id,
             })
