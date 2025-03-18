@@ -28,6 +28,14 @@ declare global {
         createdAt: string,
         updatedAt: string,
     }
+
+
+    // Form component types
+    type FieldType = {
+        name: string;
+        label: string;
+        type?: "text" | "email" | "number" | "password";
+    };
 };
 
 export {};
