@@ -34,6 +34,7 @@ declare global {
     type FieldType = {
         name: string;
         label: string;
+        placeholder?: string;
         type?: "text" | "email" | "number" | "password";
     };
 };
