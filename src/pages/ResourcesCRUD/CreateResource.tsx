@@ -1,22 +1,12 @@
 import React, { useState } from "react"
 import "./resources.css";
+import { RESOURCE_CATEGORY_OPTIONS } from "../../constants/resourceCategory";
 
 // Components
 import Input from "../../components/Input";
 import CustomSelect from "../../components/CustomSelect";
 import Button from "../../components/Button";
 import fetchRequest from "../../utils/fetchRequest";
-
-// Globals
-const CATEGORY_OPTIONS = [
-    { value: "COMPONENT", label: "Componente" },
-    { value: "ELECTRICITY", label: "Eletricidade" },
-    { value: "GAS", label: "Gás" },
-    { value: "RAW_MATERIAL", label: "Matéria-prima" },
-    { value: "RETAIL", label: "Retalho" },
-    { value: "SILICATE", label: "Silicato" },
-    { value: "WATER", label: "Água" },
-];
 
 interface Option {
     value: string | number;
@@ -125,7 +115,7 @@ function CreateResource({ onChangeCrudMode }: Props) {
                                 </label>
 
                                 <CustomSelect
-                                    options={CATEGORY_OPTIONS}
+                                    options={RESOURCE_CATEGORY_OPTIONS}
                                     value={selectedCategory}
                                     onChange={handleChangeSelectedCategory}
                                     isMulti={false}
