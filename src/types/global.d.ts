@@ -18,6 +18,8 @@ declare global {
         name: string,
     };
 
+    type CrudModesAllowed ="list" | "create" | "edit";
+
     type ResourceCrudModeTypesAllowed = "list" | "create" | "edit";
     type MachinesCrudModeTypesAllowed = "list" | "create" | "edit";
 
