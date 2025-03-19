@@ -14,7 +14,8 @@ const machinesRoutes: RouteObject = {
             element: <Layout />,
             children: [
                 { path: "", element: <Suspense fallback={<div>Carregando...</div>}><MachineList /></Suspense> },
-                { path: "edit/:id", element: <Suspense fallback={<div>Loading...</div>}><MachineForm crudMode={'edit'} /></Suspense> }
+                { path: "create", element: <Suspense fallback={<div>Carregando...</div>}><MachineForm crudMode={'create'} /></Suspense> },
+                { path: "edit/:id", element: <Suspense fallback={<div>Carregando...</div>}><MachineForm crudMode={'edit'} /></Suspense> },
             ]
         }
     ],
