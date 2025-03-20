@@ -5,9 +5,15 @@ import { useNavigate, useParams } from "react-router";
 import fetchRequest from "../../utils/fetchRequest";
 import Button from "../../components/Button";
 
-const userSchema = z.object({
-    machineName: z.string().min(4, "O nome da máquina deve possuir no minimo 4 caracteres"),
-    power: z.number().min(20, "Deve haver no minimo 20 caracteres"),
+const machineSchema = z.object({
+    name: z.string().min(4, "O nome da máquina deve possuir no mínimo 4 caracteres"),
+    power: z
+        .string()
+        // .min(1, "A potência é obrigatória")
+        // .transform((val) => Number(val))
+        // .refine((val) => !isNaN(val) && val >= 20, {
+        //     message: "Deve haver no mínimo 20 CV",
+        // }),
 });
 
 const fields: FieldType[] = [
@@ -76,7 +82,7 @@ function MachineForm({ crudMode }: Props) {
         navigate("/machines");
     }
 
-    const handleSubmit = async (formData: any) => {
+    const handleSubmit = async (formData: any) => {        
         setLoading(true);
         let response;
 
@@ -89,16 +95,20 @@ function MachineForm({ crudMode }: Props) {
         }
 
         if (response.err) {
-            alert("Erro ao salvar os dados. Por favor, tente novamente.");
+            console.log(response.err)
+            
+            if (typeof response.err === 'string') {
+                alert(response.err);
+            } else {
+                alert('Erro ao salvar os dados. Por favor, tente novamente.');
+            }
+
             setLoading(false);
             return;
         }
 
         alert(isEditMode ? "Máquina atualizada com sucesso!" : "Máquina criada com sucesso!");
-
-        setTimeout(() => {
-            navigate("/machines");
-        }, 4000);
+        navigate("/machines");
     };
 
     return (
@@ -116,8 +126,8 @@ function MachineForm({ crudMode }: Props) {
 
             <Form
                 fields={fields}
-                schema={userSchema}
-                onSubmit={handleSubmit}
+                schema={machineSchema}
+                submitFunc={handleSubmit}
                 submitButtonLabel={isEditMode ? 'Atualizar' : 'Cadastrar'}
                 initialData={machineData}
             />
