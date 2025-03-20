@@ -7,7 +7,7 @@ import { useEffect } from "react";
 interface FormProps<T> {
     fields: FieldType[];
     schema: ZodType<T>;
-    onSubmit: SubmitHandler<any>;
+    submitFunc?: SubmitHandler<any>;
     submitButtonLabel?: string,
     initialData?: Partial<T>,
 }
@@ -15,7 +15,7 @@ interface FormProps<T> {
 const Form = <T extends Record<string, any>>({
     fields,
     schema,
-    onSubmit,
+    submitFunc,
     submitButtonLabel,
     initialData,
 }: FormProps<T>) => {
@@ -35,8 +35,24 @@ const Form = <T extends Record<string, any>>({
         }
     }, [initialData, reset]);
 
+    const handleInvalidSubmit = err => {
+        console.log('Error to submit form obj: ', err);
+        alert('Um erro inesperado ocorreu. Por favor, tente novamente!')
+    }
+
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="p-4 space-y-4 border rounded-md">
+        <form
+            onSubmit={(e) => {
+                e.preventDefault();
+
+                handleSubmit(data => {
+                    if (submitFunc && typeof submitFunc === 'function') {
+                        submitFunc(data);
+                    }
+                }, handleInvalidSubmit)(e);
+            }}
+            className="p-4 space-y-4 border rounded-md"
+        >
             {fields.map((field) => (
                 <div key={field.name}>
                     <label className="block">{field.label}:</label>
@@ -55,12 +71,28 @@ const Form = <T extends Record<string, any>>({
                     )}
                 </div>
             ))}
-
+            {/* 
             <Button
+                onClickFunc={handleSubmit(onSubmitt)}
                 name={isSubmitting ? "Processando..." : (submitButtonLabel || 'Enviar')}
                 type="submit"
                 isDisabled={isSubmitting}
-            />
+            /> */}
+
+            <div style={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}>
+                <button
+                    // onClick={}
+                    type="submit"
+                    className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow justify-center items-center flex gap-4"
+                >
+                    {submitButtonLabel}
+                </button>
+            </div>
         </form>
     );
 };
