@@ -23,9 +23,10 @@ const Form = <T extends Record<string, any>>({
         register,
         handleSubmit,
         reset,
-        formState: { errors, isSubmitting },
+        formState: { errors, isSubmitting, isValid, },
     } = useForm<T>({
         resolver: zodResolver(schema),
+        mode: 'onChange',
         defaultValues: initialData as DefaultValues<T> || {} as DefaultValues<T>,
     });
 
@@ -86,12 +87,14 @@ const Form = <T extends Record<string, any>>({
                 justifyContent: 'center',
             }}>
                 <button
-                    // onClick={}
                     type="submit"
-                    className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow justify-center items-center flex gap-4"
+                    disabled={!isValid || isSubmitting}
+                    className={`bg-white text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow justify-center items-center flex gap-4 ${!isValid || isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-100"
+                        }`}
                 >
-                    {submitButtonLabel}
+                    {isSubmitting ? "Processando..." : submitButtonLabel}
                 </button>
+
             </div>
         </form>
     );
