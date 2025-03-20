@@ -20,9 +20,6 @@ declare global {
 
     type CrudModesAllowed ="list" | "create" | "edit";
 
-    type ResourceCrudModeTypesAllowed = "list" | "create" | "edit";
-    type MachinesCrudModeTypesAllowed = "list" | "create" | "edit";
-
     interface Machine {
         id: string,
         name: string,
@@ -31,6 +28,10 @@ declare global {
         updatedAt: string,
     }
 
+    interface Option {
+        value: string | number;
+        label: string;
+    }
 
     // Form component types
     type FieldType = {
@@ -38,6 +39,7 @@ declare global {
         label: string;
         placeholder?: string;
         type?: "text" | "email" | "number" | "password";
+        options?: Option[];
     };
 };
 
