@@ -12,7 +12,7 @@ type Icon = {
 interface Props {
     className?: string,
     name: string,
-    onClickFunc: () => void,
+    onClickFunc?: () => void,
     icon?: Icon,
     type?: ButtonType,
     isDisabled?: boolean,
@@ -35,7 +35,7 @@ function Button({
     const handleButtonClicked = (event: ButtonEvent): void => {
         event.preventDefault();
 
-        if (!isDisabled) onClickFunc();
+        if (!isDisabled && onClickFunc) onClickFunc();
     }
 
     return (
