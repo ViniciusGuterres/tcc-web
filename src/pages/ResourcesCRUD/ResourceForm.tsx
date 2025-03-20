@@ -4,7 +4,7 @@ import { z } from "zod";
 import { useNavigate, useParams } from "react-router";
 import fetchRequest from "../../utils/fetchRequest";
 import Button from "../../components/Button";
-
+import { RESOURCE_CATEGORY_OPTIONS } from "../../constants/resourceCategory";
 
 const fields: FieldType[] = [
     {
@@ -13,10 +13,10 @@ const fields: FieldType[] = [
         type: "text",
         placeholder: 'EX: Água',
     },
-    {
-        name: "category",
-        label: "Categoria",
-        type: "text",
+    { 
+        name: "category", 
+        label: "Categoria", 
+        options: RESOURCE_CATEGORY_OPTIONS,
     },
     {
         name: "unity",
@@ -26,9 +26,9 @@ const fields: FieldType[] = [
 ];
 
 const resourceSchema = z.object({
-    name: z.string().min(4, "O nome do recurso deve possuir no mínimo 4 caracteres"),
-    category: z.string().min(4, "O nome do recurso deve possuir no mínimo 4 caracteres"),
-    unity: z.string().min(4, "O nome do recurso deve possuir no mínimo 4 caracteres"),
+    name: z.string().nonempty("Por favor, preencha o nome do recurso"),
+    category: z.string().nonempty("Selecione uma categoria!"),
+    unity: z.string().nonempty("Por favor, Preencha o valor unitário"),
 });
 
 interface Props {
