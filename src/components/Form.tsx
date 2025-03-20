@@ -1,8 +1,10 @@
-import { useForm, SubmitHandler, Path, DefaultValues } from "react-hook-form";
+import { useForm, SubmitHandler, Path, DefaultValues, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ZodType } from "zod";
-import Button from "./Button";
 import { useEffect } from "react";
+
+// Components
+import CustomSelect from "./CustomSelect";
 
 interface FormProps<T> {
     fields: FieldType[];
@@ -23,6 +25,7 @@ const Form = <T extends Record<string, any>>({
         register,
         handleSubmit,
         reset,
+        control,
         formState: { errors, isSubmitting, isValid, },
     } = useForm<T>({
         resolver: zodResolver(schema),
@@ -43,6 +46,7 @@ const Form = <T extends Record<string, any>>({
 
     return (
         <form
+            className="p-4 space-y-4 border rounded-md"
             onSubmit={(e) => {
                 e.preventDefault();
 
@@ -52,52 +56,54 @@ const Form = <T extends Record<string, any>>({
                     }
                 }, handleInvalidSubmit)(e);
             }}
-            className="p-4 space-y-4 border rounded-md"
         >
             {fields.map((field) => (
                 <div key={field.name}>
                     <label className="block">{field.label}:</label>
 
-                    <input
-                        type={field.type || "text"}
-                        {...register(field.name as Path<T>)}
-                        className="border p-2 w-full"
-                        placeholder={field.placeholder || ''}
-                    />
+                    {field.options ? (
+                        // If options exist, render CustomSelect
+                        <Controller
+                            control={control}
+                            name={field.name as Path<T>}
+                            rules={{ required: "Esse campo é obrigatorio" }}
+                            render={({ field: { onChange, value } }) => (
+                                <CustomSelect
+                                    options={field.options || []}
+                                    value={field.options?.find((opt) => opt.value === value) || null}
+                                    onChange={(selectedOption) => onChange(selectedOption?.value)}
+                                />
+                            )}
+                        />
+                    ) : (
+                        // Otherwise, render normal input
+                        <input
+                            type={field.type || "text"}
+                            {...register(field.name as Path<T>)}
+                            className="border p-2 w-full"
+                            placeholder={field.placeholder || ""}
+                        />
+                    )}
 
                     {errors[field.name as keyof T] && (
-                        <p className="text-red-500">
-                            {errors[field.name as keyof T]?.message?.toString()}
-                        </p>
+                        <p className="text-red-500">{errors[field.name as keyof T]?.message?.toString()}</p>
                     )}
                 </div>
             ))}
-            {/* 
-            <Button
-                onClickFunc={handleSubmit(onSubmitt)}
-                name={isSubmitting ? "Processando..." : (submitButtonLabel || 'Enviar')}
-                type="submit"
-                isDisabled={isSubmitting}
-            /> */}
 
-            <div style={{
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-            }}>
+            <div className="flex justify-center">
                 <button
                     type="submit"
                     disabled={!isValid || isSubmitting}
-                    className={`bg-white text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow justify-center items-center flex gap-4 ${!isValid || isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-100"
+                    className={`bg-white text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow flex gap-4 ${!isValid || isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-100"
                         }`}
                 >
                     {isSubmitting ? "Processando..." : submitButtonLabel}
                 </button>
-
             </div>
         </form>
     );
+
 };
 
 export default Form;
