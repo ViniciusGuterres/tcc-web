@@ -29,7 +29,7 @@ const ListMachines = () => {
             type: 'action',
             actionButton: {
                 type: "edit",
-                onClickHandler: id => {handleClickEdit(id) },
+                onClickHandler: id => { handleClickEdit(id) },
                 enabled: true,
             },
         },
@@ -48,23 +48,25 @@ const ListMachines = () => {
     const handleClickDelete = async (machineID: string | number) => {
         if (!machineID) return null;
 
-        const deleteMachineEndPoint = `${ENTITY_END_POINT}/${machineID}`;
+        if (confirm('Deseja realmente excluir essa máquina ?')) {
+            const deleteMachineEndPoint = `${ENTITY_END_POINT}/${machineID}`;
 
-        const { data, err } = await fetchRequest(deleteMachineEndPoint, 'DELETE', null);
+            const { data, err } = await fetchRequest(deleteMachineEndPoint, 'DELETE', null);
 
-        if (err || !data) {
-            console.log(err || 'Missing req.data');
+            if (err || !data) {
+                console.log(err || 'Missing req.data');
 
-            alert(`Erro ao deletar. Por favor, tente novamente`);
-            return;
+                alert(`Erro ao deletar. Por favor, tente novamente`);
+                return;
+            }
+
+            if (data === 'success') {
+                alert(`Máquina deletada com sucesso!`);
+                window.location.reload();
+            }
+
+            return null;
         }
-
-        if (data === 'success') {
-            alert(`Máquina deletada com sucesso!`);
-            window.location.reload();
-        }
-
-        return null;
     }
 
     const handleClickEdit = (machineId: string | number) => {
