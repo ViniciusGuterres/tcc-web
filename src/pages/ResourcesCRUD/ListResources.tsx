@@ -53,7 +53,7 @@ const ListResources = () => {
             type: 'action',
             actionButton: {
                 type: "edit",
-                onClickHandler: () => { },
+                onClickHandler: (id) => { handleClickEdit(id) },
                 enabled: true,
             },
         },
@@ -68,6 +68,13 @@ const ListResources = () => {
             },
         },
     ];
+
+    
+    const handleClickEdit = (machineId: string | number) => {
+        if (!machineId) return null;
+
+        navigate(`/resources/edit/${machineId}`);
+    }
 
     const handleClickDeleteResource = async (resourceID: string | number) => {
         if (!resourceID) return null;
