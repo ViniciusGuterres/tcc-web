@@ -48,7 +48,7 @@ const ListMachines = () => {
     const handleClickDelete = async (machineID: string | number) => {
         if (!machineID) return null;
 
-        if (confirm('Deseja realmente excluir essa máquina ?')) {
+        if (window.confirm('Deseja realmente excluir essa máquina ?')) {
             const deleteMachineEndPoint = `${ENTITY_END_POINT}/${machineID}`;
 
             const { data, err } = await fetchRequest(deleteMachineEndPoint, 'DELETE', null);
