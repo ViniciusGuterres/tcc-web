@@ -21,7 +21,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
     options,
     value,
     onChange,
-    placeholder = "Select...",
+    placeholder = "Selecione...",
     isMulti = false,
     isDisabled = false,
     isSearchable = true,
