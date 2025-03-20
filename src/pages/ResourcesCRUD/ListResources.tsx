@@ -3,98 +3,98 @@ import Button from "../../components/Button";
 import fetchRequest from "../../utils/fetchRequest";
 import Table from "../../components/Table";
 import resourceCategoryTranslate from "../../utils/resourceCategoryTranslate";
-interface Props {
-    onChangeCrudMode: (newCrudMode: ResourceCrudModeTypesAllowed) => void
-};
-
-const handleClickDeleteResource = async (resourceID: string | number) => {
-    if (!resourceID) return null;
-
-    const deleteResourceEndPoint = `${RESOURCES_END_POINT}/${resourceID}`;
-
-    const { data, err } = await fetchRequest(deleteResourceEndPoint, 'DELETE', null);
-
-    if (err || !data ) {
-        console.log(err || 'Missing req.data');
-
-        alert(`Erro ao deletar. Por favor, tente novamente`);
-        return;
-    }
-
-    if (data === 'success') {
-        alert(`Recurso deletado com sucesso!`);
-        window.location.reload();
-    }
-
-    return null;
-}
+import { useNavigate } from "react-router";
 
 // Globals
-const RESOURCE_END_POINT = 'resources';
-
-const TABLE_COLUMNS = [
-    {
-        name: "name",
-        header: "Nome",
-        type: 'default',
-    },
-    {
-        name: "category",
-        header: "Categoria",
-        format: 'custom',
-        customFormatFunction: resourceCategoryTranslate,
-        type: 'default',
-    },
-    {
-        name: "unitValue",
-        header: "Valor unitário",
-        format: "currency-BRL",
-        type: 'default',
-    },
-    {
-        name: "currentQuantity",
-        header: "Quantidade",
-        type: 'default',
-    },
-    {
-        name: "currentQuantityPrice",
-        header: "Preço",
-        type: 'default',
-    },
-    {
-        name: "edit",
-        header: "Editar",
-        type: 'action',
-        actionButton: {
-            type: "edit",
-            onClickHandler: () => {},
-            enabled: true,
-        },
-    },
-    {
-        name: "delete",
-        header: "Deletar",
-        type: 'action',
-        actionButton: {
-            type: "delete",
-            onClickHandler: (id) => { handleClickDeleteResource(id) },
-            enabled: true,
-        },
-    },
-];
-
 const RESOURCES_END_POINT = 'resources';
 
-const ListResources = ({ onChangeCrudMode }: Props) => {
+const ListResources = () => {
     const [resourcesList, setResourcesList] = useState<Resource[]>([]);
+
+    const navigate = useNavigate();
 
     // Get initial data (resource list) when component did mount
     useEffect(() => {
         getInitialData();
     }, []);
 
+    const TABLE_COLUMNS = [
+        {
+            name: "name",
+            header: "Nome",
+            type: 'default',
+        },
+        {
+            name: "category",
+            header: "Categoria",
+            format: 'custom',
+            customFormatFunction: resourceCategoryTranslate,
+            type: 'default',
+        },
+        {
+            name: "unitValue",
+            header: "Valor unitário",
+            format: "currency-BRL",
+            type: 'default',
+        },
+        {
+            name: "currentQuantity",
+            header: "Quantidade",
+            type: 'default',
+        },
+        {
+            name: "currentQuantityPrice",
+            header: "Preço",
+            type: 'default',
+        },
+        {
+            name: "edit",
+            header: "Editar",
+            type: 'action',
+            actionButton: {
+                type: "edit",
+                onClickHandler: () => { },
+                enabled: true,
+            },
+        },
+        {
+            name: "delete",
+            header: "Deletar",
+            type: 'action',
+            actionButton: {
+                type: "delete",
+                onClickHandler: (id) => { handleClickDeleteResource(id) },
+                enabled: true,
+            },
+        },
+    ];
+
+    const handleClickDeleteResource = async (resourceID: string | number) => {
+        if (!resourceID) return null;
+
+        if (window.confirm('Deseja realmente excluir esse recurso ?')) {
+            const deleteResourceEndPoint = `${RESOURCES_END_POINT}/${resourceID}`;
+
+            const { data, err } = await fetchRequest(deleteResourceEndPoint, 'DELETE', null);
+
+            if (err || !data) {
+                console.log(err || 'Missing req.data');
+
+                alert(`Erro ao deletar. Por favor, tente novamente`);
+                return;
+            }
+
+            if (data === 'success') {
+                alert(`Recurso deletado com sucesso!`);
+                window.location.reload();
+            }
+
+            return null;
+        }
+    }
+
     const getInitialData = async () => {
-        const { err, data } = await fetchRequest(RESOURCE_END_POINT, 'GET', null);
+        const { err, data } = await fetchRequest(RESOURCES_END_POINT, 'GET', null);
 
         if (err) {
             console.log(err || 'Erro ao pagar lista de recursos');
@@ -112,7 +112,7 @@ const ListResources = ({ onChangeCrudMode }: Props) => {
         <>
             <Button
                 name="Novo recurso"
-                onClickFunc={() => onChangeCrudMode('create')}
+                onClickFunc={() => { navigate('/resources/create') }}
                 isDisabled={false}
                 icon={{
                     position: 'left',
