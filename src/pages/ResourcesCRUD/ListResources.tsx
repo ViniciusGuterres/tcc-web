@@ -45,7 +45,19 @@ const ListResources = () => {
         {
             name: "currentQuantityPrice",
             header: "Preço",
+            format: "currency-BRL",
             type: 'default',
+        },
+        {
+            name: "createTransaction",
+            header: "Ações",
+            type: 'action',
+            actionButton: {
+                type: "custom",
+                onClickHandler: (id) => { handleClickGoToResourceTransactionForm(id) },
+                enabled: true,
+                label: 'Nova transação',
+            },
         },
         {
             name: "edit",
@@ -69,11 +81,14 @@ const ListResources = () => {
         },
     ];
 
+    const handleClickGoToResourceTransactionForm = (resourceID: string | number) => {
+        navigate(`/resources/createTransaction/${resourceID}`);
+    }
     
-    const handleClickEdit = (machineId: string | number) => {
-        if (!machineId) return null;
+    const handleClickEdit = (resourceId: string | number) => {
+        if (!resourceId) return null;
 
-        navigate(`/resources/edit/${machineId}`);
+        navigate(`/resources/edit/${resourceId}`);
     }
 
     const handleClickDeleteResource = async (resourceID: string | number) => {
@@ -87,7 +102,7 @@ const ListResources = () => {
             if (err || !data) {
                 console.log(err || 'Missing req.data');
 
-                alert(`Erro ao deletar. Por favor, tente novamente`);
+                alert(err|| 'Erro ao deletar. Por favor, tente novamente');
                 return;
             }
 
