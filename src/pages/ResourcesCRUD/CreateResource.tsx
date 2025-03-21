@@ -13,14 +13,10 @@ interface Option {
     label: string;
 }
 
-interface Props {
-    onChangeCrudMode: (newCrudMode: ResourceCrudModeTypesAllowed) => void
-};
-
 // Globals
 const RESOURCE_END_POINT = 'resources';
 
-function CreateResource({ onChangeCrudMode }: Props) {
+function CreateResource({ onChangeCrudMode }) {
     const [name, setName] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<Option | null>(null);
     const [unityValue, setUnityValue] = useState('');
