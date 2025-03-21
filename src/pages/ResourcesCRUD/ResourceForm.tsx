@@ -79,8 +79,6 @@ function ResourceForm({ crudMode }: Props) {
         return null;
     }
 
-
-
     const goBackToResourceList = () => {
         navigate("/resources");
     }
