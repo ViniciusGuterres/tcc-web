@@ -15,6 +15,7 @@ interface ActionButtonType {
     type: string,
     onClickHandler: (id: string | number) => void,
     enabled: boolean,
+    label?: string,
 }
 
 type customFormatFunctionType = (value: string | number) => void;
@@ -59,7 +60,7 @@ function Table({
         }
     }
 
-    const actionButtonBuilder = ({ type, onClickHandler, enabled }: ActionButtonType, header: string, rowData: any) => {
+    const actionButtonBuilder = ({ type, onClickHandler, enabled, label }: ActionButtonType, header: string, rowData: any) => {
         let buttonClass = 'px-2 py-1 border rounded-md ';
 
         if (type === 'delete') {
@@ -73,7 +74,7 @@ function Table({
                 onClick={() => { onClickHandler(rowData.id) }}
                 className={buttonClass}
             >
-                {header}
+                {label || header}
             </button>
         );
     }
