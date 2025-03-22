@@ -24,7 +24,7 @@ interface Column {
     name: string,
     header: string,
     format?: string,
-    customFormatFunction?: customFormatFunctionType, 
+    customFormatFunction?: customFormatFunctionType,
     type: string,
     actionButton?: ActionButtonType,
 };
@@ -32,13 +32,24 @@ interface Column {
 interface Props {
     data: Array<any>,
     columns: Array<Column>,
+    rowsExpandable?: boolean
 };
 
 function Table({
     data,
     columns,
+    rowsExpandable = false,
 }: Props) {
+    const [expandedRow, setExpandedRow] = useState<string | null>(null);
+
     const columnHelper = createColumnHelper();
+
+
+    const toggleExpandRow = (evt: React.MouseEvent<Element, MouseEvent>, rowId: string) => {
+        evt.stopPropagation();
+
+        setExpandedRow(expandedRow === rowId ? null : rowId);
+    };
 
     const formatCellValue = (format: string | undefined, value: string | number, customFormatFunction: customFormatFunctionType | undefined) => {
         switch (format) {
@@ -53,7 +64,7 @@ function Table({
                 if (customFormatFunction && typeof customFormatFunction === 'function') {
                     return customFormatFunction(value);
                 }
-                
+
                 return value;
             default:
                 return value;
@@ -87,7 +98,7 @@ function Table({
                     const rowData = info.row.original; // Get the full object
 
                     if (
-                        column.type === 'action' 
+                        column.type === 'action'
                         && column.actionButton
                     ) {
                         return actionButtonBuilder(column.actionButton, column.header, rowData);
@@ -147,16 +158,35 @@ function Table({
                 <tbody>
                     {table.getRowModel().rows.length ? (
                         table.getRowModel().rows.map((row, i) => (
-                            <tr
-                                key={row.id}
-                                className={`${i % 2 === 0 ? "font-color-primary" : "font-color-secondary"}`}
-                            >
-                                {row.getVisibleCells().map((cell) => (
-                                    <td key={cell.id} className="px-3.5 py-2">
-                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                    </td>
-                                ))}
-                            </tr>
+                            <>
+                                <tr
+                                    key={row.id}
+                                    className={`${i % 2 === 0 ? "font-color-primary" : "font-color-secondary"}`}
+                                    onClick={evt => {
+                                        if (rowsExpandable) {
+                                            toggleExpandRow(evt, row.id)
+                                        }
+                                    }}
+                                >
+                                    {row.getVisibleCells().map((cell) => (
+                                        <td key={cell.id} className="px-3.5 py-2">
+                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                        </td>
+                                    ))}
+                                </tr>
+
+                                {/* Expanded Row */}
+                                {rowsExpandable && expandedRow === row.id && (
+                                    <tr className="bg-gray-100">
+                                        <td colSpan={columns.length} className="p-2 border">
+                                            <div className="p-2">
+                                                <strong>Detalhes:</strong>
+                                                <pre className="whitespace-pre-wrap">{JSON.stringify(row.original, null, 2)}</pre>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )}
+                            </>
                         ))
                     ) : (
                         <tr className="text-center h-32 font-color-primary">

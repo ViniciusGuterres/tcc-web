@@ -146,6 +146,7 @@ const ListResources = () => {
             <Table
                 data={resourcesList}
                 columns={TABLE_COLUMNS}
+                rowsExpandable={true}
             />
         </>
     );
