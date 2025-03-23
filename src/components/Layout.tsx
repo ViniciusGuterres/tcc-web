@@ -22,6 +22,11 @@ const menuLinks = [
         link: 'machines',
         icon: 'fa-industry',
     },
+    {
+        label: 'Bateladas',
+        link: 'batch',
+        icon: 'fa-bolt',
+    },
 ];
 
 function Layout() {
