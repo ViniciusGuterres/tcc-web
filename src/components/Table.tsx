@@ -10,6 +10,8 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import formatToBRL from "../utils/formatToBRL";
+import formatDbTimestamp from "../utils/formatDbTimestamp";
+import formatNumber from "../utils/formatNumber";
 
 interface ActionButtonType {
     type: string,
@@ -57,11 +59,26 @@ function Table({
         setExpandedRow(expandedRow === rowId ? null : rowId);
     };
 
-    const formatCellValue = (format: string | undefined, value: string | number, customFormatFunction: customFormatFunctionType | undefined) => {
+    const formatCellValue = (format: string | undefined, value: string | number, customFormatFunction?: customFormatFunctionType | undefined) => {
         switch (format) {
             case 'currency-BRL':
                 if (typeof value === 'number') {
                     return formatToBRL(value);
+                }
+
+                return value;
+
+            case 'dbTimestamp':
+                if (typeof value === 'string') {
+                    return formatDbTimestamp(value);
+                }
+
+                return value;
+
+            case 'number':
+
+                if (typeof value === 'number') {
+                    return formatNumber(value);
                 }
 
                 return value;
@@ -139,7 +156,7 @@ function Table({
                                         key={`nested_data_table_data_${data.id}_${currentData}_${column.name}`}
                                         className="font-color-primary"
                                     >
-                                        {currentData}
+                                        {formatCellValue(column.format, currentData) || ''}
                                     </td>
                                 );
                             })
