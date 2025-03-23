@@ -7,9 +7,11 @@ import { useNavigate } from "react-router";
 
 // Globals
 const RESOURCES_END_POINT = 'resources';
+const TRANSACTIONS_END_POINT = 'transactions';
 
 const ListResources = () => {
     const [resourcesList, setResourcesList] = useState<Resource[]>([]);
+    const [resourcesTransactions, setResourcesTransactions] = useState({});
 
     const navigate = useNavigate();
 
@@ -41,6 +43,7 @@ const ListResources = () => {
             name: "currentQuantity",
             header: "Quantidade",
             type: 'default',
+            format: 'number',
         },
         {
             name: "currentQuantityPrice",
@@ -81,10 +84,42 @@ const ListResources = () => {
         },
     ];
 
+    const EXPANDABLE_ROW_COLUMNS = [
+        {
+            name: "type",
+            header: "Tipo",
+            type: 'default',
+        },
+        {
+            name: "quantity",
+            header: "Quantidade",
+            type: 'default',
+            format: 'number',
+        },
+        {
+            name: "cost",
+            header: "Custo",
+            type: 'default',
+            format: "currency-BRL",
+        },
+        {
+            name: "createdAt",
+            header: "Data de criação",
+            type: 'default',
+            format: "dbTimestamp",
+        },
+        {
+            name: "updatedAt",
+            header: "Data de atualização",
+            type: 'default',
+            format: "dbTimestamp",
+        },
+    ];
+
     const handleClickGoToResourceTransactionForm = (resourceID: string | number) => {
         navigate(`/resources/createTransaction/${resourceID}`);
     }
-    
+
     const handleClickEdit = (resourceId: string | number) => {
         if (!resourceId) return null;
 
@@ -102,7 +137,7 @@ const ListResources = () => {
             if (err || !data) {
                 console.log(err || 'Missing req.data');
 
-                alert(err|| 'Erro ao deletar. Por favor, tente novamente');
+                alert(err || 'Erro ao deletar. Por favor, tente novamente');
                 return;
             }
 
@@ -130,6 +165,38 @@ const ListResources = () => {
         }
     }
 
+    const getResourceTransactions = async (resourceId: ID | undefined) => {
+        if (!resourceId) return null;
+
+        // Check if already have the transactions in memory
+        if (resourcesTransactions?.[resourceId] != null) return null;
+
+        let response;
+
+        let resourceTransactionEndPoint = `${RESOURCES_END_POINT}/${resourceId}/${TRANSACTIONS_END_POINT}`;
+
+        response = await fetchRequest(resourceTransactionEndPoint, 'GET', null);
+
+        if (response.err) {
+            console.log(response.err)
+
+            if (typeof response.err === 'string') {
+                alert(response.err);
+            } else {
+                alert('Erro ao pegar os dados. Por favor, tente novamente.');
+            }
+
+            return;
+        }
+
+        if (response.data?.length > 0) {
+            const resourcesTransactionsCopy = { ...resourcesTransactions };
+            resourcesTransactionsCopy[resourceId] = response.data;
+
+            setResourcesTransactions(resourcesTransactionsCopy);
+        } 
+    }
+
     return (
         <>
             <Button
@@ -147,6 +214,9 @@ const ListResources = () => {
                 data={resourcesList}
                 columns={TABLE_COLUMNS}
                 rowsExpandable={true}
+                expandableRowColumns={EXPANDABLE_ROW_COLUMNS}
+                expandableRowsData={resourcesTransactions}
+                onExpandRowFunction={getResourceTransactions}
             />
         </>
     );
