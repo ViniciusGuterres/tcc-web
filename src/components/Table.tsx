@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, ReactElement, useEffect, useState } from "react";
 
 import {
     ColumnDef,
@@ -32,20 +32,26 @@ interface Column {
 interface Props {
     data: Array<any>,
     columns: Array<Column>,
-    rowsExpandable?: boolean
+    rowsExpandable?: boolean,
+    expandableRowColumns?: Array<Column>,
+    onExpandRowFunction?: (value?: ID) => void,
+    expandableRowsData?: Object,
 };
 
 function Table({
     data,
     columns,
     rowsExpandable = false,
+    expandableRowColumns,
+    onExpandRowFunction,
+    expandableRowsData,
 }: Props) {
-    const [expandedRow, setExpandedRow] = useState<string | null>(null);
+    const [expandedRow, setExpandedRow] = useState<ID | null>(null);
 
     const columnHelper = createColumnHelper();
 
 
-    const toggleExpandRow = (evt: React.MouseEvent<Element, MouseEvent>, rowId: string) => {
+    const toggleExpandRow = (evt: OnClickEvent, rowId: ID) => {
         evt.stopPropagation();
 
         setExpandedRow(expandedRow === rowId ? null : rowId);
@@ -111,6 +117,75 @@ function Table({
         ) as ColumnDef<any, any>[];
     }
 
+    const expandableRowBuilder = (row) => {
+        const buildTableData = () => {
+            const nestedRowData = expandableRowsData?.[row.original.id] || [];
+
+            let elements: ReactElement[] = [];
+
+            for (let i = 0; i < nestedRowData.length; i++) {
+                const data = nestedRowData[i];
+
+                elements.push(
+                    <tr
+                        key={`nested_data_table_row_${data.id}_${Date.now()}`}
+                    >
+                        {
+                            expandableRowColumns?.map(column => {
+                                const currentData = data[column.name];
+
+                                return (
+                                    <td
+                                        key={`nested_data_table_data_${data.id}_${currentData}_${column.name}`}
+                                        className="font-color-primary"
+                                    >
+                                        {currentData}
+                                    </td>
+                                );
+                            })
+                        }
+                    </tr>
+                );
+            }
+
+            return elements;
+        }
+
+        return (
+            <tr className="bg-black-100">
+                <td colSpan={columns.length} className="p-2 border">
+                    <table className="w-full border-collapse border border-gray-300">
+                        <thead className="font-color-primary">
+                            <tr>
+                                {
+                                    expandableRowColumns?.map(column => (
+                                        <th
+                                            className="border p-2"
+                                            key={`expandable_row_columns_${column.name}`}
+                                        >
+                                            {column.header}
+                                        </th>
+                                    ))
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {buildTableData()}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        );
+    }
+
+    const handleClickToExpandRow = (evt: OnClickEvent, rowId: ID) => {
+        if (onExpandRowFunction && typeof onExpandRowFunction === 'function') {
+            onExpandRowFunction(rowId);
+        }
+
+        toggleExpandRow(evt, rowId);
+    }
+
     const [globalFilter, setGlobalFilter] = useState("");
 
     const table = useReactTable({
@@ -140,7 +215,7 @@ function Table({
             </div>
 
             <table className="rounded-lg shadow dark:border w-full text-left bg-secondary-color">
-                <thead className=" font-color-primary">
+                <thead className="font-color-primary">
                     {table.getHeaderGroups().map((headerGroup) => (
                         <tr key={headerGroup.id}>
                             {headerGroup.headers.map((header) => (
@@ -158,13 +233,14 @@ function Table({
                 <tbody>
                     {table.getRowModel().rows.length ? (
                         table.getRowModel().rows.map((row, i) => (
+
                             <>
                                 <tr
                                     key={row.id}
-                                    className={`${i % 2 === 0 ? "font-color-primary" : "font-color-secondary"}`}
+                                    className={`font-color-primary ${i % 2 === 0 ? "" : "bg-gray-100"} ${rowsExpandable ? "cursor-pointer hover:bg-sky-100" : ""}`}
                                     onClick={evt => {
                                         if (rowsExpandable) {
-                                            toggleExpandRow(evt, row.id)
+                                            handleClickToExpandRow(evt, row.original.id);
                                         }
                                     }}
                                 >
@@ -175,17 +251,12 @@ function Table({
                                     ))}
                                 </tr>
 
-                                {/* Expanded Row */}
-                                {rowsExpandable && expandedRow === row.id && (
-                                    <tr className="bg-gray-100">
-                                        <td colSpan={columns.length} className="p-2 border">
-                                            <div className="p-2">
-                                                <strong>Detalhes:</strong>
-                                                <pre className="whitespace-pre-wrap">{JSON.stringify(row.original, null, 2)}</pre>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                )}
+                                {/* Expanded Row with Nested Table */}
+                                {
+                                    rowsExpandable
+                                    && expandedRow === row.original.id
+                                    && expandableRowColumns?.length
+                                    && expandableRowBuilder(row)}
                             </>
                         ))
                     ) : (
@@ -242,11 +313,11 @@ function Table({
                     onChange={(e) => {
                         table.setPageSize(Number(e.target.value));
                     }}
-                    className="p-2 bg-transparent"
+                    className="p-2 bg-transparent font-primary"
                 >
                     {[10, 20, 30, 50].map((pageSize) => (
-                        <option key={pageSize} value={pageSize}>
-                            Show {pageSize}
+                        <option key={pageSize} value={pageSize} className="font-primary">
+                            Páginas {pageSize}
                         </option>
                     ))}
                 </select>
