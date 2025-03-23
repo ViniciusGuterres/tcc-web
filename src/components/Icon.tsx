@@ -8,7 +8,8 @@ import {
     faCubesStacked,
     faPlus,
     faArrowLeft,
-    faIndustry
+    faIndustry,
+    faBolt
 } from '@fortawesome/free-solid-svg-icons'
 
 interface Props {
@@ -54,6 +55,10 @@ function Icon({
             
             case 'fa-industry':
                 icon = faIndustry;
+                break;
+
+            case 'fa-bolt':
+                icon = faBolt;
                 break;
 
             default:
