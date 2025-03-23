@@ -1,4 +1,5 @@
 declare global {
+    type ID = string | number;
     interface Settings {
         server: {
             host: string,
@@ -10,15 +11,30 @@ declare global {
 
     type ButtonEvent = React.MouseEvent<HTMLButtonElement>;
 
+    type TransactionTypes = 'OUTGOING' | 'INCOMING';
+
     interface Resource {
         category: string,
         currentQuantity: number,
         currentQuantityPrice: number,
-        id: number,
+        id: ID,
         name: string,
     };
 
+    interface ResourceTransaction {
+        id: ID,
+        createAt: string,
+        updatedAt: string,
+        type: TransactionTypes,
+        quantity: number,
+        resourceName: string,
+        batchId: ID | null,
+        cost: number,
+    }
+
     type CrudModesAllowed ="list" | "create" | "edit";
+
+    type OnClickEvent = React.MouseEvent<Element, MouseEvent>;
 
     interface Machine {
         id: string,
