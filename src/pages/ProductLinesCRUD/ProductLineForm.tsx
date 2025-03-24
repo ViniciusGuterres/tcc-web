@@ -61,7 +61,7 @@ function ProductLineForm({ crudMode }: Props) {
         }
 
         setProductLineData(data);
-        setLoading(true);
+        setLoading(false);
 
         return null;
     }
@@ -124,6 +124,7 @@ function ProductLineForm({ crudMode }: Props) {
                 submitFunc={handleSubmit}
                 submitButtonLabel={isEditMode ? 'Atualizar' : 'Cadastrar'}
                 initialData={productLineData}
+                isLoading={loading}
             />
         </div>
     );
