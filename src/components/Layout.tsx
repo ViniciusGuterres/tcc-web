@@ -22,6 +22,11 @@ const menuLinks = [
         link: 'machines',
         icon: 'fa-industry',
     },
+    {
+        label: 'Linha de Produto',
+        link: 'productLines',
+        icon: 'fa-layer-group',
+    },
     // {
     //     label: 'Bateladas',
     //     link: 'batches',
