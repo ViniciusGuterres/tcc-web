@@ -76,7 +76,6 @@ function Table({
                 return value;
 
             case 'number':
-
                 if (typeof value === 'number') {
                     return formatNumber(value);
                 }
@@ -156,7 +155,7 @@ function Table({
                                         key={`nested_data_table_data_${data.id}_${currentData}_${column.name}`}
                                         className="font-color-primary"
                                     >
-                                        {formatCellValue(column.format, currentData) || ''}
+                                        {formatCellValue(column.format, currentData, column.customFormatFunction) || ''}
                                     </td>
                                 );
                             })
