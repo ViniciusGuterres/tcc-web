@@ -44,6 +44,14 @@ declare global {
         updatedAt: string,
     }
 
+    interface ProductLine {
+        id: ID,
+        createdAt: string,
+        updatedAt: string,
+        name: string,
+        productQuantity: number,
+    }
+
     interface Batch {
         id: ID,
         createdAt: string,
