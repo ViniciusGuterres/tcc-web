@@ -4,6 +4,7 @@ import fetchRequest from "../../utils/fetchRequest";
 import Table from "../../components/Table";
 import resourceCategoryTranslate from "../../utils/resourceCategoryTranslate";
 import { useNavigate } from "react-router";
+import transactionTypeTranslate from "../../utils/transactionTypeTranslate";
 
 // Globals
 const RESOURCES_END_POINT = 'resources';
@@ -89,6 +90,8 @@ const ListResources = () => {
             name: "type",
             header: "Tipo",
             type: 'default',
+            format: 'custom',
+            customFormatFunction: transactionTypeTranslate,
         },
         {
             name: "quantity",
