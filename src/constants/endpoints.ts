@@ -9,6 +9,7 @@ const endPoints =  {
     transactionsEndPoint,
     productLinesEndPoint,
     productTypesEndPoint,
+    productsEndPoint,
 };
 
 export default endPoints;
