@@ -7,11 +7,11 @@ import Header from "./Header";
 import SidebarMenu from "./SidebarMenu";
 
 const menuLinks = [
-    {
-        label: 'Home',
-        link: 'home',
-        icon: 'fa-chart-pie',
-    },
+    // {
+    //     label: 'Home',
+    //     link: 'home',
+    //     icon: 'fa-chart-pie',
+    // },
     {
         label: 'Recursos',
         link: 'resources',
@@ -24,7 +24,7 @@ const menuLinks = [
     },
     {
         label: 'Bateladas',
-        link: 'batch',
+        link: 'batches',
         icon: 'fa-bolt',
     },
 ];
