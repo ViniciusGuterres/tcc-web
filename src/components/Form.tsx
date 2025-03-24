@@ -12,6 +12,7 @@ interface FormProps<T> {
     submitFunc?: SubmitHandler<any>;
     submitButtonLabel?: string,
     initialData?: Partial<T>,
+    isLoading?: boolean,
 }
 
 const Form = <T extends Record<string, any>>({
@@ -20,6 +21,7 @@ const Form = <T extends Record<string, any>>({
     submitFunc,
     submitButtonLabel,
     initialData,
+    isLoading,
 }: FormProps<T>) => {
     const {
         register,
@@ -43,6 +45,8 @@ const Form = <T extends Record<string, any>>({
         console.log('Error to submit form obj: ', err);
         alert('Um erro inesperado ocorreu. Por favor, tente novamente!')
     }
+
+    const submitButtonDisabled = !isValid || isSubmitting || isLoading;
 
     return (
         <form
@@ -94,9 +98,8 @@ const Form = <T extends Record<string, any>>({
             <div className="flex justify-center">
                 <button
                     type="submit"
-                    disabled={!isValid || isSubmitting}
-                    className={`bg-white text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow flex gap-4 ${!isValid || isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-100"
-                        }`}
+                    disabled={submitButtonDisabled}
+                    className={`bg-white text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow flex gap-4 ${submitButtonDisabled ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-100"}`}
                 >
                     {isSubmitting ? "Processando..." : submitButtonLabel}
                 </button>
