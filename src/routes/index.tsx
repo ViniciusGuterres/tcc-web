@@ -4,6 +4,7 @@ import Layout from "../components/Layout";
 import machinesRoutes from "./machinesRoutes";
 import resourcesRoutes from "./resourcesRoutes";
 import batchesRoutes from "./batchesRoutes";
+import productLinesRoutes from "./productLinesRoutes";
 
 // Lazy-loaded pages for better performance
 // const ResourcesCRUD = lazy(() => import("../pages/ResourcesCRUD"));
@@ -14,6 +15,7 @@ const router = createBrowserRouter([
     resourcesRoutes,
     machinesRoutes,
     batchesRoutes,
+    productLinesRoutes,
     {path: "*", element: <Layout />},
 ]);
 
