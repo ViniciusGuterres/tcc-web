@@ -27,6 +27,11 @@ const menuLinks = [
         link: 'productLines',
         icon: 'fa-layer-group',
     },
+    {
+        label: 'Tipo de Produto',
+        link: 'productTypes',
+        icon: 'fa-layer-group',
+    },
     // {
     //     label: 'Bateladas',
     //     link: 'batches',
