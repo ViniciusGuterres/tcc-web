@@ -4,6 +4,7 @@ import PrivateRoute from "./PrivateRoute";
 import Layout from "../components/Layout";
 
 const ListProductLines = lazy(() => import('../pages/ProductLinesCRUD/ListProductLines'));
+const ProductLineForm = lazy(() => import('../pages/ProductLinesCRUD/ProductLineForm'));
 
 const productLinesRoutes: RouteObject = {
     path: 'productLines',
@@ -13,6 +14,8 @@ const productLinesRoutes: RouteObject = {
             element: <Layout />,
             children: [
                 { path: "", element: <Suspense fallback={<div>Carregando...</div>}><ListProductLines /></Suspense> },
+                { path: "create", element: <Suspense fallback={<div>Carregando...</div>}><ProductLineForm crudMode={'create'} /></Suspense> },
+                { path: "edit/:id", element: <Suspense fallback={<div>Carregando...</div>}><ProductLineForm crudMode={'edit'} /></Suspense> },
             ]
         }
     ],
