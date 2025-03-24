@@ -44,6 +44,13 @@ declare global {
         updatedAt: string,
     }
 
+    interface Batch {
+        id: ID,
+        createdAt: string,
+        updatedAt: string,
+        batchFinalCost: number,
+    }
+
     interface Option {
         value: string | number;
         label: string;
