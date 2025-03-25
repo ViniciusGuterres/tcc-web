@@ -32,7 +32,7 @@ declare global {
         cost: number,
     }
 
-    type CrudModesAllowed ="list" | "create" | "edit";
+    type CrudModesAllowed = "list" | "create" | "edit";
 
     type OnClickEvent = React.MouseEvent<Element, MouseEvent>;
 
@@ -60,6 +60,20 @@ declare global {
         productQuantity: number,
     }
 
+    interface Product {
+        id: ID,
+        createdAt: string,
+        updatedAt: string,
+        name: string,
+        price: number,
+        height: number,
+        length: number,
+        width: number,
+        typeId: ID,
+        lineId: ID,
+        productStock: number,
+    }
+
     interface Batch {
         id: ID,
         createdAt: string,
@@ -82,4 +96,4 @@ declare global {
     };
 };
 
-export {};
+export { };
