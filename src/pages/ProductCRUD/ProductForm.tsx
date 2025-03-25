@@ -5,37 +5,13 @@ import { useNavigate, useParams } from "react-router";
 import fetchRequest from "../../utils/fetchRequest";
 import Button from "../../components/Button";
 import endPoints from '../../constants/endpoints';
+import transformArrayIntoSelectOptions from "../../utils/transformArrayIntoSelectOptions";
 
 const productsSchema = z.object({
     name: z.string().min(4, "O nome do produto deve possuir no mínimo 3 caracteres"),
+    // lineId: z.number().min(1, "Selecione uma linha de produto!"),
+    // typeID: z.number().min(1, "Selecione um tipo de produto!"),
 });
-
-const fields: FieldType[] = [
-    {
-        name: "name",
-        label: "Nome",
-        type: "text",
-        placeholder: 'EX: Produto 1',
-    },
-    {
-        name: "height",
-        label: "Altura",
-        type: "number",
-        placeholder: 'EX: 3,05',
-    },
-    {
-        name: "width",
-        label: "Largura",
-        type: "number",
-        placeholder: 'EX: 3,05',
-    },
-    {
-        name: "length",
-        label: "Comprimento",
-        type: "number",
-        placeholder: 'EX: 3,05',
-    },
-];
 
 const END_POINT = endPoints.productsEndPoint;
 
@@ -45,6 +21,8 @@ interface Props {
 
 function ProductForm({ crudMode }: Props) {
     const [productData, setProductData] = useState<Record<string, any>>({});
+    const [productLinesOptions, setProductLinesOptions] = useState<Array<Option>>([]);
+    const [productTypesOptions, setProductTypesOptions] = useState<Array<Option>>([]);
     const [loading, setLoading] = useState<boolean>(false);
 
     const { id } = useParams();
@@ -55,12 +33,52 @@ function ProductForm({ crudMode }: Props) {
     const isEditMode = crudMode === 'edit' && id;
 
     useEffect(() => {
+        getProductLinesData();
+        getProductTypesData();
+
         // Verify edit mode (create or edit)
         if (isEditMode && id) {
             getProductData(id);
         }
 
     }, []);
+
+    const fields: FieldType[] = [
+        {
+            name: "name",
+            label: "Nome",
+            type: "text",
+            placeholder: 'EX: Produto 1',
+        },
+        {
+            name: "height",
+            label: "Altura",
+            type: "number",
+            placeholder: 'EX: 3,05',
+        },
+        {
+            name: "width",
+            label: "Largura",
+            type: "number",
+            placeholder: 'EX: 3,05',
+        },
+        {
+            name: "length",
+            label: "Comprimento",
+            type: "number",
+            placeholder: 'EX: 3,05',
+        },
+        {
+            name: "lineId",
+            label: "Linha",
+            options: productLinesOptions,
+        },
+        {
+            name: "typeId",
+            label: "Tipo",
+            options: productTypesOptions,
+        },
+    ];
 
     const getProductData = async productId => {
         if (!productId) return null;
@@ -82,6 +100,46 @@ function ProductForm({ crudMode }: Props) {
         setLoading(false);
 
         return null;
+    }
+
+    const getProductLinesData = async () => {
+        const { err, data } = await fetchRequest(endPoints.productLinesEndPoint, 'GET', null);
+
+        if (err) {
+            console.log(err || 'Erro ao pegar lista de linhas de produto');
+
+            alert(`Erro ao pegar dados`);
+            return;
+        }
+        console.log(data);
+
+        if (data && Array.isArray(data) && data.length > 0) {
+            const productLinesOptions = transformArrayIntoSelectOptions(data, 'id', 'name');
+
+            if (productLinesOptions && productLinesOptions.length > 0) {
+                setProductLinesOptions(productLinesOptions);
+            }            
+        }
+    }
+
+    const getProductTypesData = async () => {
+        const { err, data } = await fetchRequest(endPoints.productTypesEndPoint, 'GET', null);
+
+        if (err) {
+            console.log(err || 'Erro ao pegar lista de tipos de produto');
+
+            alert(`Erro ao pegar dados`);
+            return;
+        }
+        console.log(data);
+
+        if (data && Array.isArray(data) && data.length > 0) {
+            const productTypesOptions = transformArrayIntoSelectOptions(data, 'id', 'name');
+
+            if (productTypesOptions && productTypesOptions.length > 0) {
+                setProductTypesOptions(productTypesOptions);
+            }            
+        }
     }
 
     const goBackToList = () => {
