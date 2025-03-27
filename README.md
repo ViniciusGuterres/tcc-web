@@ -1,12 +1,10 @@
-# Getting Started with Create React App
+# Passos manuais para subir o projeto
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+1) Baixe o nodeJs (https://nodejs.org/en/download)
 
-## Available Scripts
+2) Rode "npm install"
 
-In the project directory, you can run:
-
-### `npm start`
+3) Rode "npm start"
 
 # Design inspirations
 https://dribbble.com/shots/24191273-Sales-Analytics-Dashboard
