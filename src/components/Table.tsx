@@ -1,4 +1,4 @@
-import { FC, ReactElement, useEffect, useState } from "react";
+import { FC, ReactElement, ReactNode, useEffect, useState } from "react";
 
 import {
     ColumnDef,
@@ -15,12 +15,12 @@ import formatNumber from "../utils/formatNumber";
 
 interface ActionButtonType {
     type: string,
-    onClickHandler: (id: string | number) => void,
+    onClickHandler: (id: ID, entityId?: ID) => void,
     enabled: boolean,
     label?: string,
 }
 
-type customFormatFunctionType = (value: string | number) => void;
+type customFormatFunctionType = (value: ID) => void;
 
 interface Column {
     name: string,
@@ -93,7 +93,12 @@ function Table({
         }
     }
 
-    const actionButtonBuilder = ({ type, onClickHandler, enabled, label }: ActionButtonType, header: string, rowData: any) => {
+    const actionButtonBuilder = (
+        { type, onClickHandler, enabled, label }: ActionButtonType,
+        header: string,
+        rowData: any,
+        entityData?: any
+    ) => {
         let buttonClass = 'px-2 py-1 border rounded-md ';
 
         if (type === 'delete') {
@@ -104,7 +109,7 @@ function Table({
 
         return (
             <button
-                onClick={() => { onClickHandler(rowData.id) }}
+                onClick={() => { onClickHandler(rowData?.id, entityData?.id) }}
                 className={buttonClass}
             >
                 {label || header}
@@ -150,12 +155,22 @@ function Table({
                             expandableRowColumns?.map(column => {
                                 const currentData = data[column.name];
 
+                                let rowElement: ReactNode =
+                                    <span>{formatCellValue(column.format, currentData, column.customFormatFunction) || ''}</span>
+
+                                if (
+                                    column.type === 'action'
+                                    && column.actionButton
+                                ) {
+                                    rowElement = actionButtonBuilder(column.actionButton, column.header, data, row.original);
+                                }
+
                                 return (
                                     <td
                                         key={`nested_data_table_data_${data.id}_${currentData}_${column.name}`}
                                         className="font-color-primary"
                                     >
-                                        {formatCellValue(column.format, currentData, column.customFormatFunction) || ''}
+                                        {rowElement}
                                     </td>
                                 );
                             })
