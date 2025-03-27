@@ -69,7 +69,7 @@ const ListResources = () => {
             type: 'action',
             actionButton: {
                 type: "edit",
-                onClickHandler: (id) => { handleClickEdit(id) },
+                onClickHandler: (id) => { handleClickEditResource(id) },
                 enabled: true,
             },
         },
@@ -117,19 +117,45 @@ const ListResources = () => {
             type: 'default',
             format: "dbTimestamp",
         },
+        {
+            name: "edit",
+            header: "Editar",
+            type: 'action',
+            actionButton: {
+                type: "edit",
+                onClickHandler: (id, entityId) => { handleClickEditResourceTransaction(id, entityId) },
+                enabled: true,
+            },
+        },
+        {
+            name: "delete",
+            header: "Deletar",
+            type: 'action',
+            actionButton: {
+                type: "delete",
+                onClickHandler: (id, entityId) => { handleClickDeleteResourceTransaction(id, entityId) },
+                enabled: true,
+            },
+        },
     ];
 
     const handleClickGoToResourceTransactionForm = (resourceID: string | number) => {
         navigate(`/resources/createTransaction/${resourceID}`);
     }
 
-    const handleClickEdit = (resourceId: string | number) => {
+    const handleClickEditResource = (resourceId: string | number) => {
         if (!resourceId) return null;
 
         navigate(`/resources/edit/${resourceId}`);
     }
 
-    const handleClickDeleteResource = async (resourceID: string | number) => {
+    const handleClickEditResourceTransaction = (transactionId: ID, resourceId: ID) => {
+        if (!transactionId || !resourceId) return null;
+
+        navigate(`/resources/editTransaction/${resourceId}/${transactionId}`);
+    }
+
+    const handleClickDeleteResource = async (resourceID: ID) => {
         if (!resourceID) return null;
 
         if (window.confirm('Deseja realmente excluir esse recurso ?')) {
@@ -146,6 +172,30 @@ const ListResources = () => {
 
             if (data === 'success') {
                 alert(`Recurso deletado com sucesso!`);
+                window.location.reload();
+            }
+
+            return null;
+        }
+    }
+
+    const handleClickDeleteResourceTransaction = async (transactionId: ID, resourceId: ID) => {
+        if (!transactionId) return null;
+
+        if (window.confirm('Deseja realmente excluir essa transação de recurso ?')) {
+            const deleteResourceEndPoint = `${RESOURCES_END_POINT}/${resourceId}/${TRANSACTIONS_END_POINT}/${transactionId}`;
+
+            const { data, err } = await fetchRequest(deleteResourceEndPoint, 'DELETE', null);
+
+            if (err || !data) {
+                console.log(err || 'Missing req.data');
+
+                alert(err || 'Erro ao deletar. Por favor, tente novamente');
+                return;
+            }
+
+            if (data === 'success') {
+                alert(`Transação de recurso deletada com sucesso!`);
                 window.location.reload();
             }
 
