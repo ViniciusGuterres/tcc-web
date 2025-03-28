@@ -40,7 +40,6 @@ function ProductForm({ crudMode }: Props) {
         if (isEditMode && id) {
             getProductData(id);
         }
-
     }, []);
 
     const fields: FieldType[] = [
