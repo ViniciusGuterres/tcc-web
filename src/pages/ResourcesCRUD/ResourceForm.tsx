@@ -22,6 +22,7 @@ const fields: FieldType[] = [
         name: "unitValue",
         label: "Valor unitário",
         type: "number",
+        useFloat: true,
     },
 ];
 
