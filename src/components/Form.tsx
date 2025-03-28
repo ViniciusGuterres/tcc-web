@@ -86,6 +86,7 @@ const Form = <T extends Record<string, any>>({
                             {...register(field.name as Path<T>)}
                             className="border p-2 w-full"
                             placeholder={field.placeholder || ""}
+                            step={field.useFloat ? 'any' : ''}
                         />
                     )}
 
