@@ -91,7 +91,8 @@ declare global {
         name: string;
         label: string;
         placeholder?: string;
-        type?: "text" | "email" | "number" | "password";
+        type?: "text" | "email" | "number" | "password" | "float";
+        useFloat?: boolean,
         options?: Option[];
     };
 };
