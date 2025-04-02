@@ -50,9 +50,7 @@ function ResourceTransactionForm({ crudMode }: Props) {
 
     }, []);
 
-    const getFormData = async (resourceId: ID, transactionId: ID) => {
-        console.log("🚀 ~ getFormData ~ getFormData:", getFormData)
-        
+    const getFormData = async (resourceId: ID, transactionId: ID) => {        
         if (!resourceId || !transactionID) return null;
 
         setLoading(true);
@@ -67,7 +65,6 @@ function ResourceTransactionForm({ crudMode }: Props) {
             alert(`Erro ao pegar os dados da transação de recursos. Por favor, tente novamente`);
             return;
         }
-        console.log("🚀 ~ getFormData ~ data:", data)
 
         setResourceTransactionData(data);
         setLoading(true);
