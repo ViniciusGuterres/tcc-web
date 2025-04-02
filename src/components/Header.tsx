@@ -12,12 +12,12 @@ function Header() {
                     </a>
                 </div>
 
-                <div className="hidden lg:flex lg:gap-x-12">
+                {/* <div className="hidden lg:flex lg:gap-x-12">
                     <a href="#" className="text-sm/6 font-semibold text-gray-900">Produção</a>
                     <a href="#" className="text-sm/6 font-semibold text-gray-900">Recursos</a>
                     <a href="#" className="text-sm/6 font-semibold text-gray-900">Relatórios</a>
                     <a href="#" className="text-sm/6 font-semibold text-gray-900">Resumo</a>
-                </div>
+                </div> */}
 
                 {/* Log out */}
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end">
