@@ -42,6 +42,39 @@ function ResourceTransactionForm({ crudMode }: Props) {
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        // Verify edit mode (create or edit)
+        if (isEditMode && resourceID && transactionID) {
+            getFormData(resourceID, transactionID);
+        }
+
+    }, []);
+
+    const getFormData = async (resourceId: ID, transactionId: ID) => {
+        console.log("🚀 ~ getFormData ~ getFormData:", getFormData)
+        
+        if (!resourceId || !transactionID) return null;
+
+        setLoading(true);
+
+        const resourceTransactionEndPoint = `${RESOURCE_END_POINT}/${resourceId}/${TRANSACTION_END_POINT}/${transactionId}`;
+
+        const { data, err } = await fetchRequest(resourceTransactionEndPoint, 'GET', null);
+
+        if (err || !data || typeof data !== 'object') {
+            console.log(err || 'Missing req.data');
+
+            alert(`Erro ao pegar os dados da transação de recursos. Por favor, tente novamente`);
+            return;
+        }
+        console.log("🚀 ~ getFormData ~ data:", data)
+
+        setResourceTransactionData(data);
+        setLoading(true);
+
+        return null;
+    }
+
     const goBackToResourceList = () => {
         navigate("/resources");
     }
