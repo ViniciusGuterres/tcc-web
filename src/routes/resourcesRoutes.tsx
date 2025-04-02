@@ -19,7 +19,7 @@ const resourcesRoutes: RouteObject = {
                 { path: "edit/:id", element: <Suspense fallback={<div>Carregando...</div>}><ResourceForm crudMode={'edit'} /></Suspense> },
                 // Transactions crud
                 { path: "createTransaction/:resourceID", element: <Suspense fallback={<div>Carregando...</div>}><ResourceTransactionForm crudMode={'create'} /></Suspense> },
-                { path: "editTransaction/:resourceID/:transactionID", element: <Suspense fallback={<div>Carregando...</div>}><ResourceTransactionForm crudMode={'create'} /></Suspense> },
+                { path: "editTransaction/:resourceID/:transactionID", element: <Suspense fallback={<div>Carregando...</div>}><ResourceTransactionForm crudMode={'edit'} /></Suspense> },
             ]
         }
     ],
