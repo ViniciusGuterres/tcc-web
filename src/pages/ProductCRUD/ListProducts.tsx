@@ -74,6 +74,17 @@ const ListProducts = () => {
         //     format: "dbtimestamp",
         // },
         {
+            name: "createTransaction",
+            header: "Ações",
+            type: 'action',
+            actionButton: {
+                type: "custom",
+                onClickHandler: (id) => { handleClickCreateNewTransaction(id) },
+                enabled: true,
+                label: 'Nova transação',
+            },
+        },
+        {
             name: "edit",
             header: "Editar",
             type: 'action',
@@ -117,6 +128,10 @@ const ListProducts = () => {
 
             return null;
         }
+    }
+
+    const handleClickCreateNewTransaction = (productId: ID) => {
+        navigate(`/products/createTransaction/${productId}`);
     }
 
     const handleClickEdit = (productID: string | number) => {
