@@ -174,7 +174,7 @@ const ListProducts = () => {
             if (err || !data) {
                 console.log(err || 'Missing req.data');
 
-                alert(`Erro ao deletar. Por favor, tente novamente`);
+                alert(err || `Erro ao deletar. Por favor, tente novamente`);
                 return;
             }
 
