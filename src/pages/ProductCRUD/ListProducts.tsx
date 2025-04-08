@@ -4,12 +4,15 @@ import fetchRequest from "../../utils/fetchRequest";
 import Table from "../../components/Table";
 import { useNavigate } from "react-router";
 import endPoints from "../../constants/endpoints";
+import productStateTranslate from "../../utils/productStateTranslate";
 
 // Globals
 const END_POINT = endPoints.productsEndPoint;
+const TRANSACTIONS_END_POINT = endPoints.transactionsEndPoint;
 
 const ListProducts = () => {
     const [productsList, setProductList] = useState<Product[]>([]);
+    const [productsTransactions, setProductsTransactions] = useState({});
 
     const navigate = useNavigate();
 
@@ -106,6 +109,60 @@ const ListProducts = () => {
         },
     ];
 
+    const EXPANDABLE_ROW_COLUMNS = [
+        {
+            name: "state",
+            header: "Estado",
+            type: 'default',
+            format: 'custom',
+            customFormatFunction: productStateTranslate,
+        },
+        // {
+        //     name: "quantity",
+        //     header: "Quantidade",
+        //     type: 'default',
+        //     format: 'number',
+        // },
+        // {
+        //     name: "cost",
+        //     header: "Custo",
+        //     type: 'default',
+        //     format: "currency-BRL",
+        // },
+        {
+            name: "createdAt",
+            header: "Data de criação",
+            type: 'default',
+            format: "dbTimestamp",
+        },
+        {
+            name: "updatedAt",
+            header: "Data de atualização",
+            type: 'default',
+            format: "dbTimestamp",
+        },
+        {
+            name: "edit",
+            header: "Editar",
+            type: 'action',
+            actionButton: {
+                type: "edit",
+                onClickHandler: (id, entityId) => { handleClickEditProductTransaction(id, entityId) },
+                enabled: true,
+            },
+        },
+        {
+            name: "delete",
+            header: "Deletar",
+            type: 'action',
+            actionButton: {
+                type: "delete",
+                onClickHandler: (id, entityId) => { handleClickDeleteProductTransaction(id, entityId) },
+                enabled: true,
+            },
+        },
+    ];
+
     const handleClickDelete = async (productID: string | number) => {
         if (!productID) return null;
 
@@ -164,6 +221,68 @@ const ListProducts = () => {
         navigate("/products/create");
     }
 
+    const getProductsTransactions = async (productID: ID | undefined) => {
+        if (!productID) return null;
+
+        // Check if already have the transactions in memory
+        if (productsTransactions?.[productID] != null) return null;
+
+        let response;
+
+        let productTransactionEndPoint = `${END_POINT}/${productID}/${TRANSACTIONS_END_POINT}`;
+
+        response = await fetchRequest(productTransactionEndPoint, 'GET', null);
+
+        if (response.err) {
+            console.log(response.err)
+
+            if (typeof response.err === 'string') {
+                alert(response.err);
+            } else {
+                alert('Erro ao pegar os dados. Por favor, tente novamente.');
+            }
+
+            return;
+        }
+
+        if (response.data?.length > 0) {
+            const productsTransactionsCopy = { ...productsTransactions };
+            productsTransactionsCopy[productID] = response.data;
+
+            setProductsTransactions(productsTransactionsCopy);
+        }
+    }
+
+    const handleClickEditProductTransaction = (transactionID: ID, productID: ID) => {
+        if (!transactionID || !productID) return null;
+
+        navigate(`/products/editTransaction/${productID}/${transactionID}`);
+    }
+
+    const handleClickDeleteProductTransaction = async (transactionID: ID, productID: ID) => {
+        if (!transactionID) return null;
+
+        if (window.confirm('Deseja realmente excluir essa transação ?')) {
+            const deleteProductTransactionEndPoint = `${END_POINT}/${productID}/${TRANSACTIONS_END_POINT}/${transactionID}`;
+
+            const { data, err } = await fetchRequest(deleteProductTransactionEndPoint, 'DELETE', null);
+
+            if (err || !data) {
+                console.log(err || 'Missing req.data');
+
+                alert(err || 'Erro ao deletar. Por favor, tente novamente');
+                return;
+            }
+
+            if (data === 'success') {
+                alert(`Transação deletada com sucesso!`);
+                window.location.reload();
+            }
+
+            return null;
+        }
+    }
+
     return (
         <>
             <Button
@@ -180,6 +299,10 @@ const ListProducts = () => {
             <Table
                 data={productsList}
                 columns={TABLE_COLUMNS}
+                rowsExpandable={true}
+                expandableRowColumns={EXPANDABLE_ROW_COLUMNS}
+                expandableRowsData={productsTransactions}
+                onExpandRowFunction={getProductsTransactions}
             />
         </>
     );
