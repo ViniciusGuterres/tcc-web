@@ -44,6 +44,14 @@ declare global {
         updatedAt: string,
     }
 
+    interface Kiln {
+        id: string,
+        name: string,
+        power: number,
+        createdAt: string,
+        updatedAt: string,
+    }
+
     interface ProductLine {
         id: ID,
         createdAt: string,
