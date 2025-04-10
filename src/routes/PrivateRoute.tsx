@@ -2,7 +2,7 @@ import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
 import { Navigate, Outlet } from "react-router";
 
-const PrivateRoute = () => {
+const privateRoute = () => {
     const userToken = Cookies.get("user_token");
 
     if (!userToken) {
@@ -27,4 +27,4 @@ const PrivateRoute = () => {
 
 }
 
-export default PrivateRoute;
+export default privateRoute;
