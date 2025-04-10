@@ -37,6 +37,11 @@ const menuLinks = [
         link: 'products',
         icon: 'fa-layer-group',
     },
+    {
+        label: 'Forno',
+        link: 'kilns',
+        icon: 'fa-fire',
+    },
     // {
     //     label: 'Bateladas',
     //     link: 'batches',

@@ -1,6 +1,6 @@
 import { RouteObject } from "react-router";
 import { lazy, Suspense } from "react";
-import PrivateRoute from "./PrivateRoute";
+import PrivateRoute from "./privateRoute";
 import Layout from "../components/Layout";
 import ResourceTransactionForm from "../pages/ResourcesCRUD/ResourceTransactionForm";
 

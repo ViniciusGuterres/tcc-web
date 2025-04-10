@@ -6,7 +6,8 @@ import resourcesRoutes from "./resourcesRoutes";
 import batchesRoutes from "./batchesRoutes";
 import productLinesRoutes from "./productLinesRoutes";
 import productTypesRoutes from "./productTypesRoutes";
-import productsRoutes from "./ProductRoutes";
+import productsRoutes from "./productRoutes";
+import kilnsRoutes from "./kilnsRoutes";
 
 // Lazy-loaded pages for better performance
 // const ResourcesCRUD = lazy(() => import("../pages/ResourcesCRUD"));
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
     productLinesRoutes,
     productTypesRoutes,
     productsRoutes,
+    kilnsRoutes,
     {path: "*", element: <Layout />},
 ]);
 
