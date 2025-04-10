@@ -3,7 +3,6 @@ import { BrowserRouter as Router, createBrowserRouter, RouterProvider } from "re
 import Layout from "../components/Layout";
 import machinesRoutes from "./machinesRoutes";
 import resourcesRoutes from "./resourcesRoutes";
-import batchesRoutes from "./batchesRoutes";
 import productLinesRoutes from "./productLinesRoutes";
 import productTypesRoutes from "./productTypesRoutes";
 import productsRoutes from "./productRoutes";
@@ -17,7 +16,6 @@ const router = createBrowserRouter([
     { path: "/login", element: <Login />},
     resourcesRoutes,
     machinesRoutes,
-    batchesRoutes,
     productLinesRoutes,
     productTypesRoutes,
     productsRoutes,
