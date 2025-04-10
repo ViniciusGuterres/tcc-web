@@ -141,16 +141,16 @@ const ListProducts = () => {
             type: 'default',
             format: "dbTimestamp",
         },
-        {
-            name: "edit",
-            header: "Editar",
-            type: 'action',
-            actionButton: {
-                type: "edit",
-                onClickHandler: (id, entityId) => { handleClickEditProductTransaction(id, entityId) },
-                enabled: true,
-            },
-        },
+        // {
+        //     name: "edit",
+        //     header: "Editar",
+        //     type: 'action',
+        //     actionButton: {
+        //         type: "edit",
+        //         onClickHandler: (id, entityId) => { handleClickEditProductTransaction(id, entityId) },
+        //         enabled: true,
+        //     },
+        // },
         {
             name: "delete",
             header: "Deletar",
