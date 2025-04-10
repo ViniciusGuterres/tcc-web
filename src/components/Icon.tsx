@@ -10,7 +10,8 @@ import {
     faArrowLeft,
     faIndustry,
     faBolt,
-    faLayerGroup
+    faLayerGroup,
+    faFire
 } from '@fortawesome/free-solid-svg-icons'
 
 interface Props {
@@ -64,6 +65,10 @@ function Icon({
             
             case 'fa-layer-group':
                 icon = faLayerGroup;
+                break;
+
+            case 'fa-fire':
+                icon = faFire;
                 break;
 
             default:
