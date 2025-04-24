@@ -247,10 +247,11 @@ function Table({
 
             <table className="rounded-lg shadow dark:border w-full text-left bg-secondary-color">
                 <thead className="font-color-primary">
-                    {table.getHeaderGroups().map((headerGroup) => (
-                        <tr key={headerGroup.id}>
+                    {table.getHeaderGroups().map((headerGroup, index) => (
+                        <tr key={`headerGroup_${headerGroup.id}_${index}_${Date.now()}`}>
                             {headerGroup.headers.map((header) => (
-                                <th key={header.id} className="capitalize px-3.5 py-2">
+                                
+                                <th key={`headers_values_${header.id}_${header.index}_${Date.now()}`} className="capitalize px-3.5 py-2">
                                     {flexRender(
                                         header.column.columnDef.header,
                                         header.getContext()
