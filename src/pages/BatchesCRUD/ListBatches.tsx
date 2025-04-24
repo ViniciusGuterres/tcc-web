@@ -3,9 +3,10 @@ import Button from "../../components/Button";
 import fetchRequest from "../../utils/fetchRequest";
 import Table from "../../components/Table";
 import { useNavigate } from "react-router";
+import endPoints from "../../constants/endpoints";
 
 // Globals
-const ENTITY_END_POINT = 'batches';
+const ENTITY_END_POINT = endPoints.batchesEndPoint;
 
 const ListBatches = () => {
     const [batchesList, setBatchesList] = useState<Batch[]>([]);
@@ -69,7 +70,7 @@ const ListBatches = () => {
             }
 
             if (data === 'success') {
-                alert(`Btelada deletada com sucesso!`);
+                alert(`Batelada deletada com sucesso!`);
                 window.location.reload();
             }
 
