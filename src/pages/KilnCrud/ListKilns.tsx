@@ -103,7 +103,7 @@ const ListKilns = () => {
     return (
         <>
             <Button
-                name="Nova forno"
+                name="Novo forno"
                 onClickFunc={handleClickCreateNewKiln}
                 isDisabled={false}
                 icon={{
