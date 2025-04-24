@@ -7,6 +7,7 @@ import productLinesRoutes from "./productLinesRoutes";
 import productTypesRoutes from "./productTypesRoutes";
 import productsRoutes from "./productRoutes";
 import kilnsRoutes from "./kilnsRoutes";
+import batchesRoutes from "./batchesRoutes";
 
 // Lazy-loaded pages for better performance
 // const ResourcesCRUD = lazy(() => import("../pages/ResourcesCRUD"));
@@ -16,6 +17,7 @@ const router = createBrowserRouter([
     { path: "/login", element: <Login />},
     resourcesRoutes,
     machinesRoutes,
+    batchesRoutes,
     productLinesRoutes,
     productTypesRoutes,
     productsRoutes,
