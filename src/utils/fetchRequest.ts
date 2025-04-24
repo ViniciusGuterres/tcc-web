@@ -21,7 +21,7 @@ type ResData = null | string | ResObj;
 
 interface ReturnObj {
     err: ResData,
-    data: ResObj | null | Array<any> | string,
+    data: ResObj | null | Array<any> | string | {},
 }
 
 const host = 'localhost';
