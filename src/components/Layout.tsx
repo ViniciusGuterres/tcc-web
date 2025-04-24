@@ -18,6 +18,11 @@ const menuLinks = [
         icon: 'fa-cubes-stacked',
     },
     {
+        label: 'Bateladas',
+        link: 'batches',
+        icon: 'fa-bolt',
+    },
+    {
         label: 'Máquinas',
         link: 'machines',
         icon: 'fa-industry',
@@ -42,11 +47,6 @@ const menuLinks = [
         link: 'kilns',
         icon: 'fa-fire',
     },
-    // {
-    //     label: 'Bateladas',
-    //     link: 'batches',
-    //     icon: 'fa-bolt',
-    // },
 ];
 
 function Layout() {
