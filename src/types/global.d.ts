@@ -89,6 +89,17 @@ declare global {
         batchFinalCost: number,
     }
 
+    interface Glaze {
+        id: ID,
+        createdAt: string,
+        updatedAt: string,
+        color: string,
+        unitValue: number,
+        unitCost: number,
+        currentQuantity: number,
+        currentQuantityPrice: number
+    }
+
     interface Option {
         value: string | number;
         label: string;
