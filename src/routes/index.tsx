@@ -8,13 +8,17 @@ import productTypesRoutes from "./productTypesRoutes";
 import productsRoutes from "./productRoutes";
 import kilnsRoutes from "./kilnsRoutes";
 import batchesRoutes from "./batchesRoutes";
+import glazesRoutes from "./glazesRoutes";
+import homeRoute from "./homeRoute";
 
 // Lazy-loaded pages for better performance
 // const ResourcesCRUD = lazy(() => import("../pages/ResourcesCRUD"));
 const Login = lazy(() => import("../pages/Login"));
+const Home = lazy(() => import("../pages/Home"));
 
 const router = createBrowserRouter([
     { path: "/login", element: <Login />},
+    homeRoute,
     resourcesRoutes,
     machinesRoutes,
     batchesRoutes,
@@ -22,6 +26,7 @@ const router = createBrowserRouter([
     productTypesRoutes,
     productsRoutes,
     kilnsRoutes,
+    glazesRoutes,
     {path: "*", element: <Layout />},
 ]);
 
