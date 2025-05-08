@@ -51,7 +51,8 @@ function Login() {
             Cookies.set('user_token', data.token, {expires: 7, secure: true});
         }
 
-        navigate('/');
+        // Go to home
+        navigate('/home');
     }
 
     const isLoginButtonDisabled = !email || !password;
