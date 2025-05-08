@@ -1,7 +1,13 @@
 import { Link } from "react-router-dom";
 import Icon from "./Icon";
+import removeBrowserCookie from "../utils/removeBrowserCookie";
 
 function Header() {
+    const handleLogout = () => {
+        removeBrowserCookie("user_token");
+        window.location.href = 'login';
+    }
+
     return (
         <header className="bg-white">
             <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
@@ -20,20 +26,23 @@ function Header() {
                 </div> */}
 
                 {/* Log out */}
-                <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                    <Link 
-                        to="logout"
-                        className="header-logout"
-                    >
-                        <span className="text-sm/6 font-semibold text-gray-900">
-                            Log out
-                        </span>
+                <div
+                    onClick={handleLogout}
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
+                        cursor: "pointer",
+                    }}
+                >
+                    <span className="text-sm/6 font-semibold text-gray-900">
+                        Log out
+                    </span>
 
-                        <Icon
-                            iconClass="fa-logout"
-                            className="text-sm/6 font-semibold text-gray-900"
-                        />
-                    </Link>
+                    <Icon
+                        iconClass="fa-logout"
+                        className="text-sm/6 font-semibold text-gray-900"
+                    />
                 </div>
             </nav>
         </header>
