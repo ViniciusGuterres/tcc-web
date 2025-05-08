@@ -17,11 +17,13 @@ import {
 interface Props {
     iconClass: string,
     className?: string,
+    onClickFunc?: Function,
 };
 
 function Icon({
     iconClass,
     className,
+    onClickFunc,
 }: Props) {
     const getIcon = () => {
         let icon = faBox;
@@ -54,7 +56,7 @@ function Icon({
             case 'fa-arrow-left':
                 icon = faArrowLeft;
                 break;
-            
+
             case 'fa-industry':
                 icon = faIndustry;
                 break;
@@ -62,7 +64,7 @@ function Icon({
             case 'fa-bolt':
                 icon = faBolt;
                 break;
-            
+
             case 'fa-layer-group':
                 icon = faLayerGroup;
                 break;
@@ -79,10 +81,13 @@ function Icon({
     }
 
 
-    return <FontAwesomeIcon
-        icon={getIcon()}
-        className={className}
-    />;
+    return (
+        <FontAwesomeIcon
+            icon={getIcon()}
+            className={className}
+            onClick={() => onClickFunc?.()}
+        />
+    );
 }
 
 export default Icon;
