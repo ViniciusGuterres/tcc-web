@@ -1,6 +1,10 @@
 import React, { lazy } from "react";
-import { BrowserRouter as Router, createBrowserRouter, RouterProvider } from "react-router-dom";
+import { BrowserRouter as Router, createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
+
+// Components
 import Layout from "../components/Layout";
+
+// Routes
 import machinesRoutes from "./machinesRoutes";
 import resourcesRoutes from "./resourcesRoutes";
 import productLinesRoutes from "./productLinesRoutes";
@@ -12,12 +16,11 @@ import glazesRoutes from "./glazesRoutes";
 import homeRoute from "./homeRoute";
 
 // Lazy-loaded pages for better performance
-// const ResourcesCRUD = lazy(() => import("../pages/ResourcesCRUD"));
 const Login = lazy(() => import("../pages/Login"));
-const Home = lazy(() => import("../pages/Home"));
 
 const router = createBrowserRouter([
     { path: "/login", element: <Login />},
+    { path: "/", element: <Navigate to="/home" replace /> }, // 👈 redirect from "/" to "/home"
     homeRoute,
     resourcesRoutes,
     machinesRoutes,
