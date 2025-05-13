@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ApexChart from "../../components/ApexChart";
 import { ApexOptions } from "apexcharts";
 
 const Home: React.FC = () => {
+    // Component did mount
+    // Load charts data
+    useEffect(() => {
+
+
+    }, []);
+
     const chartOptions: ApexOptions = {
         chart: {
             id: "basic-bar",
@@ -11,7 +18,6 @@ const Home: React.FC = () => {
             categories: ["Jan", "Feb", "Mar", "Apr", "May"],
         },
         title: {
-            text: "Monthly Sales",
             align: "center",
         },
     };
@@ -26,28 +32,71 @@ const Home: React.FC = () => {
     const chartLabels = ["Product A", "Product B", "Product C"];
 
     return (
-        <div className="p-4 border rounded shadow">
-            <h2 className="text-xl font-semibold mb-4">Bar Chart Example</h2>
-            <ApexChart
-                type="bar"
-                options={chartOptions}
-                series={chartSeries}
-            />
+        <div
+            //className="p-4 border rounded shadow"
+            style={{
+                height: "100%",
+            }}
+        >
+            <div style={{
+                display: "flex",
+                gap: "10px",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "20%"
+            }}>
+                <div
+                    style={{
+                        width: "50%",
+                        boxShadow: "0 0.5rem 1rem rgb(0 0 0 / 15%)",
+                        borderRadius: "10px",
+                    }}
+                >
+                    <h2 className="text-xl font-semibold mb-4">Bar Chart Example</h2>
+                    <ApexChart
+                        type="bar"
+                        options={chartOptions}
+                        series={chartSeries}
+                        width="100%"
+                        height="100%"
+                    />
+                </div>
 
-            <h2 className="text-xl font-semibold mt-10 mb-4">Donut Chart Example</h2>
-            <ApexChart
-                type="donut"
-                options={{}}
-                series={[44, 55, 13]}
-                labels={chartLabels}
-            />
+                <div
+                    style={{
+                        width: "50%",
+                        boxShadow: "0 0.5rem 1rem rgb(0 0 0 / 15%)",
+                        borderRadius: "10px",
+                    }}
+                >
+                    <h2 className="text-xl font-semibold mt-10 mb-4">Donut Chart Example</h2>
+                    <ApexChart
+                        type="donut"
+                        options={{}}
+                        series={[44, 55, 13]}
+                        labels={chartLabels}
+                        width="100%"
+                        height="100%"
+                    />
+                </div>
+            </div>
 
-            <h2 className="text-xl font-semibold mt-10 mb-4">Line Chart Example</h2>
-            <ApexChart
-                type="line"
-                options={chartOptions}
-                series={chartSeries}
-            />
+            <div style={{
+                width: "100%",
+                height: "70%",
+                minHeight: "350px",
+                boxShadow: "0 0.5rem 1rem rgb(0 0 0 / 15%)",
+                borderRadius: "10px",
+            }}>
+                <h2 className="text-xl font-semibold mt-10 mb-4">Faturamento anual</h2>
+                <ApexChart
+                    type="line"
+                    options={chartOptions}
+                    series={chartSeries}
+                    width="100%"
+                    height="100%"
+                />
+            </div>
         </div>
     );
 };
