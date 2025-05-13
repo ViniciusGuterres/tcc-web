@@ -5,10 +5,14 @@ import { ApexOptions } from "apexcharts";
 interface BaseChartProps {
     options: ApexOptions;
     series: ApexAxisChartSeries | ApexNonAxisChartSeries;
+    width?: string,
+    height?: string,
 }
 
 interface DonutChartProps extends BaseChartProps {
     labels: string[];
+    width?: string,
+    height?: string,
 }
 
 type ChartType = 'bar' | 'donut' | 'line';
@@ -18,47 +22,65 @@ interface ApexChartProps {
     options: ApexOptions;
     series: ApexAxisChartSeries | ApexNonAxisChartSeries;
     labels?: string[];
+    width?: string,
+    height?: string,
 }
 
-const BarChart: React.FC<BaseChartProps> = ({ options, series }) => (
+const BarChart: React.FC<BaseChartProps> = ({ options, series, width, height }) => (
     <Chart
         options={options}
         series={series}
         type="bar"
-        width="100%"
-        height="80%"
+        width={width || "100%"}
+        height={height || "80%"}
     />
 );
 
-const DonutChart: React.FC<DonutChartProps> = ({ options, series, labels }) => (
+const DonutChart: React.FC<DonutChartProps> = ({ options, series, labels, width, height }) => (
     <Chart
         options={{ ...options, labels }}
         series={series}
         type="donut"
-        width="100%"
-        height="80%"
+        width={width || "100%"}
+        height={height || "80%"}
     />
 );
 
-const LineChart: React.FC<BaseChartProps> = ({ options, series }) => (
+const LineChart: React.FC<BaseChartProps> = ({ options, series, width, height }) => (
     <Chart
         options={options}
         series={series}
         type="line"
-        width="100%"
-        height="80%"
+        width={width || "100%"}
+        height={height || "80%"}
     />
 );
 
-const ApexChart: React.FC<ApexChartProps> = ({ type, options, series, labels }) => {
+const ApexChart: React.FC<ApexChartProps> = ({ type, options, series, labels, width, height }) => {
     const renderChart = () => {
         switch (type) {
             case 'bar':
-                return <BarChart options={options} series={series} />;
+                return <BarChart
+                    options={options}
+                    series={series}
+                    width={width}
+                    height={height}
+                />;
             case 'donut':
-                return <DonutChart options={options} series={series} labels={labels || []} />;
+                return <DonutChart
+                    options={options}
+                    series={series}
+                    labels={labels || []}
+                    width={width}
+                    height={height}
+                />;
             case 'line':
-                return <LineChart options={options} series={series} />;
+                return <LineChart
+                    options={options}
+                    series={series}
+                    width={width}
+                    height={height}
+                />;
             default:
                 return null;
         }
