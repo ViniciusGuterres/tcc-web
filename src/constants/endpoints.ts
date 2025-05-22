@@ -6,7 +6,8 @@ const productsEndPoint = 'products';
 const kilnsEndPoint = 'kilns';
 const batchesEndPoint = 'batches';
 const glazesEndPoint = 'glazes';
-const generalReportEndPont = 'general-report';
+const generalReportEndPoint = 'general-report';
+const yearlyReportEndPoint = 'yearly-report';
 
 const endPoints =  {
     resourcesEndPoint,
@@ -17,7 +18,8 @@ const endPoints =  {
     kilnsEndPoint,
     batchesEndPoint,
     glazesEndPoint,
-    generalReportEndPont,
+    generalReportEndPoint,
+    yearlyReportEndPoint,
 };
 
 export default endPoints;
