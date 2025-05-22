@@ -2,12 +2,17 @@ import React, { useState } from 'react';
 import ReportDocument from './ReportDocument';
 import fetchRequest from '../utils/fetchRequest';
 import { pdf } from '@react-pdf/renderer';
+import Icon from './Icon';
 
 interface Props {
     reportEndPoint: string,
+    buttonLabel?: string,
 }
 
-const ReportPDFButton: React.FC<Props> = ({ reportEndPoint }) => {
+const ReportPDFButton: React.FC<Props> = ({
+    reportEndPoint,
+    buttonLabel = "Baixar Relatório PDF"
+}) => {
     const [loadingData, setLoadingData] = useState(false);
 
     const handleDownload = async () => {
@@ -46,11 +51,16 @@ const ReportPDFButton: React.FC<Props> = ({ reportEndPoint }) => {
 
     return (
         <button
+            className="flex items-center rounded-md bg-gradient-to-tr from-slate-800 to-slate-700 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-sm hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+            type="button"
             onClick={handleDownload}
             disabled={loadingData}
-            className="bg-white border border-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-100"
         >
-            {loadingData ? "Gerando PDF..." : "Baixar Relatório PDF"}
+            <div style={{ marginRight: '5px' }}>
+                <Icon iconClass={'fa-download'} />
+            </div>
+
+            {loadingData ? "Gerando PDF..." : buttonLabel}
         </button>
     );
 };
