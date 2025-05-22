@@ -4,6 +4,9 @@ import fetchRequest from "../../utils/fetchRequest";
 import Table from "../../components/Table";
 import { useNavigate } from "react-router";
 import endPoints from "../../constants/endpoints";
+import { pdf } from "@react-pdf/renderer";
+import ReportDocument from "../../components/ReportDocument";
+import downloadPDF from "../../utils/downloadPDF";
 
 // Globals
 const ENTITY_END_POINT = endPoints.kilnsEndPoint;
@@ -23,6 +26,17 @@ const ListKilns = () => {
             name: "power",
             header: "Potência (CV)",
             type: 'default',
+        },
+        {
+            name: "downloadKilnYearlyReport",
+            header: "Baixar relatório",
+            type: 'action',
+            actionButton: {
+                type: "custom",
+                onClickHandler: (id) => { handleClickDownloadYearlyKilnReport(id) },
+                enabled: true,
+                label: 'Baixar',
+            },
         },
         {
             name: "edit",
@@ -46,7 +60,7 @@ const ListKilns = () => {
         },
     ];
 
-    const handleClickDelete = async (kilnID: string | number) => {
+    const handleClickDelete = async (kilnID: ID) => {
         if (!kilnID) return null;
 
         if (window.confirm('Deseja realmente excluir esse forno ?')) {
@@ -68,6 +82,33 @@ const ListKilns = () => {
 
             return null;
         }
+    }
+
+    const handleClickDownloadYearlyKilnReport = async (kilnID: ID) => {        
+        try {
+            const { err, data } = await fetchRequest(`${ENTITY_END_POINT}/${kilnID}/${endPoints.yearlyReportEndPoint}`, 'GET', null);
+
+            if (err) {
+                console.log(err || 'Erro ao pegar detalhes do forno');
+
+                alert(`Erro ao pegar dados`);
+                return;
+            }
+
+            if (data?.[0]) {
+                const report = data[0];
+                const blob = await pdf(<ReportDocument report={report} />).toBlob();
+
+                downloadPDF(blob, `relatorio_${report.year}`);
+            } else {
+                alert("Nenhum dado encontrado");
+            }
+
+
+        } catch (error) {
+            console.error("Erro ao carregar os dados do relatório:", error);
+            alert("Erro ao carregar os dados");
+        } 
     }
 
     const handleClickEdit = (kilnId: string | number) => {
