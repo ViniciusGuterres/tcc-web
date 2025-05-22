@@ -6,6 +6,7 @@ import {
     View,
     StyleSheet,
 } from '@react-pdf/renderer';
+import formatToBRL from '../utils/formatToBRL';
 
 type Month = {
     monthName: string;
@@ -69,9 +70,9 @@ const ReportDocument: React.FC<Props> = ({ report }) => (
                     <View style={styles.tableRow} key={idx}>
                         <Text style={styles.tableCol}>{m.monthName}</Text>
                         <Text style={styles.tableCol}>{m.incomingQty.toFixed(1)}</Text>
-                        <Text style={styles.tableCol}>R$ {m.incomingCost.toFixed(2)}</Text>
+                        <Text style={styles.tableCol}>{formatToBRL(parseInt(m.incomingCost.toFixed(2)))}</Text>
                         <Text style={styles.tableCol}>{m.outgoingQty.toFixed(1)}</Text>
-                        <Text style={styles.tableCol}>R$ {m.outgoingProfit.toFixed(2)}</Text>
+                        <Text style={styles.tableCol}>{formatToBRL(parseInt(m.outgoingProfit.toFixed(2)))}</Text>
                     </View>
                 ))}
             </View>
@@ -79,10 +80,10 @@ const ReportDocument: React.FC<Props> = ({ report }) => (
             {/* Totals */}
             <View style={styles.totals}>
                 <Text style={styles.totalsText}>
-                    Total Entradas: {report.totalIncomingQty.toFixed(1)}  |  R$ {report.totalIncomingCost.toFixed(2)}
+                    Total Entradas: {formatToBRL(parseInt(report.totalIncomingQty.toFixed(1)))}  |  {formatToBRL(parseInt(report.totalIncomingCost.toFixed(2)))}
                 </Text>
                 <Text style={styles.totalsText}>
-                    Total Saídas: {report.totalOutgoingQty.toFixed(1)}  |  R$ {report.totalOutgoingProfit.toFixed(2)}
+                    Total Saídas: {formatToBRL(parseInt(report.totalOutgoingQty.toFixed(1)))}  |  {formatToBRL(parseInt(report.totalOutgoingProfit.toFixed(2)))}
                 </Text>
             </View>
         </Page>
