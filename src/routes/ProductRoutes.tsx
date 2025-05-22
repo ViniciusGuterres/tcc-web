@@ -7,7 +7,7 @@ const ListProducts = lazy(() => import('../pages/ProductCRUD/ListProducts'));
 const ProductForm = lazy(() => import('../pages/ProductCRUD/ProductForm'));
 const ProductTransactionForm = lazy(() => import('../pages/ProductCRUD/ProductTransactionForm'));
 
-const productsRoutes: RouteObject = {
+const productRoutes: RouteObject = {
     path: 'products',
     element: <PrivateRoute />,
     children: [
@@ -24,4 +24,4 @@ const productsRoutes: RouteObject = {
     ],
 };
 
-export default productsRoutes;
+export default productRoutes;
