@@ -80,10 +80,10 @@ const ReportDocument: React.FC<Props> = ({ report }) => (
             {/* Totals */}
             <View style={styles.totals}>
                 <Text style={styles.totalsText}>
-                    Total Entradas: {formatToBRL(parseInt(report.totalIncomingQty.toFixed(1)))}  |  {formatToBRL(parseInt(report.totalIncomingCost.toFixed(2)))}
+                    Total Entradas: {parseInt(report.totalIncomingQty.toFixed(1))}  |  {formatToBRL(parseInt(report.totalIncomingCost.toFixed(2)))}
                 </Text>
                 <Text style={styles.totalsText}>
-                    Total Saídas: {formatToBRL(parseInt(report.totalOutgoingQty.toFixed(1)))}  |  {formatToBRL(parseInt(report.totalOutgoingProfit.toFixed(2)))}
+                    Total Saídas: {parseInt(report.totalOutgoingQty.toFixed(1))}  |  {formatToBRL(parseInt(report.totalOutgoingProfit.toFixed(2)))}
                 </Text>
             </View>
         </Page>
