@@ -42,8 +42,8 @@ const Home: React.FC = () => {
         >
             <div className="p-8">
                 <DownloadPDFButton
-                    reportEndPoint={endPoints.generalReportEndPont}
-                    buttonLabel="Relatório Anual de faturamento"
+                    reportEndPoint={endPoints.generalReportEndPoint}
+                    buttonLabel="Relatório Anual de Faturamento"
                 />
             </div>
 
