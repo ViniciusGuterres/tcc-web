@@ -114,6 +114,23 @@ declare global {
         useFloat?: boolean,
         options?: Option[];
     };
+
+    interface MonthlyReport {
+        monthName: string;
+        incomingQty: number;
+        incomingCost: number;
+        outgoingQty: number;
+        outgoingProfit: number;
+    }
+
+    interface YearlyReport {
+        year: number;
+        months: MonthlyReport[];
+        totalIncomingQty: number;
+        totalIncomingCost: number;
+        totalOutgoingQty: number;
+        totalOutgoingProfit: number;
+    }
 };
 
 export { };
