@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import React, { useState } from 'react';
 import ReportDocument from './ReportDocument';
 import fetchRequest from '../utils/fetchRequest';
 import { pdf } from '@react-pdf/renderer';
@@ -9,9 +8,7 @@ interface Props {
 }
 
 const ReportPDFButton: React.FC<Props> = ({ reportEndPoint }) => {
-    const [report, setReport] = useState<YearlyReport | null>(null);
     const [loadingData, setLoadingData] = useState(false);
-    const [showDownload, setShowDownload] = useState(false);
 
     const handleDownload = async () => {
         setLoadingData(true);
@@ -37,11 +34,8 @@ const ReportPDFButton: React.FC<Props> = ({ reportEndPoint }) => {
                 link.download = `relatorio_${report.year}.pdf`;
                 link.click();
                 URL.revokeObjectURL(url);
-
-                setReport(data[0]);
             }
 
-            setShowDownload(true);
 
         } catch (error) {
             console.error("Erro ao carregar os dados do relatório:", error);
