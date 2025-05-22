@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
-import Button from "../../components/Button";
 import fetchRequest from "../../utils/fetchRequest";
-import Table from "../../components/Table";
 import { useNavigate } from "react-router";
 import endPoints from "../../constants/endpoints";
-import Modal from "../../components/Modal";
 import formatDbTimestamp from "../../utils/formatDbTimestamp";
+
+// Components imports
+import Modal from "../../components/Modal";
+import Button from "../../components/Button";
+import Table from "../../components/Table";
+import DownloadPDFButton from "../../components/DownloadPDFButton";
 
 // Globals
 const ENTITY_END_POINT = endPoints.batchesEndPoint;
@@ -222,16 +225,27 @@ const ListBatches = () => {
 
     return (
         <>
-            <Button
-                name="Nova batelada"
-                onClickFunc={handleClickCreateNew}
-                isDisabled={false}
-                icon={{
-                    position: 'left',
-                    icon: 'fa-plus'
+            <div style={{
+                display: 'flex',
+                alignItems: "center",
+                justifyContent: "space-between",
+            }}>
+                <Button
+                    name="Nova batelada"
+                    onClickFunc={handleClickCreateNew}
+                    isDisabled={false}
+                    icon={{
+                        position: 'left',
+                        icon: 'fa-plus'
 
-                }}
-            />
+                    }}
+                />
+
+                <DownloadPDFButton
+                    reportEndPoint={`${endPoints.batchesEndPoint}/${endPoints.yearlyReportEndPoint}`}
+                    buttonLabel="Relatório Anual de Bateladas"
+                />
+            </div>
 
             <Table
                 data={batchesList}
