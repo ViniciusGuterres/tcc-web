@@ -3,6 +3,7 @@ import ReportDocument from './ReportDocument';
 import fetchRequest from '../utils/fetchRequest';
 import { pdf } from '@react-pdf/renderer';
 import Icon from './Icon';
+import downloadPDF from '../utils/downloadPDF';
 
 interface Props {
     reportEndPoint: string,
@@ -30,22 +31,16 @@ const ReportPDFButton: React.FC<Props> = ({
 
             if (data?.[0]) {
                 const report = data[0];
-
                 const blob = await pdf(<ReportDocument report={report} />).toBlob();
 
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = `relatorio_${report.year}.pdf`;
-                link.click();
-                URL.revokeObjectURL(url);
+                downloadPDF(blob, `relatorio_${report.year}`);
             }
-
-
         } catch (error) {
             console.error("Erro ao carregar os dados do relatório:", error);
         } finally {
-            setLoadingData(false);
+            setTimeout(() => {
+                setLoadingData(false);
+            }, 500);
         }
     };
 
