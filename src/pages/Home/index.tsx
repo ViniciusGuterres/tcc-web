@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import ApexChart from "../../components/ApexChart";
 import { ApexOptions } from "apexcharts";
+import DownloadPDFButton from "../../components/DownloadPDFButton";
+import endPoints from "../../constants/endpoints";
 
 const Home: React.FC = () => {
     // Component did mount
@@ -38,6 +40,13 @@ const Home: React.FC = () => {
                 height: "100%",
             }}
         >
+            <div className="p-8">
+                <DownloadPDFButton
+                    reportEndPoint={endPoints.generalReportEndPont}
+                    buttonLabel="Relatório Anual de faturamento"
+                />
+            </div>
+
             <div style={{
                 display: "flex",
                 gap: "10px",
