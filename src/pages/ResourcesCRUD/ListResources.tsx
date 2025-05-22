@@ -5,6 +5,9 @@ import Table from "../../components/Table";
 import resourceCategoryTranslate from "../../utils/resourceCategoryTranslate";
 import { useNavigate } from "react-router";
 import transactionTypeTranslate from "../../utils/transactionTypeTranslate";
+import ReportDocument from "../../components/ReportDocument";
+import { pdf } from "@react-pdf/renderer";
+import endPoints from "../../constants/endpoints";
 
 // Globals
 const RESOURCES_END_POINT = 'resources';
@@ -51,6 +54,17 @@ const ListResources = () => {
             header: "Preço",
             format: "currency-BRL",
             type: 'default',
+        },
+        {
+            name: "downloadResourceYearlyReport",
+            header: "Baixar relatório",
+            type: 'action',
+            actionButton: {
+                type: "custom",
+                onClickHandler: (id) => { handleClickDownloadYearlyResourceReport(id) },
+                enabled: true,
+                label: 'Baixar',
+            },
         },
         {
             name: "createTransaction",
@@ -139,11 +153,46 @@ const ListResources = () => {
         },
     ];
 
-    const handleClickGoToResourceTransactionForm = (resourceID: string | number) => {
+    const handleClickGoToResourceTransactionForm = (resourceID: ID) => {
         navigate(`/resources/createTransaction/${resourceID}`);
     }
 
-    const handleClickEditResource = (resourceId: string | number) => {
+    const handleClickDownloadYearlyResourceReport = async (resourceID: ID) => {
+        console.log("🚀 ~ handleClickDownloadYearlyResourceReport ~ resourceID:", resourceID)
+        
+        try {
+            const { err, data } = await fetchRequest(`${RESOURCES_END_POINT}/${resourceID}/${endPoints.yearlyReportEndPoint}`, 'GET', null);
+
+            if (err) {
+                console.log(err || 'Erro ao pegar detalhes da batelada');
+
+                alert(`Erro ao pegar dados`);
+                return;
+            }
+
+            if (data?.[0]) {
+                const report = data[0];
+
+                const blob = await pdf(<ReportDocument report={report} />).toBlob();
+
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `relatorio_${report.year}.pdf`;
+                link.click();
+                URL.revokeObjectURL(url);
+            } else {
+                alert("Nenhum dado encontrado");
+            }
+
+
+        } catch (error) {
+            console.error("Erro ao carregar os dados do relatório:", error);
+            alert("Erro ao carregar os dados");
+        } 
+    }
+
+    const handleClickEditResource = (resourceId: ID) => {
         if (!resourceId) return null;
 
         navigate(`/resources/edit/${resourceId}`);
@@ -247,7 +296,7 @@ const ListResources = () => {
             resourcesTransactionsCopy[resourceId] = response.data;
 
             setResourcesTransactions(resourcesTransactionsCopy);
-        } 
+        }
     }
 
     return (
