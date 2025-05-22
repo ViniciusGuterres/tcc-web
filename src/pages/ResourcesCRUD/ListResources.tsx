@@ -8,6 +8,7 @@ import transactionTypeTranslate from "../../utils/transactionTypeTranslate";
 import ReportDocument from "../../components/ReportDocument";
 import { pdf } from "@react-pdf/renderer";
 import endPoints from "../../constants/endpoints";
+import downloadPDF from "../../utils/downloadPDF";
 
 // Globals
 const RESOURCES_END_POINT = 'resources';
@@ -157,9 +158,7 @@ const ListResources = () => {
         navigate(`/resources/createTransaction/${resourceID}`);
     }
 
-    const handleClickDownloadYearlyResourceReport = async (resourceID: ID) => {
-        console.log("🚀 ~ handleClickDownloadYearlyResourceReport ~ resourceID:", resourceID)
-        
+    const handleClickDownloadYearlyResourceReport = async (resourceID: ID) => {        
         try {
             const { err, data } = await fetchRequest(`${RESOURCES_END_POINT}/${resourceID}/${endPoints.yearlyReportEndPoint}`, 'GET', null);
 
@@ -172,15 +171,9 @@ const ListResources = () => {
 
             if (data?.[0]) {
                 const report = data[0];
-
                 const blob = await pdf(<ReportDocument report={report} />).toBlob();
 
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = `relatorio_${report.year}.pdf`;
-                link.click();
-                URL.revokeObjectURL(url);
+                downloadPDF(blob, `relatorio_${report.year}`);
             } else {
                 alert("Nenhum dado encontrado");
             }
