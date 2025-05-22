@@ -11,7 +11,8 @@ import {
     faIndustry,
     faBolt,
     faLayerGroup,
-    faFire
+    faFire,
+    faDownload
 } from '@fortawesome/free-solid-svg-icons'
 
 interface Props {
@@ -71,6 +72,10 @@ function Icon({
 
             case 'fa-fire':
                 icon = faFire;
+                break;
+
+            case 'fa-download':
+                icon = faDownload;
                 break;
 
             default:
