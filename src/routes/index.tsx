@@ -9,7 +9,7 @@ import machinesRoutes from "./machinesRoutes";
 import resourcesRoutes from "./resourcesRoutes";
 import productLinesRoutes from "./productLinesRoutes";
 import productTypesRoutes from "./productTypesRoutes";
-// import productRoutes from "./productRoutes";
+import productRoutes from "./productRoutes";
 import kilnsRoutes from "./kilnsRoutes";
 import batchesRoutes from "./batchesRoutes";
 import glazesRoutes from "./glazesRoutes";
@@ -27,7 +27,7 @@ const router = createBrowserRouter([
     batchesRoutes,
     productLinesRoutes,
     productTypesRoutes,
-    // productRoutes,
+    productRoutes,
     kilnsRoutes,
     glazesRoutes,
     {path: "*", element: <Layout />},
