@@ -16,7 +16,7 @@ import glazesRoutes from "./glazesRoutes";
 import homeRoute from "./homeRoute";
 
 // Lazy-loaded pages for better performance
-const Login = lazy(() => import("../pages/Login"));
+const Login = lazy(() => import("../pages/Login/Login"));
 
 const router = createBrowserRouter([
     { path: "/login", element: <Login />},
