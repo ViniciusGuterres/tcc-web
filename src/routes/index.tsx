@@ -20,7 +20,7 @@ const Login = lazy(() => import("../pages/Login"));
 
 const router = createBrowserRouter([
     { path: "/login", element: <Login />},
-    { path: "/", element: <Navigate to="/home" replace /> }, // 👈 redirect from "/" to "/home"
+    { path: "/", element: <Navigate to="/home" replace /> }, 
     homeRoute,
     resourcesRoutes,
     machinesRoutes,
