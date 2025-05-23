@@ -1,6 +1,6 @@
 import { RouteObject } from "react-router";
 import { lazy, Suspense } from "react";
-import PrivateRoute from "./privateRoute";
+import PrivateRoute from "./privateRoutes";
 import Layout from "../components/Layout";
 
 const ListKilns = lazy(() => import('../pages/KilnCrud/ListKilns'));

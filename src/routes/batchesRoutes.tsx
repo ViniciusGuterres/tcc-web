@@ -1,6 +1,6 @@
 import { RouteObject } from "react-router";
 import { lazy, Suspense } from "react";
-import PrivateRoute from "./privateRoute";
+import PrivateRoute from "./privateRoutes";
 import Layout from "../components/Layout";
 
 const ListBatches = lazy(() => import('../pages/BatchesCRUD/ListBatches'));
