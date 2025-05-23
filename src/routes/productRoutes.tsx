@@ -1,5 +1,5 @@
 import { RouteObject } from "react-router";
-import { lazy, Suspense } from "react"
+import { lazy, Suspense } from "react";
 import PrivateRoute from "./privateRoute";
 import Layout from "../components/Layout";
 
