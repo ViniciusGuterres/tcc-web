@@ -1,7 +1,7 @@
 import { RouteObject } from "react-router";
 import { lazy, Suspense } from "react";
 import PrivateRoute from "./privateRoutes";
-import Layout from "../components/Layout";
+import Layout from "../components/Layout"
 
 const ListProducts = lazy(() => import('../pages/ProductCRUD/ListProducts'));
 const ProductForm = lazy(() => import('../pages/ProductCRUD/ProductForm'));
