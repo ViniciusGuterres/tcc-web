@@ -31,7 +31,7 @@ const Home: React.FC = () => {
         },
     ];
 
-    const chartLabels = ["Product A", "Product B", "Product C"];
+    const chartLabels = ["Água", "Terra 1", "Eletricidade"];
 
     return (
         <div
@@ -61,7 +61,7 @@ const Home: React.FC = () => {
                         borderRadius: "10px",
                     }}
                 >
-                    <h2 className="text-xl font-semibold mb-4">Bar Chart Example</h2>
+                    <h2 className="text-xl font-semibold mb-4">Faturamento Mensal</h2>
                     <ApexChart
                         type="bar"
                         options={chartOptions}
@@ -78,7 +78,7 @@ const Home: React.FC = () => {
                         borderRadius: "10px",
                     }}
                 >
-                    <h2 className="text-xl font-semibold mt-10 mb-4">Donut Chart Example</h2>
+                    <h2 className="text-xl font-semibold mt-10 mb-4">Recursos</h2>
                     <ApexChart
                         type="donut"
                         options={{}}
