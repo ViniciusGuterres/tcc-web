@@ -44,6 +44,7 @@ const Home: React.FC = () => {
                 <DownloadPDFButton
                     reportEndPoint={endPoints.generalReportEndPoint}
                     buttonLabel="Relatório Anual de Faturamento"
+                    hideTotalQuantities
                 />
             </div>
 
