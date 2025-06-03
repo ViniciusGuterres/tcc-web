@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
-import ReportDocument from './ReportDocument';
 import fetchRequest from '../utils/fetchRequest';
 import { pdf } from '@react-pdf/renderer';
 import Icon from './Icon';
 import downloadPDF from '../utils/downloadPDF';
 
+// Component
+import ReportDocument from './ReportDocument';
 interface Props {
     reportEndPoint: string,
     buttonLabel?: string,
-}
+    hideTotalQuantities?: boolean,
+};
 
 const ReportPDFButton: React.FC<Props> = ({
     reportEndPoint,
-    buttonLabel = "Baixar Relatório PDF"
+    buttonLabel = "Baixar Relatório PDF",
+    hideTotalQuantities,
 }) => {
     const [loadingData, setLoadingData] = useState(false);
 
@@ -31,7 +34,11 @@ const ReportPDFButton: React.FC<Props> = ({
 
             if (data?.[0]) {
                 const report = data[0];
-                const blob = await pdf(<ReportDocument report={report} />).toBlob();
+                const blob = await pdf(
+                    <ReportDocument
+                        report={report}
+                        hideTotalQuantities={hideTotalQuantities}
+                    />).toBlob();
 
                 downloadPDF(blob, `relatorio_${report.year}`);
             }
