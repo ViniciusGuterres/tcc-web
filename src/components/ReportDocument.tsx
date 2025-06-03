@@ -50,9 +50,13 @@ const styles = StyleSheet.create({
 
 interface Props {
     report: YearReport;
+    hideTotalQuantities?: boolean,
 }
 
-const ReportDocument: React.FC<Props> = ({ report }) => (
+const ReportDocument: React.FC<Props> = ({
+    report,
+    hideTotalQuantities = false,
+}) => (
     <Document>
         <Page size="A4" style={styles.page}>
             <Text style={styles.header}>Relatório Anual — {report.year}</Text>
@@ -80,10 +84,10 @@ const ReportDocument: React.FC<Props> = ({ report }) => (
             {/* Totals */}
             <View style={styles.totals}>
                 <Text style={styles.totalsText}>
-                    Total Entradas: {parseInt(report.totalIncomingQty.toFixed(1))}  |  {formatToBRL(parseInt(report.totalIncomingCost.toFixed(2)))}
+                    Total Entradas: {hideTotalQuantities ? null : `${parseInt(report.totalIncomingQty.toFixed(1))} |`}  {formatToBRL(parseInt(report.totalIncomingCost.toFixed(2)))}
                 </Text>
                 <Text style={styles.totalsText}>
-                    Total Saídas: {parseInt(report.totalOutgoingQty.toFixed(1))}  |  {formatToBRL(parseInt(report.totalOutgoingProfit.toFixed(2)))}
+                    Total Saídas: {hideTotalQuantities ? null : `${parseInt(report.totalOutgoingQty.toFixed(1))} |`} {formatToBRL(parseInt(report.totalOutgoingProfit.toFixed(2)))}
                 </Text>
             </View>
         </Page>
