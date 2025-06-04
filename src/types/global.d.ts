@@ -144,6 +144,23 @@ declare global {
             usageTime: number;
         }>;
     }
+
+    // types/GlazePostBody.ts
+
+    interface GlazePostBody {
+        color: string;
+        unitValue: number;
+
+        resourceUsages: {
+            resourceId: number;
+            quantity: number;
+        }[];
+
+        machineUsages: {
+            machineId: number;
+            usageTime: number;
+        }[];
+    }
 };
 
 export { };
