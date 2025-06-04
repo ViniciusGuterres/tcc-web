@@ -4,6 +4,7 @@ import { z } from "zod";
 import { useNavigate, useParams } from "react-router";
 import fetchRequest from "../../utils/fetchRequest";
 import Button from "../../components/Button";
+import endPoints from "../../constants/endpoints";
 
 const machineSchema = z.object({
     name: z.string().min(4, "O nome da máquina deve possuir no mínimo 4 caracteres"),
@@ -31,7 +32,7 @@ const fields: FieldType[] = [
     },
 ];
 
-const MACHINE_END_POINT = 'machines';
+const MACHINE_END_POINT = endPoints.machinesEndPoint;
 
 interface Props {
     crudMode: CrudModesAllowed,
