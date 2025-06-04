@@ -145,8 +145,6 @@ declare global {
         }>;
     }
 
-    // types/GlazePostBody.ts
-
     interface GlazePostBody {
         color: string;
         unitValue: number;
@@ -160,6 +158,14 @@ declare global {
             machineId: number;
             usageTime: number;
         }[];
+    }
+
+    interface DryingRoomList     {
+        id: ID,
+        createdAt: string,
+        updatedAt: string,
+        name: string,
+        gasConsumptionPerHour: number,
     }
 };
 
