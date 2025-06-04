@@ -131,6 +131,19 @@ declare global {
         totalOutgoingQty: number;
         totalOutgoingProfit: number;
     }
+
+    interface BatchPostBody {
+        resourceUsages: Array<{
+            resourceId: number;
+            initialQuantity: number;
+            umidity: number;
+            addedQuantity: number;
+        }>;
+        machineUsages: Array<{
+            machineId: number;
+            usageTime: number;
+        }>;
+    }
 };
 
 export { };
