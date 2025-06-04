@@ -1,6 +1,6 @@
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import fetchRequest from "../../utils/fetchRequest";
 import CustomSelect from "../../components/CustomSelect";
 
@@ -40,12 +40,23 @@ function BatchForm({ crudMode }) {
     const [machineOptions, setMachineOptions] = useState<Array<Option>>([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    // Check if the crud mode is "edit", otherwise is "create"
+    const { id } = useParams();
+
+    const isEditMode = crudMode === 'edit';
+
     const navigate = useNavigate();
 
     // Getting select options
     useEffect(() => {
         getMachinesAvailable();
         getResourcesAvailable();
+
+        // Verify edit mode (create or edit)
+        if (isEditMode && id) {
+            getBatchData(id);
+        }
+
         setIsLoading(false);
     }, []);
 
@@ -53,17 +64,18 @@ function BatchForm({ crudMode }) {
         register,
         handleSubmit,
         control,
-        formState: { errors, isSubmitting, isValid, },
+        reset,
+        formState: { errors, isSubmitting, isValid },
     } = useForm<BatchFormData>({
         resolver: zodResolver(batchSchema),
         defaultValues: {
-            resourceUsages: [{ resourceId: 0, initialQuantity: 0, umidity: 0, addedQuantity: 0 }],
-            machineUsages: [{ machineId: 0, usageTime: 0 }],
+            resourceUsages: [],
+            machineUsages: [],
         },
     });
 
     const submitButtonDisabled = !isValid || isSubmitting || isLoading;
-    const submitButtonLabel = 'Criar Batelada';
+    const submitButtonLabel = crudMode === "edit" ? "Atualizar Batelada" : "Criar Batelada";
 
     const { fields: resourceFields, append: appendResource, remove: removeResource } = useFieldArray({
         control,
@@ -78,23 +90,68 @@ function BatchForm({ crudMode }) {
     const onSubmit = async (data: BatchFormData) => {
         setIsLoading(true);
 
-        const { err } = await fetchRequest(BATCHES_END_POINT, "POST", data);
+        const method = crudMode === "edit" ? "PUT" : "POST";
+        const endpoint = crudMode === "edit" ? `${BATCHES_END_POINT}/${id}` : BATCHES_END_POINT;
+
+        const { err } = await fetchRequest(endpoint, method, data);
+
         if (err) {
-            alert("Erro ao criar batelada.");
+            alert(`Erro ao ${crudMode === "edit" ? "atualizar" : "criar"} batelada.`);
+            setIsLoading(false);
             return;
         }
 
-        setIsLoading(false);
-
-        alert("Batelada criada com sucesso!");
+        alert(`Batelada ${crudMode === "edit" ? "atualizada" : "criada"} com sucesso!`);
         navigate("/batches");
     };
+
 
     const handleInvalidSubmit = err => {
         console.log('Error to submit form obj: ', err);
         alert('Um erro inesperado ocorreu. Por favor, tente novamente!')
     }
 
+    const getBatchData = async batchId => {
+        if (!batchId) return null;
+
+        setIsLoading(true);
+
+        const getBatchEndPoint = `${BATCHES_END_POINT}/${batchId}`;
+
+        const { data, err } = await fetchRequest(getBatchEndPoint, 'GET', null);
+
+        if (err || !data || typeof data !== 'object') {
+            console.log(err || 'Missing req.data');
+
+            alert(`Erro ao pegar os dados da batelada. Por favor, tente novamente`);
+            return;
+        }
+
+        const batchData = data as BatchPostBody;
+
+        if (
+            batchData
+            && batchData.machineUsages?.length > 0
+            && batchData.resourceUsages?.length > 0
+        ) {
+            reset({
+                resourceUsages: batchData.resourceUsages.map(r => ({
+                    resourceId: Number(r.resourceId),
+                    initialQuantity: Number(r.initialQuantity),
+                    umidity: Number(r.umidity),
+                    addedQuantity: Number(r.addedQuantity),
+                })),
+                machineUsages: batchData.machineUsages.map(m => ({
+                    machineId: Number(m.machineId),
+                    usageTime: Number(m.usageTime),
+                })),
+            });
+        }
+
+        setIsLoading(false);
+
+        return null;
+    }
 
     const getMachinesAvailable = async () => {
         const { err, data } = await fetchRequest(MACHINES_END_POINT, 'GET', null);
@@ -138,8 +195,6 @@ function BatchForm({ crudMode }) {
         <form
             className="space-y-6 p-6 border rounded-md bg-white shadow-sm"
             onSubmit={(e) => {
-                console.log("🚀 ~ BatchForm ~ e:", e)
-
                 e.preventDefault();
 
                 handleSubmit(data => {
@@ -256,7 +311,7 @@ function BatchForm({ crudMode }) {
                     type="submit"
                     disabled={submitButtonDisabled}
                     className={`bg-white text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow flex gap-4 ${submitButtonDisabled ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-100"}`}
-                >   
+                >
                     {isSubmitting ? "Processando..." : submitButtonLabel}
                 </button>
             </div>
