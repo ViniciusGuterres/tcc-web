@@ -9,9 +9,11 @@ import formatDbTimestamp from "../../utils/formatDbTimestamp";
 import ReportDocument from "../../components/ReportDocument";
 import downloadPDF from "../../utils/downloadPDF";
 import { pdf } from "@react-pdf/renderer";
+import transactionTypeTranslate from "../../utils/transactionTypeTranslate";
 
 // Globals
 const ENTITY_END_POINT = endPoints.glazesEndPoint;
+const TRANSACTIONS_END_POINT = endPoints.transactionsEndPoint;
 
 type glazeDetails = {
     id: ID,
@@ -37,6 +39,7 @@ type glazeDetails = {
 const ListGlazes = () => {
     const [glazesList, setGlazesList] = useState<Glaze[]>([]);
     const [glazeDetails, setGlazeDetails] = useState<null | {}>(null);
+    const [glazesTransactions, setGlazesTransactions] = useState({});
 
     const navigate = useNavigate();
 
@@ -135,6 +138,90 @@ const ListGlazes = () => {
             },
         },
     ];
+
+    const EXPANDABLE_ROW_COLUMNS = [
+        {
+            name: "type",
+            header: "Tipo",
+            type: 'default',
+            format: 'custom',
+            customFormatFunction: transactionTypeTranslate,
+        },
+        {
+            name: "quantity",
+            header: "Quantidade",
+            type: 'default',
+            format: 'number',
+        },
+        {
+            name: "cost",
+            header: "Custo",
+            type: 'default',
+            format: "currency-BRL",
+        },
+        {
+            name: "createdAt",
+            header: "Data de criação",
+            type: 'default',
+            format: "dbTimestamp",
+        },
+        {
+            name: "updatedAt",
+            header: "Data de atualização",
+            type: 'default',
+            format: "dbTimestamp",
+        },
+        {
+            name: "edit",
+            header: "Editar",
+            type: 'action',
+            actionButton: {
+                type: "edit",
+                onClickHandler: (id, entityId) => { handleClickEditGlazeTransaction(id, entityId) },
+                enabled: true,
+            },
+        },
+        {
+            name: "delete",
+            header: "Deletar",
+            type: 'action',
+            actionButton: {
+                type: "delete",
+                onClickHandler: (id, entityId) => { handleClickDeleteGlazeTransaction(id, entityId) },
+                enabled: true,
+            },
+        },
+    ];
+
+    const handleClickEditGlazeTransaction = (transactionId: ID, glazeId: ID) => {
+        if (!transactionId || !glazeId) return null;
+
+        navigate(`/glazes/editTransaction/${glazeId}/${transactionId}`);
+    }
+
+    const handleClickDeleteGlazeTransaction = async (transactionId: ID, glazeId: ID) => {
+        if (!transactionId) return null;
+
+        if (window.confirm('Deseja realmente excluir essa transação de glazura ?')) {
+            const deleteGlazeTransactionEndPoint = `${ENTITY_END_POINT}/${glazeId}/${TRANSACTIONS_END_POINT}/${transactionId}`;
+
+            const { data, err } = await fetchRequest(deleteGlazeTransactionEndPoint, 'DELETE', null);
+
+            if (err || !data) {
+                console.log(err || 'Missing req.data');
+
+                alert(err || 'Erro ao deletar. Por favor, tente novamente');
+                return;
+            }
+
+            if (data === 'success') {
+                alert(`Transação de glazura deletada com sucesso!`);
+                window.location.reload();
+            }
+
+            return null;
+        }
+    }
 
     const handleClickDelete = async (glazeID: string | number) => {
         if (!glazeID) return null;
@@ -238,6 +325,38 @@ const ListGlazes = () => {
         navigate("/glazes/create");
     }
 
+    const getGlazeTransactions = async (glazeId: ID | undefined) => {
+        if (!glazeId) return null;
+
+        // Check if already have the transactions in memory
+        if (glazesTransactions?.[glazeId] != null) return null;
+
+        let response;
+
+        let glazeTransactionEndPoint = `${ENTITY_END_POINT}/${glazeId}/${TRANSACTIONS_END_POINT}`;
+
+        response = await fetchRequest(glazeTransactionEndPoint, 'GET', null);
+
+        if (response.err) {
+            console.log(response.err)
+
+            if (typeof response.err === 'string') {
+                alert(response.err);
+            } else {
+                alert('Erro ao pegar os dados. Por favor, tente novamente.');
+            }
+
+            return;
+        }
+
+        if (response.data?.length > 0) {
+            const glazesTransactionsCopy = { ...glazesTransactions };
+            glazesTransactionsCopy[glazeId] = response.data;
+
+            setGlazesTransactions(glazesTransactionsCopy);
+        }
+    }
+
     const buildGlazeDetailsBody = (data) => {
         return (
             <div className="space-y-6 text-sm text-gray-800">
@@ -300,6 +419,10 @@ const ListGlazes = () => {
             <Table
                 data={glazesList}
                 columns={TABLE_COLUMNS}
+                rowsExpandable={true}
+                expandableRowColumns={EXPANDABLE_ROW_COLUMNS}
+                expandableRowsData={glazesTransactions}
+                onExpandRowFunction={getGlazeTransactions}
             />
 
             <Modal
