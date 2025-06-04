@@ -51,6 +51,11 @@ const menuLinks = [
         link: 'glazes',
         icon: 'fa-bolt',
     },
+    {
+        label: 'Estufas',
+        link: 'drying-rooms',
+        icon: 'fa-temperature-high',
+    },
 ];
 
 function Layout() {
@@ -58,7 +63,7 @@ function Layout() {
         <div>
             <Header />
 
-            <SidebarMenu 
+            <SidebarMenu
                 links={menuLinks}
             />
 
