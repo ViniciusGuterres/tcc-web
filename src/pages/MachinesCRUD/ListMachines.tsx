@@ -3,9 +3,10 @@ import Button from "../../components/Button";
 import fetchRequest from "../../utils/fetchRequest";
 import Table from "../../components/Table";
 import { useNavigate } from "react-router";
+import endPoints from "../../constants/endpoints";
 
 // Globals
-const ENTITY_END_POINT = 'machines';
+const ENTITY_END_POINT = endPoints.machinesEndPoint;
 
 const ListMachines = () => {
     const [machinesList, setMachinesList] = useState<Machine[]>([]);
