@@ -12,7 +12,8 @@ import {
     faBolt,
     faLayerGroup,
     faFire,
-    faDownload
+    faDownload,
+    faTemperatureHigh
 } from '@fortawesome/free-solid-svg-icons'
 
 interface Props {
@@ -76,6 +77,10 @@ function Icon({
 
             case 'fa-download':
                 icon = faDownload;
+                break;
+
+            case 'fa-temperature-high':
+                icon = faTemperatureHigh;
                 break;
 
             default:
