@@ -79,7 +79,7 @@ const ListDryingRooms = () => {
     const handleClickEdit = (dryingRoomId: string | number) => {
         if (!dryingRoomId) return null;
 
-        navigate(`/dryingRooms/edit/${dryingRoomId}`);
+        navigate(`/drying-rooms/edit/${dryingRoomId}`);
     }
 
     // Get initial data (drying-room list) when component did mount
