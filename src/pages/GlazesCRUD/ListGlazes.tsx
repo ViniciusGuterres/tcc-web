@@ -6,6 +6,9 @@ import { useNavigate } from "react-router";
 import endPoints from "../../constants/endpoints";
 import Modal from "../../components/Modal";
 import formatDbTimestamp from "../../utils/formatDbTimestamp";
+import ReportDocument from "../../components/ReportDocument";
+import downloadPDF from "../../utils/downloadPDF";
+import { pdf } from "@react-pdf/renderer";
 
 // Globals
 const ENTITY_END_POINT = endPoints.glazesEndPoint;
@@ -15,7 +18,7 @@ type glazeDetails = {
     createdAt: string;
     updatedAt: string;
     color: string;
-    unitValue: number;  
+    unitValue: number;
     resourceUsages: {
         resourceId: number;
         resourceName: string;
@@ -80,6 +83,17 @@ const ListGlazes = () => {
             format: 'dbTimestamp'
         },
         {
+            name: "downloadGlazeYearlyReport",
+            header: "Baixar relatório",
+            type: 'action',
+            actionButton: {
+                type: "custom",
+                onClickHandler: (id) => { handleClickDownloadYearlyGlazeReport(id) },
+                enabled: true,
+                label: 'Baixar',
+            },
+        },
+        {
             name: "openDetails",
             header: "Ver detalhes",
             type: 'action',
@@ -132,6 +146,33 @@ const ListGlazes = () => {
             }
 
             return null;
+        }
+    }
+
+    const handleClickDownloadYearlyGlazeReport = async (glazeID: ID) => {
+        try {
+            const { err, data } = await fetchRequest(`${ENTITY_END_POINT}/${glazeID}/${endPoints.yearlyReportEndPoint}`, 'GET', null);
+
+            if (err) {
+                console.log(err || 'Erro ao pegar detalhes da glazura');
+
+                alert(`Erro ao pegar dados`);
+                return;
+            }
+
+            if (data?.[0]) {
+                const report = data[0];
+                const blob = await pdf(<ReportDocument report={report} />).toBlob();
+
+                downloadPDF(blob, `relatorio_${report.year}`);
+            } else {
+                alert("Nenhum dado encontrado");
+            }
+
+
+        } catch (error) {
+            console.error("Erro ao carregar os dados do relatório:", error);
+            alert("Erro ao carregar os dados");
         }
     }
 
@@ -195,7 +236,7 @@ const ListGlazes = () => {
                     <p><strong>Quantidade atual:</strong> {data.currentQuantity}</p>
                     <p><strong>Preço do total atual:</strong> R$ {data.currentQuantityPrice.toFixed(2)}</p>
                 </div>
-    
+
                 <div>
                     <h3 className="font-semibold text-md mb-1">Recursos Utilizados</h3>
                     <ul className="space-y-2">
@@ -207,7 +248,7 @@ const ListGlazes = () => {
                         ))}
                     </ul>
                 </div>
-    
+
                 <div>
                     <h3 className="font-semibold text-md mb-1">Máquinas Utilizadas</h3>
                     <ul className="space-y-2">
@@ -219,7 +260,7 @@ const ListGlazes = () => {
                         ))}
                     </ul>
                 </div>
-    
+
                 <div>
                     <h3 className="font-semibold text-md mb-1">Totais</h3>
                     <p><strong>Custo unitário:</strong> R$ {data.unitCost.toFixed(2)}</p>
@@ -227,7 +268,7 @@ const ListGlazes = () => {
             </div>
         );
     };
-    
+
     return (
         <>
             <Button
