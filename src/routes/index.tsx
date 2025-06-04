@@ -14,6 +14,7 @@ import kilnsRoutes from "./kilnsRoutes";
 import batchesRoutes from "./batchesRoutes";
 import glazesRoutes from "./glazesRoutes";
 import homeRoute from "./homeRoute";
+import dryingRoomRoutes from "./dryingRoomsRoutes";
 
 // Lazy-loaded pages for better performance
 const Login = lazy(() => import("../pages/Login/Login"));
@@ -30,6 +31,7 @@ const router = createBrowserRouter([
     productRoutes,
     kilnsRoutes,
     glazesRoutes,
+    dryingRoomRoutes,
     {path: "*", element: <Layout />},
 ]);
 
