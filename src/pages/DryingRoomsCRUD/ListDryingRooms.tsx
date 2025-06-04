@@ -4,6 +4,9 @@ import fetchRequest from "../../utils/fetchRequest";
 import Table from "../../components/Table";
 import { useNavigate } from "react-router";
 import endPoints from "../../constants/endpoints";
+import ReportDocument from "../../components/ReportDocument";
+import { pdf } from "@react-pdf/renderer";
+import downloadPDF from "../../utils/downloadPDF";
 
 // Globals
 const ENTITY_END_POINT = endPoints.dryingRoomsEndPoint;
@@ -29,6 +32,17 @@ const ListDryingRooms = () => {
             header: "Data criação",
             type: 'default',
             format: 'dbTimestamp'
+        },
+        {
+            name: "downloadDryingRoomYearlyReport",
+            header: "Baixar relatório",
+            type: 'action',
+            actionButton: {
+                type: "custom",
+                onClickHandler: (id) => { handleClickDownloadYearlyDryingRoomReport(id) },
+                enabled: true,
+                label: 'Baixar',
+            },
         },
         {
             name: "edit",
@@ -73,6 +87,33 @@ const ListDryingRooms = () => {
             }
 
             return null;
+        }
+    }
+
+    const handleClickDownloadYearlyDryingRoomReport = async (dryingRoomID: ID) => {
+        try {
+            const { err, data } = await fetchRequest(`${ENTITY_END_POINT}/${dryingRoomID}/${endPoints.yearlyReportEndPoint}`, 'GET', null);
+
+            if (err) {
+                console.log(err || 'Erro ao pegar detalhes da batelada');
+
+                alert(`Erro ao pegar dados`);
+                return;
+            }
+
+            if (data?.[0]) {
+                const report = data[0];
+                const blob = await pdf(<ReportDocument report={report} />).toBlob();
+
+                downloadPDF(blob, `relatorio_${report.year}`);
+            } else {
+                alert("Nenhum dado encontrado");
+            }
+
+
+        } catch (error) {
+            console.error("Erro ao carregar os dados do relatório:", error);
+            alert("Erro ao carregar os dados");
         }
     }
 
