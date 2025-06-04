@@ -104,6 +104,17 @@ const ListGlazes = () => {
             },
         },
         {
+            name: "createTransaction",
+            header: "Ações",
+            type: 'action',
+            actionButton: {
+                type: "custom",
+                onClickHandler: (id) => { handleClickGoToGlazeTransactionForm(id) },
+                enabled: true,
+                label: 'Nova transação',
+            },
+        },
+        {
             name: "edit",
             header: "Editar",
             type: 'action',
@@ -191,6 +202,10 @@ const ListGlazes = () => {
         if (data && data !== null && typeof data === 'object') {
             setGlazeDetails(data);
         }
+    }
+
+    const handleClickGoToGlazeTransactionForm = (glazeID: ID) => {
+        navigate(`/glazes/createTransaction/${glazeID}`);
     }
 
     const handleClickEdit = (glazeId: ID) => {
