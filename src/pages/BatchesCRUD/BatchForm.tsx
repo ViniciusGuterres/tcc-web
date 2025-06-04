@@ -2,7 +2,6 @@ import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router";
 import fetchRequest from "../../utils/fetchRequest";
-import Button from "../../components/Button";
 import CustomSelect from "../../components/CustomSelect";
 
 import { z } from "zod";
@@ -23,7 +22,7 @@ export const batchSchema = z.object({
 
     machineUsages: z.array(
         z.object({
-            machineId: z.number().min(1, "Máquina obrigatória"),
+            machineId: z.number().min(1, "Máquina obrigatóri a"),
             usageTime: z.number().positive("Deve ser > 0"),
         })
     ).min(1, "Adicione pelo menos uma máquina"),
@@ -34,14 +33,12 @@ const BATCHES_END_POINT = endPoints.batchesEndPoint;
 const MACHINES_END_POINT = endPoints.machinesEndPoint;
 const RESOURCES_END_POINT = endPoints.resourcesEndPoint;
 
-// const resourceOptions = [{ value: 5, label: "test" }];
-// const machineOptions = [{ value: 5, label: "test" }];
-
 type BatchFormData = z.infer<typeof batchSchema>;
 
 function BatchForm({ crudMode }) {
     const [resourceOptions, setResourceOptions] = useState<Array<Option>>([]);
     const [machineOptions, setMachineOptions] = useState<Array<Option>>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const navigate = useNavigate();
 
@@ -49,13 +46,14 @@ function BatchForm({ crudMode }) {
     useEffect(() => {
         getMachinesAvailable();
         getResourcesAvailable();
+        setIsLoading(false);
     }, []);
 
     const {
         register,
         handleSubmit,
         control,
-        formState: { errors, isSubmitting },
+        formState: { errors, isSubmitting, isValid, },
     } = useForm<BatchFormData>({
         resolver: zodResolver(batchSchema),
         defaultValues: {
@@ -63,6 +61,9 @@ function BatchForm({ crudMode }) {
             machineUsages: [{ machineId: 0, usageTime: 0 }],
         },
     });
+
+    const submitButtonDisabled = !isValid || isSubmitting || isLoading;
+    const submitButtonLabel = 'Criar Batelada';
 
     const { fields: resourceFields, append: appendResource, remove: removeResource } = useFieldArray({
         control,
@@ -75,14 +76,25 @@ function BatchForm({ crudMode }) {
     });
 
     const onSubmit = async (data: BatchFormData) => {
+        setIsLoading(true);
+
         const { err } = await fetchRequest(BATCHES_END_POINT, "POST", data);
         if (err) {
-            alert("Erro ao criar o lote.");
+            alert("Erro ao criar batelada.");
             return;
         }
-        alert("Lote criado com sucesso!");
+
+        setIsLoading(false);
+
+        alert("Batelada criada com sucesso!");
         navigate("/batches");
     };
+
+    const handleInvalidSubmit = err => {
+        console.log('Error to submit form obj: ', err);
+        alert('Um erro inesperado ocorreu. Por favor, tente novamente!')
+    }
+
 
     const getMachinesAvailable = async () => {
         const { err, data } = await fetchRequest(MACHINES_END_POINT, 'GET', null);
@@ -102,7 +114,7 @@ function BatchForm({ crudMode }) {
             }
         }
     }
-    
+
     const getResourcesAvailable = async () => {
         const { err, data } = await fetchRequest(RESOURCES_END_POINT, 'GET', null);
 
@@ -123,7 +135,20 @@ function BatchForm({ crudMode }) {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-6 border rounded-md bg-white shadow-sm">
+        <form
+            className="space-y-6 p-6 border rounded-md bg-white shadow-sm"
+            onSubmit={(e) => {
+                console.log("🚀 ~ BatchForm ~ e:", e)
+
+                e.preventDefault();
+
+                handleSubmit(data => {
+                    if (onSubmit && typeof onSubmit === 'function') {
+                        onSubmit(data);
+                    }
+                }, handleInvalidSubmit)(e);
+            }}
+        >
             <h2 className="text-xl font-semibold">Recursos utilizados</h2>
 
             {resourceFields.map((field, index) => (
@@ -144,7 +169,7 @@ function BatchForm({ crudMode }) {
                             <label className="block text-sm font-medium">Quantidade Inicial</label>
                             <input
                                 type="number"
-                                {...register(`resourceUsages.${index}.initialQuantity`)}
+                                {...register(`resourceUsages.${index}.initialQuantity`, { valueAsNumber: true })}
                                 className="input input-bordered w-full"
                             />
                         </div>
@@ -153,7 +178,7 @@ function BatchForm({ crudMode }) {
                             <input
                                 type="number"
                                 step="any"
-                                {...register(`resourceUsages.${index}.umidity`)}
+                                {...register(`resourceUsages.${index}.umidity`, { valueAsNumber: true })}
                                 className="input input-bordered w-full"
                             />
                         </div>
@@ -161,7 +186,7 @@ function BatchForm({ crudMode }) {
                             <label className="block text-sm font-medium">Quantidade Adicionada</label>
                             <input
                                 type="number"
-                                {...register(`resourceUsages.${index}.addedQuantity`)}
+                                {...register(`resourceUsages.${index}.addedQuantity`, { valueAsNumber: true })}
                                 className="input input-bordered w-full"
                             />
                         </div>
@@ -204,7 +229,7 @@ function BatchForm({ crudMode }) {
                         <input
                             type="number"
                             step="any"
-                            {...register(`machineUsages.${index}.usageTime`)}
+                            {...register(`machineUsages.${index}.usageTime`, { valueAsNumber: true })}
                             className="input input-bordered w-full"
                         />
                     </div>
@@ -227,11 +252,13 @@ function BatchForm({ crudMode }) {
             </button>
 
             <div className="pt-6">
-                <Button
-                    name={isSubmitting ? "Enviando..." : "Salvar"}
+                <button
                     type="submit"
-                    isDisabled={isSubmitting}
-                />
+                    disabled={submitButtonDisabled}
+                    className={`bg-white text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow flex gap-4 ${submitButtonDisabled ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-100"}`}
+                >   
+                    {isSubmitting ? "Processando..." : submitButtonLabel}
+                </button>
             </div>
         </form>
     );
