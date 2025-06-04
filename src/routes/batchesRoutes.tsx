@@ -15,7 +15,7 @@ const batchesRoutes: RouteObject = {
             children: [
                 { path: "", element: <Suspense fallback={<div>Carregando...</div>}><ListBatches /></Suspense> },
                 { path: "create", element: <Suspense fallback={<div>Carregando...</div>}><BatchForm crudMode={'create'} /></Suspense> },
-
+                { path: "edit/:id", element: <Suspense fallback={<div>Carregando...</div>}><BatchForm crudMode={'edit'} /></Suspense> },
             ]
         }
     ],
