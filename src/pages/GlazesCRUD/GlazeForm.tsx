@@ -60,6 +60,9 @@ function GlazeForm({ crudMode }) {
         },
     });
 
+    const submitButtonDisabled = !isValid || isSubmitting || isLoading;
+    const submitButtonLabel = crudMode === "edit" ? "Atualizar Glasura" : "Criar Glasura";
+
     const { fields: resourceFields, append: appendResource, remove: removeResource } = useFieldArray({
         control,
         name: "resourceUsages",
@@ -73,6 +76,7 @@ function GlazeForm({ crudMode }) {
     useEffect(() => {
         getMachinesAvailable();
         getResourcesAvailable();
+
         if (isEditMode && id) getGlazeData(id);
         setIsLoading(false);
     }, []);
@@ -85,7 +89,7 @@ function GlazeForm({ crudMode }) {
         if (data && Array.isArray(data) && data.length > 0) {
             const machinesOptions = transformArrayIntoSelectOptions(data, "id", "name");
 
-            if (machinesOptions && machineOptions?.length > 0) {
+            if (machinesOptions && machinesOptions?.length > 0) {
                 setMachineOptions(machinesOptions);
             }
         }
@@ -119,18 +123,18 @@ function GlazeForm({ crudMode }) {
             && glazeData.resourceUsages?.length > 0
             && glazeData.machineUsages?.length > 0
         ) {
-        reset({
-            color: glazeData.color,
-            unitValue: Number(glazeData.unitValue),
-            resourceUsages: glazeData.resourceUsages.map(r => ({
-                resourceId: Number(r.resourceId),
-                quantity: Number(r.quantity),
-            })),
-            machineUsages: glazeData.machineUsages.map(m => ({
-                machineId: Number(m.machineId),
-                usageTime: Number(m.usageTime),
-            })),
-        });
+            reset({
+                color: glazeData.color,
+                unitValue: Number(glazeData.unitValue),
+                resourceUsages: glazeData.resourceUsages.map(r => ({
+                    resourceId: Number(r.resourceId),
+                    quantity: Number(r.quantity),
+                })),
+                machineUsages: glazeData.machineUsages.map(m => ({
+                    machineId: Number(m.machineId),
+                    usageTime: Number(m.usageTime),
+                })),
+            });
         }
     };
 
@@ -159,6 +163,7 @@ function GlazeForm({ crudMode }) {
                     type="text"
                     {...register("color")}
                     className="input input-bordered w-full"
+                    style={{ border: '1px solid #00000029', width: '300px', padding: '5px' }}
                 />
                 {errors.color && <p className="text-red-500 text-sm">{errors.color.message}</p>}
             </div>
@@ -169,7 +174,8 @@ function GlazeForm({ crudMode }) {
                     type="number"
                     step="any"
                     {...register("unitValue", { valueAsNumber: true })}
-                    className="input input-bordered w-full"
+                    className="input input-bordered"
+                    style={{ border: '1px solid #00000029', width: '100px', padding: '5px' }}
                 />
                 {errors.unitValue && <p className="text-red-500 text-sm">{errors.unitValue.message}</p>}
             </div>
@@ -195,6 +201,7 @@ function GlazeForm({ crudMode }) {
                         placeholder="Quantidade"
                         {...register(`resourceUsages.${index}.quantity`, { valueAsNumber: true })}
                         className="input input-bordered w-full"
+                        style={{ border: '1px solid #00000029', width: '100px', padding: '5px' }}
                     />
                     <button
                         type="button"
@@ -235,6 +242,7 @@ function GlazeForm({ crudMode }) {
                         placeholder="Tempo de uso"
                         {...register(`machineUsages.${index}.usageTime`, { valueAsNumber: true })}
                         className="input input-bordered w-full"
+                        style={{ border: '1px solid #00000029', width: '100px', padding: '5px' }}
                     />
                     <button
                         type="button"
@@ -257,10 +265,11 @@ function GlazeForm({ crudMode }) {
             <div className="pt-6">
                 <button
                     type="submit"
-                    disabled={!isValid || isSubmitting || isLoading}
-                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+                    disabled={submitButtonDisabled}
+                    className={`bg-white text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow flex gap-4 ${submitButtonDisabled ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-100"}`}
                 >
-                    {isSubmitting ? "Salvando..." : isEditMode ? "Atualizar Esmalte" : "Criar Esmalte"}
+                    {isSubmitting ? "Processando..." : submitButtonLabel}
+
                 </button>
             </div>
         </form>
