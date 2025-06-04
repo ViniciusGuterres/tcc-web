@@ -163,7 +163,7 @@ const ListResources = () => {
             const { err, data } = await fetchRequest(`${RESOURCES_END_POINT}/${resourceID}/${endPoints.yearlyReportEndPoint}`, 'GET', null);
 
             if (err) {
-                console.log(err || 'Erro ao pegar detalhes da batelada');
+                console.log(err || 'Erro ao pegar detalhes dos recursos');
 
                 alert(`Erro ao pegar dados`);
                 return;
