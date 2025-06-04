@@ -160,12 +160,18 @@ declare global {
         }[];
     }
 
-    interface DryingRoomList     {
+    interface DryingRoomList {
         id: ID,
         createdAt: string,
         updatedAt: string,
         name: string,
         gasConsumptionPerHour: number,
+    }
+
+    export interface DryingRoomPostBody {
+        name: string;
+        gasConsumptionPerHour: number;
+        machines: number[];
     }
 };
 
