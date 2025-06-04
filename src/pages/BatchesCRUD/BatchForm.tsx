@@ -6,8 +6,10 @@ import Button from "../../components/Button";
 import CustomSelect from "../../components/CustomSelect";
 
 import { z } from "zod";
-// import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
+import endPoints from "../../constants/endpoints";
+import transformArrayIntoSelectOptions from "../../utils/transformArrayIntoSelectOptions";
 
 export const batchSchema = z.object({
     resourceUsages: z.array(
@@ -27,14 +29,27 @@ export const batchSchema = z.object({
     ).min(1, "Adicione pelo menos uma máquina"),
 });
 
-const BATCH_END_POINT = "batches";
-const resourceOptions = [{ value: 5, label: "test" }];
-const machineOptions = [{ value: 5, label: "test" }];
+// endpoints
+const BATCHES_END_POINT = endPoints.batchesEndPoint;
+const MACHINES_END_POINT = endPoints.machinesEndPoint;
+const RESOURCES_END_POINT = endPoints.resourcesEndPoint;
+
+// const resourceOptions = [{ value: 5, label: "test" }];
+// const machineOptions = [{ value: 5, label: "test" }];
 
 type BatchFormData = z.infer<typeof batchSchema>;
 
 function BatchForm({ crudMode }) {
+    const [resourceOptions, setResourceOptions] = useState<Array<Option>>([]);
+    const [machineOptions, setMachineOptions] = useState<Array<Option>>([]);
+
     const navigate = useNavigate();
+
+    // Getting select options
+    useEffect(() => {
+        getMachinesAvailable();
+        getResourcesAvailable();
+    }, []);
 
     const {
         register,
@@ -60,7 +75,7 @@ function BatchForm({ crudMode }) {
     });
 
     const onSubmit = async (data: BatchFormData) => {
-        const { err } = await fetchRequest(BATCH_END_POINT, "POST", data);
+        const { err } = await fetchRequest(BATCHES_END_POINT, "POST", data);
         if (err) {
             alert("Erro ao criar o lote.");
             return;
@@ -68,6 +83,44 @@ function BatchForm({ crudMode }) {
         alert("Lote criado com sucesso!");
         navigate("/batches");
     };
+
+    const getMachinesAvailable = async () => {
+        const { err, data } = await fetchRequest(MACHINES_END_POINT, 'GET', null);
+
+        if (err) {
+            console.log(err || 'Erro ao pegar opções de máquinas');
+
+            alert(`Erro ao pegar dados`);
+            return;
+        }
+
+        if (data && Array.isArray(data) && data.length > 0) {
+            const machineOptions = transformArrayIntoSelectOptions(data, 'id', 'name');
+
+            if (machineOptions && machineOptions?.length > 0) {
+                setMachineOptions(machineOptions);
+            }
+        }
+    }
+    
+    const getResourcesAvailable = async () => {
+        const { err, data } = await fetchRequest(RESOURCES_END_POINT, 'GET', null);
+
+        if (err) {
+            console.log(err || 'Erro ao pegar opções de recursos');
+
+            alert(`Erro ao pegar dados`);
+            return;
+        }
+
+        if (data && Array.isArray(data) && data.length > 0) {
+            const resourcesOptions = transformArrayIntoSelectOptions(data, 'id', 'name');
+
+            if (resourcesOptions && resourcesOptions?.length > 0) {
+                setResourceOptions(resourcesOptions);
+            }
+        }
+    }
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-6 border rounded-md bg-white shadow-sm">
