@@ -57,6 +57,17 @@ const ListDryingRooms = () => {
                 enabled: true,
             },
         },
+            {
+            name: "createTransaction",
+            header: "Ações",
+            type: 'action',
+            actionButton: {
+                type: "custom",
+                onClickHandler: (id) => { handleClickGoToDryingRoomSessionForm(id) },
+                enabled: true,
+                label: 'Nova sessão',
+            },
+        },
         {
             name: "edit",
             header: "Editar",
@@ -122,8 +133,6 @@ const ListDryingRooms = () => {
             } else {
                 alert("Nenhum dado encontrado");
             }
-
-
         } catch (error) {
             console.error("Erro ao carregar os dados do relatório:", error);
             alert("Erro ao carregar os dados");
@@ -149,10 +158,14 @@ const ListDryingRooms = () => {
         }
     }
 
-    const handleClickEdit = (dryingRoomId: string | number) => {
+    const handleClickGoToDryingRoomSessionForm = (dryingRoomID: ID) => {
+        navigate(`/dryingRooms/createSession/${dryingRoomID}`);
+    }
+
+    const handleClickEdit = (dryingRoomId: ID) => {
         if (!dryingRoomId) return null;
 
-        navigate(`/drying-rooms/edit/${dryingRoomId}`);
+        navigate(`/dryingRooms/edit/${dryingRoomId}`);
     }
 
     // Get initial data (drying-room list) when component did mount
@@ -176,7 +189,7 @@ const ListDryingRooms = () => {
     }
 
     const handleClickCreateNewDryingRoom = () => {
-        navigate("/drying-rooms/create");
+        navigate("/dryingRooms/create");
     }
 
     const buildDryingRoomDetailsBody = (data: DryingRoomDetails) => {
