@@ -7,12 +7,15 @@ import endPoints from "../../constants/endpoints";
 import ReportDocument from "../../components/ReportDocument";
 import { pdf } from "@react-pdf/renderer";
 import downloadPDF from "../../utils/downloadPDF";
+import formatDbTimestamp from "../../utils/formatDbTimestamp";
+import Modal from "../../components/Modal";
 
 // Globals
 const ENTITY_END_POINT = endPoints.dryingRoomsEndPoint;
 
 const ListDryingRooms = () => {
     const [dryingRoomList, setDryingRoomsList] = useState<DryingRoomList[]>([]);
+    const [dryingRoomDetails, setDryingRoomDetails] = useState<DryingRoomDetails | null>(null);
 
     const navigate = useNavigate();
 
@@ -42,6 +45,16 @@ const ListDryingRooms = () => {
                 onClickHandler: (id) => { handleClickDownloadYearlyDryingRoomReport(id) },
                 enabled: true,
                 label: 'Baixar',
+            },
+        },
+        {
+            name: "openDetails",
+            header: "Ver detalhes",
+            type: 'action',
+            actionButton: {
+                type: "edit",
+                onClickHandler: id => { handleClickOpenDetails(id) },
+                enabled: true,
             },
         },
         {
@@ -117,6 +130,25 @@ const ListDryingRooms = () => {
         }
     }
 
+    const handleClickOpenDetails = async (dryingRoomId: ID) => {
+        if (!dryingRoomId) return null;
+
+        const { err, data } = await fetchRequest(`${ENTITY_END_POINT}/${dryingRoomId}`, 'GET', null);
+
+        if (err) {
+            console.log(err || 'Erro ao pegar detalhes da estufa');
+
+            alert(`Erro ao pegar dados`);
+            return;
+        }
+
+        if (data && data !== null && typeof data === 'object') {
+            const dryingRoomDetails = data as DryingRoomDetails;
+
+            setDryingRoomDetails(dryingRoomDetails);
+        }
+    }
+
     const handleClickEdit = (dryingRoomId: string | number) => {
         if (!dryingRoomId) return null;
 
@@ -147,6 +179,38 @@ const ListDryingRooms = () => {
         navigate("/drying-rooms/create");
     }
 
+    const buildDryingRoomDetailsBody = (data: DryingRoomDetails) => {
+        return (
+            <div className="space-y-6 text-sm text-gray-800">
+                <div>
+                    <h2 className="text-lg font-semibold">Informações da estufa</h2>
+                    <br />
+                    <p><strong>Criado em:</strong> {formatDbTimestamp(data.createdAt)}</p>
+                    <p><strong>Atualizado em:</strong> {formatDbTimestamp(data.updatedAt)}</p>
+                    <p><strong>Nome:</strong> {data.name}</p>
+                    <p><strong>Consumo de gás por hora:</strong> {data.gasConsumptionPerHour} m³</p>
+                </div>
+
+                <div>
+                    <h3 className="font-semibold text-md mb-1">Máquinas Associadas</h3>
+                    {data.machines.length > 0 ? (
+                        <ul className="space-y-2">
+                            {data.machines.map((machine, idx) => (
+                                <li key={`machine-${idx}`} className="border p-2 rounded bg-gray-50">
+                                    <p><strong>Nome:</strong> {machine.name}</p>
+                                    {/* Adicione mais propriedades se necessário, ex: */}
+                                    {/* <p><strong>Tipo:</strong> {machine.type}</p> */}
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p className="italic text-gray-500">Nenhuma máquina associada.</p>
+                    )}
+                </div>
+            </div>
+        );
+    };
+
     return (
         <>
             <Button
@@ -163,6 +227,12 @@ const ListDryingRooms = () => {
             <Table
                 data={dryingRoomList}
                 columns={TABLE_COLUMNS}
+            />
+
+            <Modal
+                isOpen={dryingRoomDetails != null}
+                onClose={() => { setDryingRoomDetails(null) }}
+                body={dryingRoomDetails ? buildDryingRoomDetailsBody(dryingRoomDetails) : null}
             />
         </>
     );
