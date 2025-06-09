@@ -198,8 +198,6 @@ const ListDryingRooms = () => {
                             {data.machines.map((machine, idx) => (
                                 <li key={`machine-${idx}`} className="border p-2 rounded bg-gray-50">
                                     <p><strong>Nome:</strong> {machine.name}</p>
-                                    {/* Adicione mais propriedades se necessário, ex: */}
-                                    {/* <p><strong>Tipo:</strong> {machine.type}</p> */}
                                 </li>
                             ))}
                         </ul>
