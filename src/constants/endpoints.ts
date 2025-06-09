@@ -10,6 +10,7 @@ const machinesEndPoint = 'machines';
 const dryingRoomsEndPoint = 'drying-rooms';
 const generalReportEndPoint = 'general-report';
 const yearlyReportEndPoint = 'yearly-report';
+const dryingRoomSessionEndPoint = 'drying-sessions';
 
 const endPoints =  {
     resourcesEndPoint,
@@ -24,6 +25,7 @@ const endPoints =  {
     yearlyReportEndPoint,
     machinesEndPoint,
     dryingRoomsEndPoint,
+    dryingRoomSessionEndPoint,
 };
 
 export default endPoints;
