@@ -53,7 +53,7 @@ const menuLinks = [
     },
     {
         label: 'Estufas',
-        link: 'drying-rooms',
+        link: 'dryingRooms',
         icon: 'fa-temperature-high',
     },
 ];
