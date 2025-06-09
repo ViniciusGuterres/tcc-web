@@ -10,6 +10,7 @@ import downloadPDF from "../../utils/downloadPDF";
 import formatDbTimestamp from "../../utils/formatDbTimestamp";
 import Modal from "../../components/Modal";
 
+
 // Globals
 const ENTITY_END_POINT = endPoints.dryingRoomsEndPoint;
 const DRYING_ROOM_SESSION_END_POINT = endPoints.dryingRoomSessionEndPoint;
