@@ -24,8 +24,8 @@ interface ReturnObj {
     data: ResObj | null | Array<any> | string | {},
 }
 
-const host = 'localhost';
-const port = '8080';
+
+const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080';;
 
 export async function fetchRequest(endpoint: string, method: MethodsAllowed, body: {} | null) {
     const userToken = Cookies.get("user_token");
@@ -52,7 +52,7 @@ export async function fetchRequest(endpoint: string, method: MethodsAllowed, bod
     }
 
     try {
-        const url = `http://${host}:${port}/${endpoint}`;
+        const url = `${baseUrl}/${endpoint}`;
         const response = await fetch(url, options);
 
         // User not authenticated, remove jwt on cookies and send to login page
