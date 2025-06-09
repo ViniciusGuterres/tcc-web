@@ -126,7 +126,7 @@ function DryingRoomForm({ crudMode }) {
         }
 
         alert(`Estufa ${isEditMode ? "atualizada" : "criada"} com sucesso!`);
-        navigate("/drying-rooms");
+        navigate("/dryingRooms");
     };
 
     return (
