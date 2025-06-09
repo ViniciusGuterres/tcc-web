@@ -168,10 +168,19 @@ declare global {
         gasConsumptionPerHour: number,
     }
 
-    export interface DryingRoomPostBody {
+    interface DryingRoomPostBody {
         name: string;
         gasConsumptionPerHour: number;
         machines: number[];
+    }
+
+    interface DryingRoomDetails{
+        id: number,
+        createdAt: string,
+        updatedAt: string,
+        name: string,
+        gasConsumptionPerHour: number,
+        machines: Machine[]
     }
 };
 
