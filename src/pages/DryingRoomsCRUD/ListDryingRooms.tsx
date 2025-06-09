@@ -108,7 +108,7 @@ const ListDryingRooms = () => {
             const { err, data } = await fetchRequest(`${ENTITY_END_POINT}/${dryingRoomID}/${endPoints.yearlyReportEndPoint}`, 'GET', null);
 
             if (err) {
-                console.log(err || 'Erro ao pegar detalhes da batelada');
+                console.log(err || 'Erro ao pegar detalhes da estufa');
 
                 alert(`Erro ao pegar dados`);
                 return;
