@@ -12,10 +12,12 @@ import Modal from "../../components/Modal";
 
 // Globals
 const ENTITY_END_POINT = endPoints.dryingRoomsEndPoint;
+const DRYING_ROOM_SESSION_END_POINT = endPoints.dryingRoomSessionEndPoint;
 
 const ListDryingRooms = () => {
     const [dryingRoomList, setDryingRoomsList] = useState<DryingRoomList[]>([]);
     const [dryingRoomDetails, setDryingRoomDetails] = useState<DryingRoomDetails | null>(null);
+    const [dryingRoomsSessions, setDryingRoomsSessions] = useState({});
 
     const navigate = useNavigate();
 
@@ -89,6 +91,83 @@ const ListDryingRooms = () => {
             },
         },
     ];
+
+    const EXPANDABLE_ROW_COLUMNS = [
+        {
+            name: "hours",
+            header: "Horas de uso",
+            type: 'default',
+            format: 'number',
+        },
+                {
+            name: "costAtTime",
+            header: "Custo",
+            type: 'default',
+            format: "currency-BRL",
+        },
+        {
+            name: "createdAt",
+            header: "Data de criação",
+            type: 'default',
+            format: "dbTimestamp",
+        },
+        {
+            name: "updatedAt",
+            header: "Data de atualização",
+            type: 'default',
+            format: "dbTimestamp",
+        },
+        {
+            name: "edit",
+            header: "Editar",
+            type: 'action',
+            actionButton: {
+                type: "edit",
+                onClickHandler: (id, entityId) => { handleClickEditDryingRoomSession(id, entityId) },
+                enabled: true,
+            },
+        },
+        {
+            name: "delete",
+            header: "Deletar",
+            type: 'action',
+            actionButton: {
+                type: "delete",
+                onClickHandler: (id, entityId) => { handleClickDeleteDryingRoomSession(id, entityId) },
+                enabled: true,
+            },
+        },
+    ];
+
+    const handleClickEditDryingRoomSession = (sessionId: ID, dryingRoomId: ID) => {
+        if (!sessionId || !dryingRoomId) return null;
+
+        navigate(`/dryingRooms/editSession/${dryingRoomId}/${sessionId}`);
+    }
+
+    const handleClickDeleteDryingRoomSession = async (sessionId: ID, dryingRoomId: ID) => {
+        if (!sessionId) return null;
+
+        if (window.confirm('Deseja realmente excluir essa sessão da estufa ?')) {
+            const deleteDryingRoomSessionEndPoint = `${ENTITY_END_POINT}/${dryingRoomId}/${DRYING_ROOM_SESSION_END_POINT}/${sessionId}`;
+
+            const { data, err } = await fetchRequest(deleteDryingRoomSessionEndPoint, 'DELETE', null);
+
+            if (err || !data) {
+                console.log(err || 'Missing req.data');
+
+                alert(err || 'Erro ao deletar. Por favor, tente novamente');
+                return;
+            }
+
+            if (data === 'success') {
+                alert(`Sessão de estufa deletada com sucesso!`);
+                window.location.reload();
+            }
+
+            return null;
+        }
+    }
 
     const handleClickDelete = async (dryingRoomID: string | number) => {
         if (!dryingRoomID) return null;
@@ -222,6 +301,38 @@ const ListDryingRooms = () => {
         );
     };
 
+    const getDryingRoomSessions = async (dryingRoomId: ID | undefined) => {
+        if (!dryingRoomId) return null;
+
+        // Check if already have the transactions in memory
+        if (dryingRoomsSessions?.[dryingRoomId] != null) return null;
+
+        let response;
+
+        let dryingRoomSessionEndPoint = `${ENTITY_END_POINT}/${dryingRoomId}/${DRYING_ROOM_SESSION_END_POINT}`;
+
+        response = await fetchRequest(dryingRoomSessionEndPoint, 'GET', null);
+
+        if (response.err) {
+            console.log(response.err)
+
+            if (typeof response.err === 'string') {
+                alert(response.err);
+            } else {
+                alert('Erro ao pegar os dados. Por favor, tente novamente.');
+            }
+
+            return;
+        }
+
+        if (response.data?.length > 0) {
+            const dryingRoomsSessionsCopy = { ...dryingRoomsSessions };
+            dryingRoomsSessionsCopy[dryingRoomId] = response.data;
+
+            setDryingRoomsSessions(dryingRoomsSessionsCopy);
+        }
+    }
+    
     return (
         <>
             <Button
@@ -238,6 +349,10 @@ const ListDryingRooms = () => {
             <Table
                 data={dryingRoomList}
                 columns={TABLE_COLUMNS}
+                rowsExpandable={true}
+                expandableRowColumns={EXPANDABLE_ROW_COLUMNS}
+                expandableRowsData={dryingRoomsSessions}
+                onExpandRowFunction={getDryingRoomSessions}
             />
 
             <Modal
