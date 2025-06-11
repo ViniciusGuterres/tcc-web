@@ -16,19 +16,19 @@ const menuLinks = [
         icon: 'fa-cubes-stacked',
     },
     {
-        label: 'Bateladas',
-        link: 'batches',
-        icon: 'fa-bucket',
-    },
-    {
         label: 'Máquinas',
         link: 'machines',
         icon: 'fa-industry',
     },
     {
-        label: 'Linha de Produto',
-        link: 'productLines',
-        icon: 'fa-layer-group',
+        label: 'Bateladas',
+        link: 'batches',
+        icon: 'fa-bucket',
+    },
+    {
+        label: 'Glasuras',
+        link: 'glazes',
+        icon: 'fa-bolt',
     },
     {
         label: 'Tipo de Produto',
@@ -36,19 +36,19 @@ const menuLinks = [
         icon: 'fa-layer-group',
     },
     {
-        label: 'Produto',
+        label: 'Linha de Produto',
+        link: 'productLines',
+        icon: 'fa-layer-group',
+    },
+    {
+        label: 'Produtos',
         link: 'products',
         icon: 'fa-layer-group',
     },
     {
-        label: 'Forno',
+        label: 'Fornos',
         link: 'kilns',
         icon: 'fa-fire',
-    },
-    {
-        label: 'Glasuras',
-        link: 'glazes',
-        icon: 'fa-bolt',
     },
     {
         label: 'Estufas',
