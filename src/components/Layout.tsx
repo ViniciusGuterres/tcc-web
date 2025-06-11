@@ -18,7 +18,7 @@ const menuLinks = [
     {
         label: 'Máquinas',
         link: 'machines',
-        icon: 'fa-industry',
+        icon: 'fa-gear',
     },
     {
         label: 'Bateladas',
