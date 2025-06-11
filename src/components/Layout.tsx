@@ -1,5 +1,4 @@
 import { Outlet } from "react-router-dom";
-import React from "react"
 
 // Components
 import Header from "./Header";
@@ -19,7 +18,7 @@ const menuLinks = [
     {
         label: 'Bateladas',
         link: 'batches',
-        icon: 'fa-bolt',
+        icon: 'fa-bucket',
     },
     {
         label: 'Máquinas',
