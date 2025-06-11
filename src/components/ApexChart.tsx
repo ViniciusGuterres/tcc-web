@@ -36,15 +36,16 @@ const BarChart: React.FC<BaseChartProps> = ({ options, series, width, height }) 
     />
 );
 
-const DonutChart: React.FC<DonutChartProps> = ({ options, series, labels, width, height }) => (
-    <Chart
-        options={{ ...options, labels }}
+const DonutChart: React.FC<DonutChartProps> = ({ options, series, width, height }) =>
+{
+    return <Chart
+        options={options}
         series={series}
         type="donut"
         width={width || "100%"}
         height={height || "80%"}
     />
-);
+};
 
 const LineChart: React.FC<BaseChartProps> = ({ options, series, width, height }) => (
     <Chart
