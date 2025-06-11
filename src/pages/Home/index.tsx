@@ -1,16 +1,48 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ApexChart from "../../components/ApexChart";
 import { ApexOptions } from "apexcharts";
 import DownloadPDFButton from "../../components/DownloadPDFButton";
 import endPoints from "../../constants/endpoints";
+import fetchRequest from "../../utils/fetchRequest";
+
+const RESOURCES_END_POINT = endPoints.resourcesEndPoint;
 
 const Home: React.FC = () => {
+    const [resourceChartLabels, setResourceChartLabels] = useState<string[]>([]);
+    const [resourceChartSeries, setResourceChartSeries] = useState<number[]>([]);
+
     // Component did mount
     // Load charts data
     useEffect(() => {
-
-
+        getResourceData();
     }, []);
+
+    const getResourceData = async () => {
+        const { err, data } = await fetchRequest(RESOURCES_END_POINT, 'GET', null);
+
+        if (err) {
+            console.log(err || 'Erro ao pegar dados dos recursos');
+
+            alert(`Erro ao pegar dados`);
+            return;
+        }
+
+        if (data && Array.isArray(data) && data.length > 0) {
+            // Map chart data
+            const labels: string[] = [];
+            const series: number[] = [];
+
+            data.forEach(({ name, currentQuantity }) => {
+                if (currentQuantity > 0) {
+                    series.push(currentQuantity);
+                    labels.push(name);
+                }
+            });
+
+            setResourceChartLabels(labels);
+            setResourceChartSeries(series);
+        }
+    }
 
     const chartOptions: ApexOptions = {
         chart: {
@@ -30,8 +62,6 @@ const Home: React.FC = () => {
             data: [30, 40, 45, 50, 49],
         },
     ];
-
-    const chartLabels = ["Água", "Terra 1", "Eletricidade"];
 
     return (
         <div
@@ -80,14 +110,29 @@ const Home: React.FC = () => {
                     }}
                 >
                     <h2 className="text-xl font-semibold mt-10 mb-4">Recursos</h2>
-                    <ApexChart
-                        type="donut"
-                        options={{}}
-                        series={[44, 55, 13]}
-                        labels={chartLabels}
-                        width="100%"
-                        height="100%"
-                    />
+                    {
+                        resourceChartSeries?.length > 0
+                            ?
+                            <ApexChart
+                                type="donut"
+                                options={{
+                                    labels: resourceChartLabels,
+                                    legend: {
+                                        position: 'bottom'
+                                    },
+                                    title: {
+                                        align: 'center',
+                                    }
+                                }}
+                                series={resourceChartSeries}
+                                // labels={resourceChartLabels}
+                                width="100%"
+                                height="100%"
+                            />
+                            :
+                            null
+                    }
+
                 </div>
             </div>
 
