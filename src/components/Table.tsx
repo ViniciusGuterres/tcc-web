@@ -319,7 +319,8 @@ function Table({
                 >
                     {">"}
                 </button>
-
+                
+                {/* 
                 <span className="flex items-center gap-1 font-color-secondary">
                     <div>Página</div>
                     <strong>
@@ -338,9 +339,9 @@ function Table({
                         }}
                         className="border p-1 rounded w-16 bg-transparent"
                     />
-                </span>
+                </span> */}
 
-                <select
+                {/* <select
                     value={table.getState().pagination.pageSize}
                     onChange={(e) => {
                         table.setPageSize(Number(e.target.value));
@@ -352,7 +353,7 @@ function Table({
                             Páginas {pageSize}
                         </option>
                     ))}
-                </select>
+                </select> */}
             </div>
         </div>
     );
