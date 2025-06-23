@@ -11,7 +11,7 @@ import { z } from "zod";
 
 const dryingRoomSchema = z.object({
     name: z.string().min(1, "Nome obrigatório"),
-    gasConsumptionPerHour: z.number().positive("Deve ser > 0"),
+    gasConsumptionPerHour: z.number().positive("Campo obrigatório"),
     machines: z.array(
         z.object({
             machineId: z.number().min(1, "Máquina inválida"),
@@ -196,8 +196,8 @@ function DryingRoomForm({ crudMode }) {
             <div className="pt-6">
                 <button
                     type="submit"
-                    disabled={!isValid || isSubmitting || isLoading}
-                    className={`bg-white text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow ${!isValid || isSubmitting || isLoading ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-100"
+                    disabled={isSubmitting || isLoading}
+                    className={`bg-white text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow ${isSubmitting || isLoading ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-100"
                         }`}
                 >
                     {isSubmitting ? "Salvando..." : isEditMode ? "Atualizar Estufa" : "Criar Estufa"}
