@@ -259,7 +259,7 @@ const ListProducts = () => {
         if (window.confirm('Deseja vender essa transação ?')) {
             const sellProductTransactionEndPoint = `${END_POINT}/${productID}/${TRANSACTIONS_END_POINT}/${transactionID}?outgoingReason=SOLD`;
 
-            const { data, err } = await fetchRequest(sellProductTransactionEndPoint, 'DELETE', null);
+            const { data, err } = await fetchRequest(sellProductTransactionEndPoint, 'PATCH', null);
 
             if (err || !data) {
                 console.log(err || 'Missing req.data');
@@ -268,10 +268,8 @@ const ListProducts = () => {
                 return;
             }
 
-            if (data === 'success') {
-                alert(`Transação vendida com sucesso!`);
-                window.location.reload();
-            }
+            alert(`Transação vendida com sucesso!`);
+            window.location.reload();
 
             return null;
         }
