@@ -51,21 +51,21 @@ function ProductForm({ crudMode }: Props) {
         },
         {
             name: "height",
-            label: "Altura",
+            label: "Altura (cm)",
             type: "number",
-            placeholder: 'EX: 3,05',
+            placeholder: 'EX: 3,05cm',
         },
         {
             name: "width",
-            label: "Largura",
+            label: "Largura (cm)",
             type: "number",
-            placeholder: 'EX: 3,05',
+            placeholder: 'EX: 3,05cm',
         },
         {
             name: "length",
-            label: "Comprimento",
+            label: "Comprimento (cm)",
             type: "number",
-            placeholder: 'EX: 3,05',
+            placeholder: 'EX: 3,05cm',
         },
         {
             name: "lineId",
