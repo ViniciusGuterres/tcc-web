@@ -74,7 +74,7 @@ function BatchForm({ crudMode }) {
         },
     });
 
-    const submitButtonDisabled = !isValid || isSubmitting || isLoading;
+    const submitButtonDisabled = isSubmitting || isLoading;
     const submitButtonLabel = crudMode === "edit" ? "Atualizar Batelada" : "Criar Batelada";
 
     const { fields: resourceFields, append: appendResource, remove: removeResource } = useFieldArray({
