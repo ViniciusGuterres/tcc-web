@@ -6,16 +6,46 @@ import endPoints from "../../constants/endpoints";
 import fetchRequest from "../../utils/fetchRequest";
 
 const RESOURCES_END_POINT = endPoints.resourcesEndPoint;
+const GENERAL_REPORT_END_POINT = endPoints.generalReportEndPoint;
 
 const Home: React.FC = () => {
     const [resourceChartLabels, setResourceChartLabels] = useState<string[]>([]);
     const [resourceChartSeries, setResourceChartSeries] = useState<number[]>([]);
+    const [annualSallesData, setAnnualSallesData] = useState<number[]>([]);
+    const [annualIncommingCost, setAnnualIncommingCost] = useState<number[]>([]);;
 
     // Component did mount
     // Load charts data
     useEffect(() => {
         getResourceData();
+        getAnnualSalles();
     }, []);
+
+    const getAnnualSalles = async () => {
+        const { err, data } = await fetchRequest(GENERAL_REPORT_END_POINT, 'GET', null);
+
+        if (err) {
+            console.log(err || 'Erro ao pegar dados dos recursos');
+
+            alert(`Erro ao pegar dados`);
+            return;
+        }
+
+        if (data && Array.isArray(data) && data[0] && data[0].months) {
+            const annualSallesDataArray: number[] = [];
+            const annualIncommingCost: number[] = [];
+
+            const dataMonths = data[0].months;
+
+            dataMonths.forEach(currentMonth => {
+                annualSallesDataArray.push(parseFloat(currentMonth.outgoingProfit || 0));
+                annualIncommingCost.push(parseFloat(currentMonth.incomingCost || 0));
+            });
+
+            setAnnualSallesData(annualSallesDataArray);
+            setAnnualIncommingCost(annualIncommingCost);
+        }
+    }
 
     const getResourceData = async () => {
         const { err, data } = await fetchRequest(RESOURCES_END_POINT, 'GET', null);
@@ -49,17 +79,24 @@ const Home: React.FC = () => {
             id: "basic-bar",
         },
         xaxis: {
-            categories: ["Jan", "Feb", "Mar", "Apr", "May"],
+            categories: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
         },
         title: {
             align: "center",
         },
     };
 
-    const chartSeries = [
+    const lineChartSeries = [
         {
             name: "Sales",
-            data: [30, 40, 45, 50, 49],
+            data: annualSallesData,
+        },
+    ];
+
+    const barChartSeries = [
+        {
+            name: "incomming",
+            data: annualIncommingCost,
         },
     ];
 
@@ -85,34 +122,50 @@ const Home: React.FC = () => {
                 alignItems: "center",
                 height: "20%"
             }}>
-                <div
-                    style={{
-                        width: "50%",
-                        boxShadow: "0 0.5rem 1rem rgb(0 0 0 / 15%)",
-                        borderRadius: "10px",
-                    }}
-                >
-                    <h2 className="text-xl font-semibold mb-4">Faturamento Mensal</h2>
-                    <ApexChart
-                        type="bar"
-                        options={chartOptions}
-                        series={chartSeries}
-                        width="100%"
-                        height="100%"
-                    />
-                </div>
+                {/* Bar chart */}
+                {
+                    annualIncommingCost.length > 0
+                        ?
+                        <div
+                            style={{
+                                width: "50%",
+                                boxShadow: "0 0.5rem 1rem rgb(0 0 0 / 15%)",
+                                borderRadius: "10px",
+                            }}
+                        >
+                            <h2 className="text-xl font-semibold mb-4">Despesas Mensais</h2>
+                            <ApexChart
+                                type="bar"
+                                options={chartOptions}
+                                series={barChartSeries}
+                                width="100%"
+                                height="100%"
+                            />
+                        </div>
+                        :
+                        <div
+                            className="skeleton"
+                            style={{
+                                width: "50%",
+                                boxShadow: "0 0.5rem 1rem rgb(0 0 0 / 15%)",
+                                borderRadius: "10px",
+                            }}
+                        ></div>
+                }
 
-                <div
-                    style={{
-                        width: "50%",
-                        boxShadow: "0 0.5rem 1rem rgb(0 0 0 / 15%)",
-                        borderRadius: "10px",
-                    }}
-                >
-                    <h2 className="text-xl font-semibold mt-10 mb-4">Recursos</h2>
-                    {
-                        resourceChartSeries?.length > 0
-                            ?
+                {/* Donut chart */}
+                {
+                    resourceChartSeries.length > 0
+                        ?
+                        <div
+                            style={{
+                                width: "50%",
+                                boxShadow: "0 0.5rem 1rem rgb(0 0 0 / 15%)",
+                                borderRadius: "10px",
+                            }}
+                        >
+                            <h2 className="text-xl font-semibold mt-10 mb-4">Recursos</h2>
+
                             <ApexChart
                                 type="donut"
                                 options={{
@@ -125,34 +178,55 @@ const Home: React.FC = () => {
                                     }
                                 }}
                                 series={resourceChartSeries}
-                                // labels={resourceChartLabels}
                                 width="100%"
                                 height="100%"
                             />
-                            :
-                            null
-                    }
-
-                </div>
+                        </div>
+                        :
+                        <div
+                            className="skeleton"
+                            style={{
+                                width: "50%",
+                                boxShadow: "0 0.5rem 1rem rgb(0 0 0 / 15%)",
+                                borderRadius: "10px",
+                            }}
+                        ></div>
+                }
             </div>
 
-            <div style={{
-                width: "100%",
-                height: "70%",
-                minHeight: "350px",
-                boxShadow: "0 0.5rem 1rem rgb(0 0 0 / 15%)",
-                borderRadius: "10px",
-            }}>
-                <h2 className="text-xl font-semibold mt-10 mb-4">Faturamento anual</h2>
-                <ApexChart
-                    type="line"
-                    options={chartOptions}
-                    series={chartSeries}
-                    width="100%"
-                    height="100%"
-                />
-            </div>
-        </div>
+            {/* Line chart */}
+            {
+                annualSallesData?.length > 0
+                    ?
+                    <div style={{
+                        width: "100%",
+                        height: "70%",
+                        minHeight: "350px",
+                        boxShadow: "0 0.5rem 1rem rgb(0 0 0 / 15%)",
+                        borderRadius: "10px",
+                    }}>
+                        <h2 className="text-xl font-semibold mt-10 mb-4">Faturamento Mensal</h2>
+                        <ApexChart
+                            type="line"
+                            options={chartOptions}
+                            series={lineChartSeries}
+                            width="100%"
+                            height="100%"
+                        />
+                    </div>
+                    :
+                    <div
+                        className="skeleton"
+                        style={{
+                            width: "100%",
+                            height: "70%",
+                            minHeight: "350px",
+                            boxShadow: "0 0.5rem 1rem rgb(0 0 0 / 15%)",
+                            borderRadius: "10px",
+                        }}
+                    ></div>
+            }
+        </div >
     );
 };
 
