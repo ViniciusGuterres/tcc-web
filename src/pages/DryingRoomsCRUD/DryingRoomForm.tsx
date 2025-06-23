@@ -145,12 +145,13 @@ function DryingRoomForm({ crudMode }) {
             </div>
 
             <div>
-                <label className="block text-sm font-medium">Consumo de gás por hora</label>
+                <label className="block text-sm font-medium">Consumo de gás por hora (m³)</label>
                 <input
                     type="number"
                     step="any"
                     {...register("gasConsumptionPerHour", { valueAsNumber: true })}
                     className="input input-bordered w-full"
+                    placeholder="m³"
                 />
                 {errors.gasConsumptionPerHour && <p className="text-sm text-red-600">{errors.gasConsumptionPerHour.message}</p>}
             </div>
