@@ -141,16 +141,16 @@ const ListProducts = () => {
             type: 'default',
             format: "dbTimestamp",
         },
-        // {
-        //     name: "edit",
-        //     header: "Editar",
-        //     type: 'action',
-        //     actionButton: {
-        //         type: "edit",
-        //         onClickHandler: (id, entityId) => { handleClickEditProductTransaction(id, entityId) },
-        //         enabled: true,
-        //     },
-        // },
+        {
+            name: "edit",
+            header: "Vender",
+            type: 'action',
+            actionButton: {
+                type: "edit",
+                onClickHandler: (id, entityId) => { handleClickEditProductTransaction(id, entityId) },
+                enabled: true,
+            },
+        },
         {
             name: "delete",
             header: "Deletar",
@@ -253,10 +253,29 @@ const ListProducts = () => {
         }
     }
 
-    const handleClickEditProductTransaction = (transactionID: ID, productID: ID) => {
+    const handleClickEditProductTransaction = async (transactionID: ID, productID: ID) => {
         if (!transactionID || !productID) return null;
 
-        navigate(`/products/editTransaction/${productID}/${transactionID}`);
+        if (window.confirm('Deseja vender essa transação ?')) {
+            const sellProductTransactionEndPoint = `${END_POINT}/${productID}/${TRANSACTIONS_END_POINT}/${transactionID}?outgoingReason=SOLD`;
+
+            const { data, err } = await fetchRequest(sellProductTransactionEndPoint, 'DELETE', null);
+
+            if (err || !data) {
+                console.log(err || 'Missing req.data');
+
+                alert(err || 'Erro ao vender transação. Por favor, tente novamente');
+                return;
+            }
+
+            if (data === 'success') {
+                alert(`Transação vendida com sucesso!`);
+                window.location.reload();
+            }
+
+            return null;
+        }
+
     }
 
     const handleClickDeleteProductTransaction = async (transactionID: ID, productID: ID) => {
