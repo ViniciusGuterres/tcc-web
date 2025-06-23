@@ -169,13 +169,14 @@ function GlazeForm({ crudMode }) {
             </div>
 
             <div>
-                <label className="block font-medium">Valor Unitário</label>
+                <label className="block font-medium">Valor Unitário (R$)</label>
                 <input
                     type="number"
                     step="any"
                     {...register("unitValue", { valueAsNumber: true })}
                     className="input input-bordered"
                     style={{ border: '1px solid #00000029', width: '100px', padding: '5px' }}
+                    placeholder="Ex: R$ 10,00"
                 />
                 {errors.unitValue && <p className="text-red-500 text-sm">{errors.unitValue.message}</p>}
             </div>
@@ -198,7 +199,7 @@ function GlazeForm({ crudMode }) {
                     <input
                         type="number"
                         step="any"
-                        placeholder="Quantidade"
+                        placeholder="Quantidade (Kg)"
                         {...register(`resourceUsages.${index}.quantity`, { valueAsNumber: true })}
                         className="input input-bordered w-full"
                         style={{ border: '1px solid #00000029', width: '100px', padding: '5px' }}
@@ -239,7 +240,7 @@ function GlazeForm({ crudMode }) {
                     <input
                         type="number"
                         step="any"
-                        placeholder="Tempo de uso"
+                        placeholder="Tempo de uso (em horas)"
                         {...register(`machineUsages.${index}.usageTime`, { valueAsNumber: true })}
                         className="input input-bordered w-full"
                         style={{ border: '1px solid #00000029', width: '100px', padding: '5px' }}
