@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 
-type MethodsAllowed = 'POST' | 'GET' | 'PUT' | 'DELETE';
+type MethodsAllowed = 'POST' | 'GET' | 'PUT' | 'DELETE' | 'PATCH';
 
 interface Options {
     method: MethodsAllowed,
