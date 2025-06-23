@@ -131,6 +131,7 @@ const Home: React.FC = () => {
                                 width: "50%",
                                 boxShadow: "0 0.5rem 1rem rgb(0 0 0 / 15%)",
                                 borderRadius: "10px",
+                                padding: '10px',
                             }}
                         >
                             <h2 className="text-xl font-semibold mb-4">Despesas Mensais</h2>
@@ -162,6 +163,7 @@ const Home: React.FC = () => {
                                 width: "50%",
                                 boxShadow: "0 0.5rem 1rem rgb(0 0 0 / 15%)",
                                 borderRadius: "10px",
+                                padding: '10px',
                             }}
                         >
                             <h2 className="text-xl font-semibold mt-10 mb-4">Recursos</h2>
@@ -204,6 +206,8 @@ const Home: React.FC = () => {
                         minHeight: "350px",
                         boxShadow: "0 0.5rem 1rem rgb(0 0 0 / 15%)",
                         borderRadius: "10px",
+                        padding: '10px',
+
                     }}>
                         <h2 className="text-xl font-semibold mt-10 mb-4">Faturamento Mensal</h2>
                         <ApexChart
