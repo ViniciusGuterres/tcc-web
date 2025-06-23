@@ -60,7 +60,7 @@ function GlazeForm({ crudMode }) {
         },
     });
 
-    const submitButtonDisabled = !isValid || isSubmitting || isLoading;
+    const submitButtonDisabled = isSubmitting || isLoading;
     const submitButtonLabel = crudMode === "edit" ? "Atualizar Glasura" : "Criar Glasura";
 
     const { fields: resourceFields, append: appendResource, remove: removeResource } = useFieldArray({
