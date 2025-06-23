@@ -7,17 +7,22 @@ import Button from "../../components/Button";
 import endPoints from '../../constants/endpoints';
 import transformArrayIntoSelectOptions from "../../utils/transformArrayIntoSelectOptions";
 
+// ✅ Schema completo com validações para todos os campos
 const productsSchema = z.object({
-    name: z.string().min(4, "O nome do produto deve possuir no mínimo 3 caracteres"),
-    // lineId: z.number().min(1, "Selecione uma linha de produto!"),
-    // typeID: z.number().min(1, "Selecione um tipo de produto!"),
+    name: z.string().nonempty("O nome do produto deve possuir no mínimo 3 caracteres"),
+    price: z.string().nonempty("Preço obrigatório"),
+    height: z.string().nonempty("Altura obrigatória"),
+    width: z.string().nonempty("Largura obrigatória"),
+    length: z.string().nonempty("Comprimento obrigatório"),
+    typeId: z.number(), //.nonempty("Selecione um tipo de produto!"),
+    lineId: z.number(),// .nonempty("Selecione uma linha de produto!"),
 });
 
 const END_POINT = endPoints.productsEndPoint;
 
 interface Props {
-    crudMode: CrudModesAllowed,
-};
+    crudMode: CrudModesAllowed;
+}
 
 function ProductForm({ crudMode }: Props) {
     const [productData, setProductData] = useState<Record<string, any>>({});
@@ -26,146 +31,86 @@ function ProductForm({ crudMode }: Props) {
     const [loading, setLoading] = useState<boolean>(false);
 
     const { id } = useParams();
-
     const navigate = useNavigate();
-
-    // Check if the crud mode is "edit", otherwise is "create"
     const isEditMode = crudMode === 'edit' && id;
 
     useEffect(() => {
         getProductLinesData();
         getProductTypesData();
-
-        // Verify edit mode (create or edit)
-        if (isEditMode && id) {
-            getProductData(id);
-        }
+        if (isEditMode) getProductData(id);
     }, []);
 
     const fields: FieldType[] = [
-        {
-            name: "name",
-            label: "Nome",
-            type: "text",
-            placeholder: 'EX: Produto 1',
-        },
-        {
-            name: "height",
-            label: "Altura (cm)",
-            type: "number",
-            placeholder: 'EX: 3,05cm',
-        },
-        {
-            name: "width",
-            label: "Largura (cm)",
-            type: "number",
-            placeholder: 'EX: 3,05cm',
-        },
-        {
-            name: "length",
-            label: "Comprimento (cm)",
-            type: "number",
-            placeholder: 'EX: 3,05cm',
-        },
-        {
-            name: "lineId",
-            label: "Linha",
-            options: productLinesOptions,
-        },
-        {
-            name: "typeId",
-            label: "Tipo",
-            options: productTypesOptions,
-        },
+        { name: "name", label: "Nome", type: "text", placeholder: "Ex: Produto 544" },
+        { name: "price", label: "Preço (R$)", type: "number", placeholder: "Ex: 19.90" },
+        { name: "height", label: "Altura (cm)", type: "number", placeholder: "Ex: 6.5" },
+        { name: "width", label: "Largura (cm)", type: "number", placeholder: "Ex: 20.0" },
+        { name: "length", label: "Comprimento (cm)", type: "number", placeholder: "Ex: 26.0" },
+        { name: "lineId", label: "Linha", options: productLinesOptions },
+        { name: "typeId", label: "Tipo", options: productTypesOptions },
     ];
 
-    const getProductData = async productId => {
-        if (!productId) return null;
-
+    const getProductData = async (productId: string) => {
         setLoading(true);
-
-        const getProductEndPoint = `${END_POINT}/${productId}`;
-
-        const { data, err } = await fetchRequest(getProductEndPoint, 'GET', null);
-
+        const { data, err } = await fetchRequest(`${END_POINT}/${productId}`, 'GET', null);
         if (err || !data || typeof data !== 'object') {
-            console.log(err || 'Missing req.data');
-
-            alert(`Erro ao pegar os dados do produto. Por favor, tente novamente`);
-            return;
+            alert("Erro ao carregar os dados do produto.");
+        } else {
+            setProductData(data);
         }
 
-        setProductData(data);
         setLoading(false);
-
-        return null;
-    }
+    };
 
     const getProductLinesData = async () => {
-        const { err, data } = await fetchRequest(endPoints.productLinesEndPoint, 'GET', null);
-
-        if (err) {
-            console.log(err || 'Erro ao pegar lista de linhas de produto');
-
-            alert(`Erro ao pegar dados`);
-            return;
-        }
-        console.log(data);
+        const { data, err } = await fetchRequest(endPoints.productLinesEndPoint, 'GET', null);
 
         if (data && Array.isArray(data) && data.length > 0) {
             const productLinesOptions = transformArrayIntoSelectOptions(data, 'id', 'name');
 
             if (productLinesOptions && productLinesOptions.length > 0) {
                 setProductLinesOptions(productLinesOptions);
-            }            
+            }
+
         }
-    }
+
+        if (err) console.error("Erro ao buscar linhas:", err);
+    };
 
     const getProductTypesData = async () => {
-        const { err, data } = await fetchRequest(endPoints.productTypesEndPoint, 'GET', null);
-
-        if (err) {
-            console.log(err || 'Erro ao pegar lista de tipos de produto');
-
-            alert(`Erro ao pegar dados`);
-            return;
-        }
-        console.log(data);
-
-        if (data && Array.isArray(data) && data.length > 0) {
+        const { data, err } = await fetchRequest(endPoints.productTypesEndPoint, 'GET', null);
+        if (data && Array.isArray(data)) {
             const productTypesOptions = transformArrayIntoSelectOptions(data, 'id', 'name');
 
             if (productTypesOptions && productTypesOptions.length > 0) {
                 setProductTypesOptions(productTypesOptions);
-            }            
+            } 
         }
-    }
 
-    const goBackToList = () => {
-        navigate("/products");
-    }
+        if (err) console.error("Erro ao buscar tipos:", err);
+    };
+
+    const goBackToList = () => navigate("/products");
 
     const handleSubmit = async (formData: any) => {
         setLoading(true);
-        let response;
+        const method = isEditMode ? "PUT" : "POST";
+        const endpoint = isEditMode ? `${END_POINT}/${id}` : END_POINT;
 
-        // Edit existing product 
-        if (isEditMode && id) {
-            response = await fetchRequest(`${END_POINT}/${id}`, "PUT", formData);
-        } else {
-            // Create new product 
-            response = await fetchRequest(END_POINT, "POST", formData);
-        }
+        const formattedData = {
+            ...formData,
+            price: Number(formData.price),
+            height: Number(formData.height),
+            width: Number(formData.width),
+            length: Number(formData.length),
+            typeId: Number(formData.typeId),
+            lineId: Number(formData.lineId),
+        };
 
-        if (response.err) {
-            console.log(response.err)
+        const { err } = await fetchRequest(endpoint, method, formattedData);
 
-            if (typeof response.err === 'string') {
-                alert(response.err);
-            } else {
-                alert('Erro ao salvar os dados. Por favor, tente novamente.');
-            }
-
+        if (err) {
+            alert(typeof err === 'string' ? err : "Erro ao salvar os dados.");
             setLoading(false);
             return;
         }
@@ -175,29 +120,19 @@ function ProductForm({ crudMode }: Props) {
     };
 
     return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '10px',
-        }}>
-            {/* Go back button */}
-            <div style={{ width: '100ox' }}>
-                <Button
-                    name="Voltar"
-                    onClickFunc={goBackToList}
-                    isDisabled={false}
-                    icon={{
-                        position: 'left',
-                        icon: 'fa-arrow-left'
-                    }}
-                />
-            </div>
+        <div className="flex flex-col gap-4">
+            <Button
+                name="Voltar"
+                onClickFunc={goBackToList}
+                isDisabled={false}
+                icon={{ position: 'left', icon: 'fa-arrow-left' }}
+            />
 
             <Form
                 fields={fields}
                 schema={productsSchema}
                 submitFunc={handleSubmit}
-                submitButtonLabel={isEditMode ? 'Atualizar' : 'Cadastrar'}
+                submitButtonLabel={isEditMode ? "Atualizar" : "Cadastrar"}
                 initialData={productData}
                 isLoading={loading}
             />
